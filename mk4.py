@@ -800,7 +800,7 @@ def FRESHSTART(params):
                     N_ITEM =len(ITEM)#
                     for_progress.append(file)# 
                     progress = len(for_progress) / float(N_ITEM) * 100#  
-                    dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file, 'Please Wait')#
+                    dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file)#
                 for name in files:
                     try:
                         os.remove(os.path.join(root,name))
@@ -2394,6 +2394,7 @@ def ADDONWIZ(name,url,description):
     print '======================================='
     dp.close()
     extract.all(lib,addonfolder,dp)
+    time.sleep(1)
     if ADDON.getSetting('KodiVersion')=='Krypton':
         EnableAll()
         xbmc.executebuiltin('UpdateLocalAddons')
@@ -2409,7 +2410,6 @@ def ADDONWIZ(name,url,description):
         dialog = xbmcgui.Dialog()
         dialog.ok(Title,'Opening ad-page so you can sign in for your webcode to use The Beast','','')
         OpenWebpage('http://thebeastkodi.com/signup2/register.php')
-
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok(Title, name+" Successfully Installed","")
