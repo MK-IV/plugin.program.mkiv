@@ -2270,7 +2270,7 @@ def WIZARD(name,url,version):
     #localfile.close()
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()        
-    dp.create(Title,"Downloading required files... ",'', '')
+    dp.create(Title,"Downloading "+name+"... ",'', '')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -2278,10 +2278,8 @@ def WIZARD(name,url,version):
        pass
     downloader.download(url, lib, dp)
     addonfolder = xbmc.translatePath(os.path.join('special://','home'))
-    dp.create(Title,"Downloading required files... [COLOR lime]DONE[/COLOR]",'', '')
-    time.sleep(.5)
     if ADDON.getSetting('KodiVersion')=='Krypton':
-        dp.update(0,"Downloading required files... [COLOR lime]DONE[/COLOR]","Applying Patch...", '')
+        dp.update(0,"Downloading "+name+"... [COLOR lime]DONE[/COLOR]","Applying Patch...", '')
         path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
         reqzip=os.path.join(path,'requests.zip')
         try:
@@ -2301,7 +2299,7 @@ def WIZARD(name,url,version):
         dp.update(0,"Applying Patch...[COLOR lime]DONE[/COLOR]","Extracting...")
         pass
     else:
-        dp.update(0,"Downloading required files... [COLOR lime]DONE[/COLOR]","Extracting...")
+        dp.update(0,"Downloading "+name+"... [COLOR lime]DONE[/COLOR]","Extracting...")
         pass
     try: 
         addonfolder = xbmc.translatePath(os.path.join('special://','home'))

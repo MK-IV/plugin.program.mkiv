@@ -1,4 +1,4 @@
-import xbmcaddon, xbmcgui, xbmc, os, sys, urllib, urllib2, xbmcplugin, re, extract, downloader, time
+import xbmcaddon, xbmcgui, xbmc, os, sys, urllib, urllib2, xbmcplugin, re, extract, downloader, time, sqlite3
 
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
@@ -61,7 +61,7 @@ def Open_Url(url):
 def Wizard(name,url,description):
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()        
-    dp.create("wizardname","Downloading required files... ",'', 'Please Wait')
+    dp.create("wizardname","Downloading "+name+"... ",'', 'Please Wait')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -72,7 +72,7 @@ def Wizard(name,url,description):
     xbmc_version=xbmc.getInfoLabel("System.BuildVersion")
     version=float(xbmc_version[:4])
     if version >= 17.0 and version <= 17.9:
-        dp.update(0,"Downloading required files...[COLOR lime]DONE[/COLOR]","Applying Patch...")
+        dp.update(0,"Downloading "+name+"...[COLOR lime]DONE[/COLOR]","Applying Patch...")
         path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
         reqzip=os.path.join(path,'requests.zip')
         try:
@@ -92,7 +92,7 @@ def Wizard(name,url,description):
         dp.update(0,"Applying Patch...[COLOR lime]DONE[/COLOR]","Extracting...")
         pass
     else:
-        dp.update(0,"Downloading required files...[COLOR lime]DONE[/COLOR]", "Extracting")
+        dp.update(0,"Downloading "+name+"...[COLOR lime]DONE[/COLOR]", "Extracting...")
         pass
     try: 
         addonfolder = xbmc.translatePath(os.path.join('special://','home'))
