@@ -1252,11 +1252,11 @@ def UNIVERSAL_BACKUP():
         extract.all(lib,addonfolder,dp)
     except BaseException as e:
         pass'''    
-        EnableAll() 
+    EnableAll() 
         #UpdateKryptonDB()
-        time.sleep(.5)
-        exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps','packages']
-        exclude_files = ["xbmc.log","xbmc.old.log","kodi.log","kodi.old.log","spmc.log","spmc.old.log","Textures13.db",'.DS_Store','.setup_complete','XBMCHelper.conf', 'advancedsettings.xml','Addons19.db','saltscache.db-shm','saltscache.db-wal']
+    time.sleep(.5)
+    exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps','packages']
+    exclude_files = ["xbmc.log","xbmc.old.log","kodi.log","kodi.old.log","spmc.log","spmc.old.log","Textures13.db",'.DS_Store','.setup_complete','XBMCHelper.conf', 'advancedsettings.xml','Addons19.db','saltscache.db-shm','saltscache.db-wal']
     if ADDON.getSetting('KodiVersion') == 'Jarvis': 
         exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps','packages']
         exclude_files = ["xbmc.log","xbmc.old.log","kodi.log","kodi.old.log","spmc.log","spmc.old.log","Textures13.db",'.DS_Store','.setup_complete','XBMCHelper.conf', 'advancedsettings.xml','Addons19.db','Addons20.db','saltscache.db-shm','saltscache.db-wal']
@@ -2564,40 +2564,6 @@ def DeleteSkinBackup():
 
 def NewSession():
     if ADDON.getSetting('NewSession') == 'true':
-        #try:
-        dp = xbmcgui.DialogProgress()
-        dp.create(Title,'Checking for updates...','', 'Please Wait')
-        link = OPEN_URL('https://raw.githubusercontent.com/MK-IV/plugin.program.mkiv/master/addon.xml').replace('\n','').replace('\r','')
-        match = re.compile('mk4version="(.+?)"').findall(link)
-        for mk4version in match:
-            xbmc.log('version='+mk4version+' Addon='+ADDON.getAddonInfo("version")+'')
-            if mk4version > ADDON.getAddonInfo('version'):
-                #try:
-                path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
-                dp = xbmcgui.DialogProgress()
-                dp.create(Title,'Downloading '+Title+' update...','', 'Please Wait')
-                lib=os.path.join(path, 'plugin.program.mkiv-master.zip')
-                try:
-                    os.remove(lib)
-                except:
-                    pass
-                downloader.download('https://github.com/MK-IV/plugin.program.mkiv/archive/master.zip', lib, dp)
-                dp.update(0,'Downloading '+Title+' update... [COLOR lime]Finished[/COLOR]', 'Installing...')
-                extract.all(lib,ADDONS,dp)
-                time.sleep(.5)
-                try:
-                    os.remove(lib)
-                except:
-                    pass
-                os.rename(Local,Localtmp)
-                os.rename(Master,Local)
-                shutil.rmtree(Localtmp)
-                xbmc.executebuiltin("Container.Refresh")
-                dp.close
-                #except: pass
-            else: pass
-        #except: pass
-
         try:
             myplatform = platform()            
             if myplatform == 'android':
@@ -2663,8 +2629,42 @@ def NewSession():
                     pass
                 else:
                     pass
-
+                    
         SetSetting('NewSession','false')
+        
+        #try:
+        dp = xbmcgui.DialogProgress()
+        dp.create(Title,'Checking for updates...','', 'Please Wait')
+        link = OPEN_URL('https://raw.githubusercontent.com/MK-IV/plugin.program.mkiv/master/addon.xml').replace('\n','').replace('\r','')
+        match = re.compile('mk4version="(.+?)"').findall(link)
+        for mk4version in match:
+            xbmc.log('version='+mk4version+' Addon='+ADDON.getAddonInfo("version")+'')
+            if mk4version > ADDON.getAddonInfo('version'):
+                #try:
+                path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
+                dp = xbmcgui.DialogProgress()
+                dp.create(Title,'Downloading '+Title+' update...','', 'Please Wait')
+                lib=os.path.join(path, 'plugin.program.mkiv-master.zip')
+                try:
+                    os.remove(lib)
+                except:
+                    pass
+                downloader.download('https://github.com/MK-IV/plugin.program.mkiv/archive/master.zip', lib, dp)
+                dp.update(0,'Downloading '+Title+' update... [COLOR lime]Finished[/COLOR]', 'Installing...')
+                extract.all(lib,ADDONS,dp)
+                time.sleep(.5)
+                try:
+                    os.remove(lib)
+                except:
+                    pass
+                os.rename(Local,Localtmp)
+                os.rename(Master,Local)
+                shutil.rmtree(Localtmp)
+                xbmc.executebuiltin("Container.Refresh")
+                dp.close
+                #except: pass
+            else: pass
+        #except: pass
         
 def Check4Update():
     try:
