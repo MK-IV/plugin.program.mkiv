@@ -2660,8 +2660,7 @@ def NewSession():
                 os.rename(Local,Localtmp)
                 os.rename(Master,Local)
                 shutil.rmtree(Localtmp)
-                xbmc.executebuiltin("Container.Refresh")
-                dp.close
+                sys.exit(0)
                 #except: pass
             else: pass
         #except: pass
