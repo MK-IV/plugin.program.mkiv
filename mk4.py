@@ -2406,10 +2406,11 @@ def ADDONWIZ(name,url,description):
     print '======================================='
     dp.close()
     extract.all(lib,addonfolder,dp)
-    try:
+    if ADDON.getSetting('KodiVersion')=='Krypton':
         EnableAll()
+        xbmc.executebuiltin('UpdateLocalAddons')
         pass
-    except:
+    else:
         xbmc.executebuiltin('UpdateLocalAddons')
         pass
     if 'Adults XXX Pack' in name:
