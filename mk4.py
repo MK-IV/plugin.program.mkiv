@@ -1092,13 +1092,12 @@ def Restore():
             dp.create(Title,"Applying patch... ",'','')
             downloader.download('https://github.com/MK-IV/Dependencies/raw/master/requests.zip', reqzip, dp)
             time.sleep(.5)
+            dp.update(10,'Applying patch...[COLOR lime] Done[/COLOR]',"Extracting and Writing Files... ",'')
             try:
                 shutil.rmtree(Requests)
             except: pass
             time.sleep(1)
             try: 
-                dp = xbmcgui.DialogProgress()
-                dp.update(10,'Applying patch...[COLOR lime] Done[/COLOR]',"Extracting and Writing Files... ",'')
                 extract.all(reqzip,ADDONS, dp) 
             except BaseException as e:
                 pass
