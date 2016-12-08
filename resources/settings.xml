@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+        <category label="Backup/Restore">
+            <setting type="lsep" label="[COLOR red][B]BACK-UP[/B][/COLOR]"/>
+            <setting type="lsep" label="DO NOT use a location inside your Kodi setup."/>
+            <setting id="backup" type="folder"    label="Choose Backup Folder"   source="local"   default=""/>
+            <setting type="sep"/>
+            <setting type="lsep" label="[COLOR red][B]RESTORE[/B][/COLOR]"/>
+            <setting id="restore" type="file"    label="Choose Backup To Restore"    source="local"  default=""/>	</category>
+        <category label="General">
+            <setting type="lsep" label="[COLOR red][B]MK-IV Wizardness[/B][/COLOR]"/>
+            <setting id="InstallRepo" type="bool" label="Automatically Install MK-IV Repo" default="false"/>
+            <setting id="UpdateAddons" type="bool" label="Check for add-on updates on Startup" default="false"/>
+            <setting id="AutoClean" type="bool" label="Enable Cleaning on Startup" default="false"/>
+            <setting type="sep"/>
+            <setting type="lsep" label="[COLOR red][B]MK-IV Build Options[/B][/COLOR]"/>
+            <setting id="Update" type="bool" label="Enable MK-IV to check for Updates" default="false"/>
+            <setting id="KodiVersion" type="text" visible="false" default=""/>
+            <setting id="MK4Build" type="bool" visible="false" default="false"/>
+            <setting id="BuildName" type="text" visible="false" default=""/>
+            <setting id="AresName" type="text" visible="false" default=""/>
+            <setting id="BuildVersion" type="number" visible="false" default=""/>
+            <setting id="AresVersion" type="number" visible="false" default=""/>
+            <setting id="FreshStart" type="bool" visible="false" default="false"/>
+            <setting id="FirstMK4Startup" type="bool" visible="false" default="true"/>
+            <setting id="NewSession" type="bool" visible="false" default="false"/>
+        </category>
+        <category label="Upload Log">
+            <setting type="lsep" label="[COLOR=dodgerblue]Log Settings[/COLOR]"/>
+            <setting id="email" type="text" label="30500"/>
+            <setting id="include_old" type="bool" label="30501" default="true"/>
+            <setting id="addon_debug" type="bool" label="Addon Debug" visible="false" default="false"/>
+            <setting id="email_prompt" type="bool" visible="false" default="false"/>
+            <setting label="30502" type="lsep"/>
+            <setting id="enable_tvaddons" type="bool" label="30503" default="true"/>
+            <setting id="enable_dropbox" type="bool" label="30504" default="false"/>
+            <setting id="enable_pastebin" type="bool" label="30505" default="false"/>
+            <setting id="enable_ubuntu" type="bool" label="30506" default="false"/>
+        </category>
+        <category label="Adult Content">
+            <setting id="ShowAdult" type="bool" label="Show Adult Content Section" default="false"/>
+            <setting type="number"   id="password" label="Adult Section Password" option="hidden"  enable="!eq(-1,false)" default=""/>
+        </category> 
+        <category label="Developers Tools">
+            <setting type="lsep" label="[COLOR red][B]Build-A-Section[/B][/COLOR]"/>
+            <setting id="MK4WorkFolder" type="folder"    label="Choose a Work Folder"  source="local"     default=""/>
+            <setting type="lsep" label="[COLOR red][B]Actions[/B][/COLOR]"/>
+            <setting label="Update Add-ons" type="action" action="UpdateLocalAddons"/>          
+            <setting label="Update Repos" type="action" action="UpdateAddonRepos"/>       
+            <setting label="Refresh RSS" type="action" action="RefreshRSS"/>
+            <setting label="Reload Skin" type="action" action="ReloadSkin()"/>
+        </category>
+       	<category label="Auto-View">
+            <setting type="lsep" label="[COLOR red][B]Auto-View[/B][/COLOR]"/>
+            <setting id="auto-view" type="bool" label="Enable Auto View" default="true"/>
+            <setting id="MAIN" type="number" label="MAIN" default="500" enable="!eq(-1,false)"/>
+            <setting id="INFO" type="number" label="INFO" default="515" enable="!eq(-1,false)"/>
+            <setting type="sep"/>
+        </category>
+  	</settings>

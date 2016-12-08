@@ -1,0 +1,150 @@
+Known changes for next update:
+    Backup file delete option
+    Background picture backup option
+    Skin settings backup exception will be added to fresh start when detected
+    (possibly) more Build-A- Options
+
+v1.0.18
+    Added:
+        Patch installer for Restore, Backup, and Wizard
+        Update service for Build a wizard wizards
+        Unlimited entry limit for RSS Maker
+        Link tester for Build a wizard pointer file input
+        Fix paths now includes url quoted paths
+        
+    Fixed:
+        Error handler
+        Backup, Restore and Wizard for latest Krypton changes
+        Version Identifier
+        Build a Wizard wizard function
+    
+    Updated links point to new server.
+
+v1.0.17
+    Disabled:
+        Splash image for repo updates etc. (only shows on install from http://get.mkiv.ca)
+        
+    Added:
+         Kill commands to the main addon and Build-A-Wizard output to (...hopefully) allow AppleTV to Force Close Media Centers --- (Thanks @Cowdblud for all your patience and feedback!)
+         Skin backup function now backs up script.skinsettings
+         
+    Fixed:
+         Fresh Start throwing error when updating builds
+        
+        
+
+v1.0.16
+    Added:
+        Update service for this add-on
+        
+    Fixed:
+        Minor bug fixes
+        Code Clean-up
+        
+    Other:
+        Optimized info handler
+        Removed Auto-Updater (Will be handled with a seperate slave add-on using the wizards settings...(Applies to MK-IV Builds only))
+
+v1.0.15
+    Added:
+        MK-IV Log and Maintenance tools are now available via the Kodi Context menu.
+        
+    Fixed:
+        Log Uploader Error
+        
+
+v1.0.14
+    Added:
+        -Added function to enable all add-ons when running Krypton
+        -Added Migration Killer so Kodi only Migrates addons once
+        
+    Fixed:
+        -MK-IV Wizard and Ares Wizard will now still be enabled after using Fresh Start
+        -Universal Backup should be working 100%
+        -Minor Bug fixes
+        -Addon Installer now enables addons when finished installing on Krypton
+
+
+v1.0.13
+    Fixed:
+        -Universal Backup for Krypton is now in testing
+        -New Faniriffic function
+
+
+v1.0.12
+    Added:
+        -Cache Clearing to Startup cleaner
+        -Menu Item to view this changelog
+        -New Sources to Sources menu
+        -New Add-ons to Addon menu
+        -Fix paths now scans and changes Database files
+        -Backup leaves Addons26.db for Krypton backups
+        -Added Actions to the Developers settings menu   
+        -Added Skin and GUI Backup and Restore options  
+            
+    Fixed:
+        -Improved Migration Trigger
+        -Fixed issue where clearing cache would delete the Log file
+        -Fixed issue where Adult Content section would not show up when activated
+        
+        
+v1.0.11   
+    Added:
+        -Migration trigger to make the Wizard Krypton compatible
+        -Migration trigger to Build-A-Wizard    
+        
+    Fixed:    
+        -Fixed issue with FreshStart not giving arguments
+
+    
+v1.0.10
+    Added:
+        -Prompt to install Ace Stream Engine to support upcoming BOB Addon for MK-IV Builds.
+        -Menu item to install A.S.E. in the MK-IV Build Menu as well for others who will want it. 
+           
+    Fixed:
+        -Minor fixes
+
+
+v1.0.9    
+    Added:
+        -MK-IV Build detection.
+        -Splash Screen on Add-on Install.    
+        
+    Fixed:
+        -Added IO Error handler to wizard and restore function due to unicode throwing Path does not exist errors on accented characters.
+        -Minor dialog fixes.
+
+
+v1.0.8    
+    Added:
+        -Log Viewer.
+        -Build-A-Wizard
+        -Build-A-Pointer..
+        -Build-A-RSS.
+        -Universal Backup.
+        -Restore.
+        -Get your build on Ares Wizard.
+        -Websites.
+        -Android app launcher.
+        -Web browser Launcher.
+        -Android terminal command button.
+        -Help Video section.
+        -Fanariffi.cc theme installer.
+        -System info section.
+        -Auto Maintenance function.
+        -Auto Update function.
+        -Speed Test.
+        -Add sources menu.
+        -Changed art to scrape from web to keep add-on size minimal.
+        
+    Fixed:
+        -Force close command for all devices.
+
+
+v1.0.1-1.0.7
+    -Very slack with change log but Revamped the whole addon in 1.8
+    
+
+v1.0.0
+    -Initial Release

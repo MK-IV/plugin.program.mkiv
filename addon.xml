@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.mkiv" name="[COLOR red][B]MK-IV[/B] [/COLOR][COLOR blue]Wizard[/COLOR]" version="1.0.18" mk4version="1.0.18" provider-name="[COLOR deepskyblue][B]CamC[/B][/COLOR]">
+  <requires>
+    <import addon="xbmc.python" version="2.23.0"/>
+	<import addon="script.module.addon.common" />
+    <import addon="plugin.video.youtube"  optional="true"/>
+    <import addon="script.module.requests" version="2.9.1" optional="true"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.service" library="service.py" start="startup" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">A must have multi-tool</summary>
+    <description lang="en">Visit mkiv.ca if you need help or have any suggestions</description>
+    <platform>all</platform>
+    </extension>
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+            <menu>
+                <label>MK-IV Tools</label>
+                <item library="ClearCache.py">
+                    <label>Clear Cache</label>
+                    <visible>true</visible>
+                </item>
+                <item library="DeletePackages.py">
+                    <label>Delete Packages</label>
+                    <visible>true</visible>
+                </item>
+                <item library="EnableAll.py">
+                    <label>Enable All Addons</label>
+                    <visible>true</visible>
+                </item>                
+                <item library="DeleteThumbs.py">
+                    <label>Delete Thumbnails</label>
+                    <visible>true</visible>
+                </item>
+                <item library="RefreshSkin.py">
+                    <label>Reload Skin</label>
+                    <visible>true</visible>
+                </item>                               
+                <menu>
+                    <label>Log Tools</label>
+                    <item library="ViewLast.py">
+                        <label>View Last Error</label>
+                        <visible>true</visible>
+                    </item>
+                    <item library="ViewAll.py">
+                        <label>View All Errors</label>
+                        <visible>true</visible>
+                    </item>
+                    <item library="ViewFull.py">
+                        <label>View Full Log</label>
+                        <visible>true</visible>
+                    </item>
+                    <item library="Upload.py">
+                        <label>Upload Log</label>
+                        <visible>true</visible>
+                    </item>                                        
+                </menu>
+            </menu>
+        </menu>
+	</extension>
+</addon>
