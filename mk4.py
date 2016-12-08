@@ -57,6 +57,7 @@ WorkPath=ADDON.getSetting('MK4WorkFolder')
 Downloader=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'downloader.py'))
 Extractor=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'extract.py'))
 Local=xbmc.translatePath(os.path.join('special://home/addons/',addon_id))
+Localtmp=xbmc.translatePath(os.path.join('special://home/addons/',addon_id+'-tmp'))
 Master=xbmc.translatePath(os.path.join('special://home/addons/',addon_id+'-master'))
 ART=BASEURL+'/Admin/Pictures/'
 PACKAGES=xbmc.translatePath(os.path.join('special://home/addons','packages'))
@@ -795,7 +796,7 @@ def FRESHSTART(params):
     if choice2 == 0:
         return
     elif choice2 == 1:
-        dp.create(Title,"Deleting contents",'[COLOR lime][/COLOR]', '')
+        dp.create(Title,"Counting files",'', '')
         try:
             rootlen = len(HOME)#
             for_progress = []#
@@ -808,13 +809,14 @@ def FRESHSTART(params):
                 for file in files:#
                     for_progress.append(file)# 
                     progress = len(for_progress) / float(N_ITEM) * 100#  
-                    dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file, 'Please Wait')#
+                    
             for root, dirs, files in os.walk(HOME,topdown=True):
                 dirs[:] = [d for d in dirs if d not in EXCLUDES]
                 for name in files:
                     try:
                         os.remove(os.path.join(root,name))
                         os.rmdir(os.path.join(root,name))
+                        dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file, 'Please Wait')#
                     except: pass
 
                 for name in dirs:
@@ -2566,8 +2568,9 @@ def NewSession():
                     os.remove(lib)
                 except:
                     pass
-                shutil.rmtree(Local)
+                os.rename(Local,Localtmp)
                 os.rename(Master,Local)
+                shutil.rmtree(Localtmp)
                 xbmc.executebuiltin("Container.Refresh")
                 dp.close
                 #except: pass
