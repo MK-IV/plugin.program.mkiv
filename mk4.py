@@ -809,14 +809,13 @@ def FRESHSTART(params):
                 for file in files:#
                     for_progress.append(file)# 
                     progress = len(for_progress) / float(N_ITEM) * 100#  
-                    
+                    dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file, 'Please Wait')#
             for root, dirs, files in os.walk(HOME,topdown=True):
                 dirs[:] = [d for d in dirs if d not in EXCLUDES]
                 for name in files:
                     try:
                         os.remove(os.path.join(root,name))
                         os.rmdir(os.path.join(root,name))
-                        dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file, 'Please Wait')#
                     except: pass
 
                 for name in dirs:
