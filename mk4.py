@@ -1081,7 +1081,7 @@ def Restore():
                 FRESHSTART(params)
         else:
             pass
-        if ADDON.getSetting('KodiVersion')=='Krypton':
+        '''if ADDON.getSetting('KodiVersion')=='Krypton':
             path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
             reqzip=os.path.join(path,'requests.zip')
             try:
@@ -1101,10 +1101,10 @@ def Restore():
                 extract.all(reqzip,ADDONS, dp) 
             except BaseException as e:
                 pass
-        else:
-            dp = xbmcgui.DialogProgress()
-            dp.create(Title,"Extracting and Writing Files... ",'','')
-            pass
+        else:'''
+        dp = xbmcgui.DialogProgress()
+        dp.create(Title,"Extracting and Writing Files... ",'','')
+            #pass
         addonfolder = xbmc.translatePath(os.path.join('special://','home'))
         try: 
             extract.all(RestorePath,addonfolder,dp)
@@ -1123,7 +1123,7 @@ def Restore():
         #DeletePackages(url)
         try:
             EnableAll() 
-            UpdateKryptonDB()
+            #UpdateKryptonDB()
         except: pass
         dialog = xbmcgui.Dialog()
         dialog.ok("Your Restore Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
@@ -1219,7 +1219,7 @@ def UNIVERSAL_BACKUP():
     if ( not vq ): return False, 0
     title = urllib.quote_plus(vq)
     backup_zip = xbmc.translatePath(os.path.join(fullbackuppath,title+'.zip'))
-    if ADDON.getSetting('KodiVersion') == 'Krypton':
+    '''if ADDON.getSetting('KodiVersion') == 'Krypton':
         path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
         reqzip=os.path.join(path,'requests.zip')
         try:
@@ -1251,9 +1251,9 @@ def UNIVERSAL_BACKUP():
         time.sleep(.5)
         extract.all(lib,addonfolder,dp)
     except BaseException as e:
-        pass    
+        pass'''    
         EnableAll() 
-        UpdateKryptonDB()
+        #UpdateKryptonDB()
         time.sleep(.5)
         exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps','packages']
         exclude_files = ["xbmc.log","xbmc.old.log","kodi.log","kodi.old.log","spmc.log","spmc.old.log","Textures13.db",'.DS_Store','.setup_complete','XBMCHelper.conf', 'advancedsettings.xml','Addons19.db','saltscache.db-shm','saltscache.db-wal']
@@ -1267,10 +1267,10 @@ def UNIVERSAL_BACKUP():
     FIX_SPECIAL(HOME)
     time.sleep(.5)
     ARCHIVE_CB(HOME,backup_zip, message_header, message1, message2, message3, exclude_dirs, exclude_files)
-    if ADDON.getSetting('KodiVersion') == 'Krypton':
-        RemoveTrigger()
-        pass
-    else: pass
+    #if ADDON.getSetting('KodiVersion') == 'Krypton':
+     #   RemoveTrigger()
+      #  pass
+    #else: pass
     dialog.ok("[COLOR lime][B]SUCCESS![/B][/COLOR]", 'You Are Now Backed Up.')
     dialog.ok("Backup has been saved to:", '[COLOR yellow]'+backup_zip+'[/COLOR]')
 
