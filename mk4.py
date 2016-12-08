@@ -2660,7 +2660,7 @@ def NewSession():
                 os.rename(Local,Localtmp)
                 os.rename(Master,Local)
                 shutil.rmtree(Localtmp)
-                xbmcgui.Dialog().ok(Title,'Restart required...','','Press OK to close the add-on')
+                xbmcgui.Dialog().ok(Title,Title+' Restart required...','','Press OK to close the add-on')
                 sys.exit(0)
                 #except: pass
             else: pass
