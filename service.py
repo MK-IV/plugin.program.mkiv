@@ -16,6 +16,7 @@ Addons20 = xbmc.translatePath(os.path.join('special://home/userdata/Database/','
 ART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id + '/resources/art/'))
 phoenix = xbmc.translatePath(os.path.join('special://home/addons/','plugin.video.phstreams'))
 AresTracker = xbmc.translatePath(os.path.join('special://home/userdata/addon_data/script.areswizard/','buildinstall'))
+RequestPatch=xbmc.translatePath(os.path.join('special://home/addons/script.module.requests/lib/requests/','packages'))
 myplatform = mk4.platform()
 dp           =  xbmcgui.DialogProgress()
 GoogleOne = "http://www.google.com"
@@ -46,6 +47,9 @@ if version >= 17.0 and version <= 17.9:
     #else: pass
     if os.path.exists(Addons20):
         mk4.RemoveTrigger()
+        
+if ADDON.getSetting('KodiVersion')=='Krypton' and os.path.exists(RequestPatch):
+    mk4.InstallRequests()
 
 if ADDON.getSetting('FreshStart') == 'true':
     mk4.SetSetting('FreshStart','false')

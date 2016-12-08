@@ -2427,7 +2427,27 @@ def ADDONWIZ(name,url,description):
         dialog.ok(Title, "Add-on Successfully Installed","")
 
 def InstallRequests():
-    extract.all(RequestsModule, ADDONS)
+        path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
+        reqzip=os.path.join(path,'requests.zip')
+        try:
+            os.remove(reqzip)
+        except:
+            pass
+        dp = xbmcgui.DialogProgress()
+        dp.create(Title,"Getting patch... ",'','')
+        downloader.download('https://github.com/MK-IV/Dependencies/raw/master/requests.zip', reqzip, dp)
+        time.sleep(.5)
+        try:
+            shutil.rmtree(Requests)
+        except: pass
+        time.sleep(1)
+        try: 
+            dp = xbmcgui.DialogProgress()
+            dp.update(50,'Getting patch...[COLOR lime] Done[/COLOR]','Applying Patch...')
+            extract.all(reqzip,ADDONS, dp) 
+        except BaseException as e:
+            pass
+
 
 def addItem(name,url,mode,iconimage,fanart,description):
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
