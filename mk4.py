@@ -2609,7 +2609,7 @@ def NewSession():
             else:
                 pass
 
-            if AutoUpdate=='true':
+            '''if AutoUpdate=='true':
                 if not os.path.exists(Slave):
                     xbmc.log('=====================  MK-IV Wizard  =====================')
                     xbmc.log('========  Installing MK-IV Slave (Auto-Updater)  =========')
@@ -2617,7 +2617,7 @@ def NewSession():
                     ADDONWIZ('Slave', 'https://github.com/MK-IV/script.mkiv/archive/2.0.zip', 'none')
                     pass
                 else:
-                    pass
+                    pass'''
                     
         SetSetting('NewSession','false')
         
