@@ -48,8 +48,8 @@ if version >= 17.0 and version <= 17.9:
     if os.path.exists(Addons20):
         mk4.RemoveTrigger()
         
-if ADDON.getSetting('KodiVersion')=='Krypton' and os.path.exists(RequestPatch):
-    mk4.InstallRequests()
+#if ADDON.getSetting('KodiVersion')=='Krypton' and os.path.exists(RequestPatch):
+   # mk4.InstallRequests()
 
 if ADDON.getSetting('FreshStart') == 'true':
     mk4.SetSetting('FreshStart','false')
