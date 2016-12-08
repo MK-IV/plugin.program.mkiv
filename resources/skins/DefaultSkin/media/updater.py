@@ -45,15 +45,16 @@ def UpdateCheck(AddonTitle, addon_id):
                     os.remove(lib)
                 except:
                     pass
-                    Addons = xbmc.translatePath('special://home/addons/')
-                    addontmp = xbmc.translatePath(os.path.join(Addons+'BuildAWizard-master/','addon.xml'))
-                    defaulttmp = xbmc.translatePath(os.path.join(Addons+'BuildAWizard-master/','default.py'))
-                    updatetmp = xbmc.translatePath(os.path.join(Addons+'BuildAWizard-master/','updater.py'))
-                    defaultpy = xbmc.translatePath(os.path.join(Addons+addon_id,'default.py'))
-                    updatepy = xbmc.translatePath(os.path.join(Addons+addon_id,'updater.py'))
-                    addonxml = xbmc.translatePath(os.path.join(Addons+addon_id,'addon.xml'))
-                    local = xbmc.translatePath(os.path.join(Addons,addon_id))
-                    master = xbmc.translatePath(os.path.join(Addons,'BuildAWizard-master'))
+                Addons = xbmc.translatePath('special://home/addons/')
+                addontmp = xbmc.translatePath(os.path.join(Addons+'BuildAWizard-master/','addon.xml'))
+                defaulttmp = xbmc.translatePath(os.path.join(Addons+'BuildAWizard-master/','default.py'))
+                updatetmp = xbmc.translatePath(os.path.join(Addons+'BuildAWizard-master/','updater.py'))
+                defaultpy = xbmc.translatePath(os.path.join(Addons+addon_id,'default.py'))
+                updatepy = xbmc.translatePath(os.path.join(Addons+addon_id,'updater.py'))
+                addonxml = xbmc.translatePath(os.path.join(Addons+addon_id,'addon.xml'))
+                local = xbmc.translatePath(os.path.join(Addons,addon_id))
+                localtmp = xbmc.translatePath(os.path.join(Addons,addon_id+'-tmp'))
+                master = xbmc.translatePath(os.path.join(Addons,'BuildAWizard-master'))
                 link = open(os.path.join(local, 'default.py'))
                 match = re.compile('addonname="(.+?)"wizardname="(.+?)"providername="(.+?)"zipurl="(.+?)"').findall(link)
                 for addonname,wizardname,providername,zipurl in match:
@@ -70,16 +71,12 @@ def UpdateCheck(AddonTitle, addon_id):
                     f.close()
                     pass
                 try:
-                    os.unlink(defaultpy)
-                    shutil.copy(defaulttmp,defaultpy)
-                    os.unlink(addonxml)
-                    shutil.copy(addontmp,addonxml)
-                    os.unlink(updatepy)
-                    shutil.copy(updatetmp,updatepy)
+                    os.rename(local,localtmp)
                     os.rename(master,local)
+                    shutil.rmtree(localtmp)
                 except: pass
-                xbmc.executebuiltin("Container.Refresh")
                 dp.close
+                xbmc.executebuiltin("Container.Refresh")
                 #except: pass
             else: pass
     except: pass

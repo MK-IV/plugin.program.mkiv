@@ -69,7 +69,7 @@ def Wizard(name,url,description):
        pass
     downloader.download(url, lib, dp)
     addonfolder = xbmc.translatePath(os.path.join('special://','home'))
-    xbmc_version=xbmc.getInfoLabel("System.BuildVersion")
+    '''xbmc_version=xbmc.getInfoLabel("System.BuildVersion")
     version=float(xbmc_version[:4])
     if version >= 17.0 and version <= 17.9:
         dp.update(0,"Downloading "+name+"...[COLOR lime]DONE[/COLOR]","Applying Patch...")
@@ -91,14 +91,13 @@ def Wizard(name,url,description):
             pass
         dp.update(0,"Applying Patch...[COLOR lime]DONE[/COLOR]","Extracting...")
         pass
-    else:
-        dp.update(0,"Downloading "+name+"...[COLOR lime]DONE[/COLOR]", "Extracting...")
-        pass
+    else:'''
+    dp.update(0,"Downloading "+name+"...[COLOR lime]DONE[/COLOR]", "Extracting...")
     try: 
-        addonfolder = xbmc.translatePath(os.path.join('special://','home'))
+        '''addonfolder = xbmc.translatePath(os.path.join('special://','home'))
         path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
         lib=os.path.join(path, name+'.zip')
-        time.sleep(.5)
+        time.sleep(.5)'''
         extract.all(lib,addonfolder,dp)
     except BaseException as e:
         pass       
@@ -107,7 +106,7 @@ def Wizard(name,url,description):
        os.remove(lib)
     except:
        pass
-    if version >= 17.0 and version <= 17.9:
+    '''if version >= 17.0 and version <= 17.9:
         dp.update(0,"Extracting...[COLOR lime]DONE[/COLOR]", "Updating Krypton Database")
         conn = sqlite3.connect(Addons26)
         cursor = conn.cursor()
@@ -122,7 +121,7 @@ def Wizard(name,url,description):
         time.sleep(2)
         xbmc.executebuiltin('UpdateLocalAddons')
         pass
-    else: pass
+    else: pass'''
     dialog.ok("Your Setup Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
     KillKodi()
  
