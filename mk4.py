@@ -790,36 +790,37 @@ def FRESHSTART(params):
         elif choice1 == 1:
             pass
     else:
-        choice2 = xbmcgui.Dialog().yesno("[COLOR=red]Are You Sure?[/COLOR]", 'Last chance...', '', '', yeslabel='[COLOR lime]Yes, Fresh Start[/COLOR]',nolabel='[COLOR red]No[/COLOR]')
-        if choice2 == 0:
-            return
-        elif choice2 == 1:
-            dp.create(Title,"Deleting contents",'[COLOR lime][/COLOR]', '')
-            try:
-                rootlen = len(HOME)#
-                for_progress = []#
-                ITEM =[]#
-                for root, dirs, files in os.walk(HOME):#
-                    for file in files:#
-                        ITEM.append(file)#
-                        N_ITEM =len(ITEM)#
-                for root, dirs, files in os.walk(HOME):#
-                    for file in files:#
-                        for_progress.append(file)# 
-                        progress = len(for_progress) / float(N_ITEM) * 100#  
-                        dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file, 'Please Wait')#
-                for root, dirs, files in os.walk(HOME,topdown=True):
-                    dirs[:] = [d for d in dirs if d not in EXCLUDES]
-                    for name in files:
-                        try:
-                            os.remove(os.path.join(root,name))
-                            os.rmdir(os.path.join(root,name))
-                        except: pass
+        pass
+    choice2 = xbmcgui.Dialog().yesno("[COLOR=red]Are You Sure?[/COLOR]", 'Last chance...', '', '', yeslabel='[COLOR lime]Yes, Fresh Start[/COLOR]',nolabel='[COLOR red]No[/COLOR]')
+    if choice2 == 0:
+        return
+    elif choice2 == 1:
+        dp.create(Title,"Deleting contents",'[COLOR lime][/COLOR]', '')
+        try:
+            rootlen = len(HOME)#
+            for_progress = []#
+            ITEM =[]#
+            for root, dirs, files in os.walk(HOME):#
+                for file in files:#
+                    ITEM.append(file)#
+                    N_ITEM =len(ITEM)#
+            for root, dirs, files in os.walk(HOME):#
+                for file in files:#
+                    for_progress.append(file)# 
+                    progress = len(for_progress) / float(N_ITEM) * 100#  
+                    dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file, 'Please Wait')#
+            for root, dirs, files in os.walk(HOME,topdown=True):
+                dirs[:] = [d for d in dirs if d not in EXCLUDES]
+                for name in files:
+                    try:
+                        os.remove(os.path.join(root,name))
+                        os.rmdir(os.path.join(root,name))
+                    except: pass
 
-                    for name in dirs:
-                        try: os.rmdir(os.path.join(root,name)); os.rmdir(root)
-                        except: pass
-            except: pass
+                for name in dirs:
+                    try: os.rmdir(os.path.join(root,name)); os.rmdir(root)
+                    except: pass
+        except: pass
     if not os.path.exists(Database):
         os.makedirs(Database)
         pass

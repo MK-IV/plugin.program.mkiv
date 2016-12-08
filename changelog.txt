@@ -17,6 +17,7 @@ v1.0.18
         Backup, Restore and Wizard for latest Krypton changes
         Version Identifier
         Build a Wizard wizard function
+        Modified Fresh Start working on Android again
     
     Updated links point to new server.
 
