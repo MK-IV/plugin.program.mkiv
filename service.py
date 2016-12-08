@@ -110,7 +110,7 @@ else: pass
 
 if not os.path.exists(RequestPatch) and ADDON.getSetting('KodiVersion') == 'Krypton':
     time.sleep(20)
-    if xbmcgui.Dialog.yesno(Title,'[COLOR red]A patch is available to fix errors you might be having...[/COLOR]','','Would you like to apply a patch?'):
+    if xbmcgui.Dialog().yesno(Title,'[COLOR red]A patch is available to fix errors you might be having...[/COLOR]','','Would you like to apply a patch?'):
         mk4.ADDONWIZ('Python Requests Module','http://mkiv.netne.net/Admin/Addon%20Packs/script.module.requests-2.9.1.zip','script.module.requests')
         pass
     else: pass
