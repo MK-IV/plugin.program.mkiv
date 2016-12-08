@@ -1124,7 +1124,7 @@ def Restore():
         #DeletePackages(url)
         try:
             EnableAll() 
-            UpdateKryptonDB()
+            #UpdateKryptonDB()
         except: pass
         dialog = xbmcgui.Dialog()
         dialog.ok("Your Restore Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
@@ -1254,7 +1254,7 @@ def UNIVERSAL_BACKUP():
     except BaseException as e:
         pass    
         EnableAll() 
-        UpdateKryptonDB()
+        #UpdateKryptonDB()
         time.sleep(.5)
         exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps','packages']
         exclude_files = ["xbmc.log","xbmc.old.log","kodi.log","kodi.old.log","spmc.log","spmc.old.log","Textures13.db",'.DS_Store','.setup_complete','XBMCHelper.conf', 'advancedsettings.xml','Addons19.db','saltscache.db-shm','saltscache.db-wal']
@@ -2447,6 +2447,7 @@ def InstallRequests():
             extract.all(reqzip,ADDONS, dp) 
         except BaseException as e:
             pass
+        EnableAll()
 
 
 def addItem(name,url,mode,iconimage,fanart,description):
