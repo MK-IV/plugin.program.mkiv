@@ -839,6 +839,7 @@ def FRESHSTART(params):
     dp.close()
     dialog = xbmcgui.Dialog()
     dialog.ok(Title,'Fresh Start Successful','','The MC will now close')
+    killxbmc()
     xbmc.executebuiltin('Quit')
 
 def FIX_SPECIAL(url):
