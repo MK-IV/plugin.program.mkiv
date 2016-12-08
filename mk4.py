@@ -150,23 +150,15 @@ def BUILDMENU():
     addDir('[COLOR yellow][B]ADD YOUR BUILD TO MK-IV[/B][/COLOR]',BASEURL,16,ART+'website.jpg',FANART,'','')
 
 def MAINTENANCE():
-        xbmc_version=xbmc.getInfoLabel("System.BuildVersion")
-        version=float(xbmc_version[:4])
-        if version >= 15.0 and version <= 15.9:
-            codename = 'Isengard'
-        if version >= 16.0 and version <= 16.9:
-            codename = 'Jarvis'
-        if version >= 17.0 and version <= 17.9:
-            codename = 'Krypton'
         addItem('[B]Delete Cache[/B]','url',4,'http://a3.mzstatic.com/eu/r30/Purple20/v4/8a/d6/08/8ad6089c-37f1-6670-7aa1-069ba44de89e/icon128-2x.png',FANART,'')
         addItem('[B]Delete Thumbnails[/B]','url',11,'http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Pictures-Folder-icon.png',FANART,'')
         addItem('[B]Delete Packages[/B]','url',7,'http://www.freeiconspng.com/uploads/packages-icon-21.png',FANART,'')
-        if codename == 'Krypton':
+        if ADDON.getSetting('KodiVersion') == 'Krypton':
             addItem('[B]Enable All Addons[/B]','url',70,'http://clipartix.com/wp-content/uploads/2016/04/Thumbs-up-clipart-2.png',FANART,'')
             #addItem('[B]Check Sources[/B]',BASEURL,50,ART+'checksources.png',FANART,'')
             addItem('[B]     -----     [/B]','url',0,ICON,FANART,'')
             addItem('[COLOR red][B]Fresh Start[/B][/COLOR]','url',6,'http://www.southdecaturchurch.com/files/southdecatur/Pic%20and%20Sermons/FreshStart_preview.jpg',FANART,'')
-        if codename!='Krypton':
+        if ADDON.getSetting('KodiVersion') == 'Jarvis':
             #addItem('[B]Check Sources[/B]',BASEURL,50,ART+'checksources.png',FANART,'')
             addItem('[COLOR deepskyblue][B]     -----     [/B][/COLOR]','url',0,ICON,FANART,'')
             addItem('[COLOR red][B]Fresh Start[/B][/COLOR]','url',6,'http://www.southdecaturchurch.com/files/southdecatur/Pic%20and%20Sermons/FreshStart_preview.jpg',FANART,'')
@@ -801,17 +793,14 @@ def FRESHSTART(params):
             rootlen = len(HOME)#
             for_progress = []#
             ITEM =[]#
-            for root, dirs, files in os.walk(HOME):#
+            for root, dirs, files in os.walk(HOME,topdown=True):
+                dirs[:] = [d for d in dirs if d not in EXCLUDES]
                 for file in files:#
                     ITEM.append(file)#
                     N_ITEM =len(ITEM)#
-            for root, dirs, files in os.walk(HOME):#
-                for file in files:#
                     for_progress.append(file)# 
                     progress = len(for_progress) / float(N_ITEM) * 100#  
                     dp.update(int(progress),"Deleting:",'[COLOR lime]%s[/COLOR]'%file, 'Please Wait')#
-            for root, dirs, files in os.walk(HOME,topdown=True):
-                dirs[:] = [d for d in dirs if d not in EXCLUDES]
                 for name in files:
                     try:
                         os.remove(os.path.join(root,name))
@@ -2390,7 +2379,7 @@ def ADDONWIZ(name,url,description):
     xbmc.log('================================================')
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()
-    dp.create(Title,"Downloading ",'', 'Please Wait')
+    dp.create(Title,"Downloading "+name,'', '')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -2423,7 +2412,7 @@ def ADDONWIZ(name,url,description):
 
     else:
         dialog = xbmcgui.Dialog()
-        dialog.ok(Title, "Add-on Successfully Installed","")
+        dialog.ok(Title, name+" Successfully Installed","")
 
 def InstallRequests():
         path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
