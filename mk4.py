@@ -1263,12 +1263,27 @@ def UNIVERSAL_BACKUP():
     dialog.ok("[COLOR lime][B]SUCCESS![/B][/COLOR]", 'You Are Now Backed Up.')
     dialog.ok("Backup has been saved to:", '[COLOR yellow]'+backup_zip+'[/COLOR]')
 
-def ListBackDel():
-    if os.path.exists(USB):
-        for file in os.listdir(USB):
+def ListBackRes():
+    fullbackuppath = xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
+    if os.path.exists(fullbackuppath):
+        for file in os.listdir(fullbackuppath):
             if file.endswith(".zip"):
-                url =  xbmc.translatePath(os.path.join(USB,file))
-                addDir(file,url,52,ICON,FANART,'','')
+                url =  xbmc.translatePath(os.path.join(fullbackuppath,file))
+                addItem(file,url,52,ICON,FANART,'','')
+    else: 
+        if xbmcgui.Dialog().yesno(Title,'You need to set a Backup Path in Settings first', 'Open Settings now?'):
+            Addon_Settings()
+            sys.exit(0)
+        else:
+            return False, 0
+    
+def ListBackDel():
+    fullbackuppath = xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
+    if os.path.exists(fullbackuppath):
+        for file in os.listdir(fullbackuppath):
+            if file.endswith(".zip"):
+                url =  xbmc.translatePath(os.path.join(fullbackuppath,file))
+                addItem(file,url,52,ICON,FANART,'','')
     else: 
         if xbmcgui.Dialog().yesno(Title,'You need to set a Backup Path in Settings first', 'Open Settings now?'):
             Addon_Settings()
@@ -1277,15 +1292,16 @@ def ListBackDel():
             return False, 0
 
 def DeleteBackup(url):
-	if dialog.yesno(Title,"[COLOR smokewhite]" + url + "[/COLOR]","Do you want to delete this backup?"):
-		os.remove(url)
-		dialog.ok(Title,"[COLOR smokewhite]" + url + "[/COLOR]","Successfully deleted.")
+    if dialog.yesno(Title,"[COLOR smokewhite]" + url + "[/COLOR]","Do you want to delete this backup?"):
+        os.remove(url)
+        dialog.ok(Title,"[COLOR smokewhite]" + url + "[/COLOR]","Successfully deleted.")
 
 def DeleteAllBackups():
-	if dialog.yesno(Title,"Do you want to delete all backups?"):
-		shutil.rmtree(USB)
-		os.makedirs(USB)
-		dialog.ok(Title,"All backups successfully deleted.")
+    fullbackuppath = xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
+    if dialog.yesno(Title,"Do you want to delete all backups?"):
+        shutil.rmtree(fullbackuppath)
+        os.makedirs(fullbackuppath)
+        dialog.ok(Title,"All backups successfully deleted.")
 
 #============================================   Fanriffic Themes   ==========================================================
 
@@ -1776,7 +1792,7 @@ def BuildAWizard():
     shutil.copy(Extractor,outputfolder)
     shutil.copy(Downloader,outputfolder)
     shutil.copy(icontmp,outputfolder)
-    dp.update(30,'Copying core files...[COLOR lime]Complete[/COLOR]','Personalizing '+name+'...')
+    dp.update(30,'Copying core files...[COLOR lime]Complete[/COLOR]','Personalizing [COLOR smokewhite]'+name+'[/COLOR]...')
     time.sleep(1)
     a=open(addonxml).read()
     b=a.replace('addonname','plugin.program.'+id).replace('wizardname',name).replace('providername',proname)
@@ -1789,7 +1805,7 @@ def BuildAWizard():
     f = open(defaultpy, mode='w')
     f.write(str(b))
     f.close()
-    dp.update(60,'Personalizing '+name+'...[COLOR lime]Complete[/COLOR]','Creating installable zip file...')
+    dp.update(60,'Personalizing [COLOR smokewhite]'+name+'[/COLOR]...[COLOR lime]Complete[/COLOR]','Creating installable zip file...')
     time.sleep(1)
     ZipIt(workfolder, workfolder,'plugin.program.'+id)
     time.sleep(.5)
@@ -2261,7 +2277,7 @@ def WIZARD(name,url,version):
     #localfile.close()
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()        
-    dp.create(Title,"Downloading "+name+"... ",'', '')
+    dp.create(Title,"Downloading [COLOR smokewhite]"+name+"[/COLOR]... ",'', '')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -2270,7 +2286,7 @@ def WIZARD(name,url,version):
     downloader.download(url, lib, dp)
     addonfolder = xbmc.translatePath(os.path.join('special://','home'))
     if ADDON.getSetting('KodiVersion')=='Krypton':
-        dp.update(0,"Downloading "+name+"... [COLOR lime]DONE[/COLOR]","Applying Patch...", '')
+        dp.update(0,"Downloading [COLOR smokewhite]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Applying Patch...", '')
         path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
         reqzip=os.path.join(path,'requests.zip')
         try:
@@ -2290,7 +2306,7 @@ def WIZARD(name,url,version):
         dp.update(0,"Applying Patch...[COLOR lime]DONE[/COLOR]","Extracting...")
         pass
     else:
-        dp.update(0,"Downloading "+name+"... [COLOR lime]DONE[/COLOR]","Extracting...")
+        dp.update(0,"Downloading [COLOR smokewhite]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Extracting...")
         pass
     try: 
         addonfolder = xbmc.translatePath(os.path.join('special://','home'))
@@ -2379,7 +2395,7 @@ def ADDONWIZ(name,url,description):
     xbmc.log('================================================')
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()
-    dp.create(Title,"Downloading "+name,'', '')
+    dp.create(Title,"Downloading [COLOR smokewhite]"+name+"[/COLOR]",'', '')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -2687,10 +2703,10 @@ def Check4Update():
                 addonfolder = xbmc.translatePath(os.path.join('special://','home'))
                 time.sleep(.5)
                 if fresh == 'false':
-                    dp.update(0,'Downloading '+name+' update...[COLOR lime]DONE[/COLOR]','Applying update...')
+                    dp.update(0,'Downloading [COLOR smokewhite]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...')
                     pass
                 else:
-                    dp.update(0,'Downloading '+name+' update...[COLOR lime]DONE[/COLOR]','Applying update...','Screen will go black for a moment')
+                    dp.update(0,'Downloading [COLOR smokewhite]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...','Screen will go black for a moment')
                     time.sleep(1)
                     xbmc.executebuiltin('UnloadSkin()')
                     pass
