@@ -1639,10 +1639,10 @@ def BuildAWizard():
     if not os.path.exists(fullworkpath):
         os.makedirs(fullworkpath)
     dialog = xbmcgui.Dialog()
-    dialog.ok('Step 1: Entering an ID for your wizard','The id is your addons xbmc ID... i.e. plugin.program.<your_id_here>','No spaces or special characters.','')
+    dialog.ok('Step 1: Entering an ID for your wizard','The id is your addons xbmc ID... i.e. plugin.program.<your_id_here>','')
     vqid = _get_keyboard(heading="Enter an id for your wizard" )
     if ( not vqid ): return False, 0
-    id = urllib.unquote_plus(vqid)
+    id = urllib.unquote_plus(vqid).replace(' ','').replace('!','').replace('@','').replace('#','').replace('$','').replace('%','').replace('^','').replace('&','').replace('*','').replace('(','').replace(')','').replace('/','')
     dialog.ok('Step 2: Entering a name for your wizard','This is your wizard\'s name.','','i.e. MK-IV Wizard or My Wizard')
     vqname = _get_keyboard(heading="Enter a name for your wizard" )
     if ( not vqname ): return False, 0
