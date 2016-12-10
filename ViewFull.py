@@ -36,39 +36,39 @@ if os.path.exists(dbmclog):
     if os.path.exists(dbmclog) and os.path.exists(dbmcold):
         choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
         if choice == 0:
-            f = open(dbmclog,mode='r'); msg = f.read(); f.close()
+            f = open(dbmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - dbmc.log" % "[COLOR white]" + msg + "[/COLOR]")
         else:
-            f = open(dbmcold,mode='r'); msg = f.read(); f.close()
+            f = open(dbmcold,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - dbmc.old.log" % "[COLOR white]" + msg + "[/COLOR]")
     else:
-        f = open(dbmclog,mode='r'); msg = f.read(); f.close()
+        f = open(dbmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
         TextBoxes(Title+' - Log Viewer',"%s - dbmc.log" % "[COLOR white]" + msg + "[/COLOR]")
 
 if os.path.exists(spmclog):
     if os.path.exists(spmclog) and os.path.exists(spmcold):
         choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
         if choice == 0:
-            f = open(spmclog,mode='r'); msg = f.read(); f.close()
+            f = open(spmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - spmc.log" % "[COLOR white]" + msg + "[/COLOR]")
         else:
-            f = open(spmcold,mode='r'); msg = f.read(); f.close()
+            f = open(spmcold,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - spmc.old.log" % "[COLOR white]" + msg + "[/COLOR]")
     else:
-        f = open(spmclog,mode='r'); msg = f.read(); f.close()
+        f = open(spmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
         TextBoxes(Title+' - Log Viewer',"%s - spmc.log" % "[COLOR white]" + msg + "[/COLOR]")
         
 if os.path.exists(kodilog):
     if os.path.exists(kodilog) and os.path.exists(kodiold):
         choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
         if choice == 0:
-            f = open(kodilog,mode='r'); msg = f.read(); f.close()
+            f = open(kodilog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - kodi.log" % "[COLOR white]" + msg + "[/COLOR]")
         else:
-            f = open(kodiold,mode='r'); msg = f.read(); f.close()
+            f = open(kodiold,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - kodi.old.log" % "[COLOR white]" + msg + "[/COLOR]")
     else:
-        f = open(kodilog,mode='r'); msg = f.read(); f.close()
+        f = open(kodilog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
         TextBoxes(Title+' - Log Viewer',"%s - kodi.log" % "[COLOR white]" + msg + "[/COLOR]")
 
 else:

@@ -52,6 +52,7 @@ Hs='https://'
 skin=xbmc.getSkinDir()
 EXCLUDES=['kodi.log','script.areswizard','plugin.program.mkiv','plugin.program.mkiv-master','script.module.addon.common','autoexec.py','service.xbmc.versioncheck','metadata.tvdb.com','metadata.common.imdb.com']
 BackupPath=ADDON.getSetting('backup')
+fullbackuppath=xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
 RestorePath=ADDON.getSetting('restore')
 WorkPath=ADDON.getSetting('MK4WorkFolder')
 Downloader=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'downloader.py'))
@@ -182,13 +183,31 @@ def BUILDERS():
 def BackupMenu():
     addItem('[COLOR yellow][B]--->Start Here<---[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
     addItem('[B]Universal Backup[/B]',BASEURL,12,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
-    addItem('[B]Restore[/B]',BASEURL,9,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
-    #addItem('[B]Delete a Backup File[/B]',BASEURL,53,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+    if os.path.exists(fullbackuppath):
+        try:
+            for file in os.listdir(fullbackuppath):
+                if file.endswith('.zip'):    
+                    addDir('[B]Restore from Backup Folder[/B]',BASEURL,71,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
+                    pass
+        except:
+            pass
+    else: 
+        pass
+    addItem('[B]Restore from Specified Location[/B]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
     addItem('[B]Backup Skin Settings[/B]',BASEURL,59,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(SkinSettingsBackup):
-        addItem('[B]Restore Skin Settings[/B]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
+        addDir('[B]Restore Skin Settings[/B]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
         addItem('[B][/B]',BASEURL,0,'',FANART,'')
-        addItem('[B]Delete Skin Settings Backup[/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+        addItem('[B][COLOR yellow]Delete Skin Settings Backup[/COLOR][/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+    else:
+        pass
+    if os.path.exists(fullbackuppath):
+        try:
+            for file in os.listdir(fullbackuppath):
+                if file.endswith('.zip'):
+                    addDir('[B][COLOR yellow]Delete a Backup[/COLOR][/B]',BASEURL,53,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'','')
+                    addItem('[B][COLOR yellow]Delete all Backups[/COLOR][/B]',BASEURL,73,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+        except: pass
     else:
         pass
 
@@ -1006,57 +1025,47 @@ def viewLogFile():
         if os.path.exists(dbmclog) and os.path.exists(dbmcold):
             choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
             if choice == 0:
-                f = open(dbmclog,mode='r'); msg = f.read(); f.close()
+                f = open(dbmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
                 TextBoxes(Title+' - Log Viewer',"%s - dbmc.log" % "[COLOR white]" + msg + "[/COLOR]")
             else:
-                f = open(dbmcold,mode='r'); msg = f.read(); f.close()
+                f = open(dbmcold,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
                 TextBoxes(Title+' - Log Viewer',"%s - dbmc.old.log" % "[COLOR white]" + msg + "[/COLOR]")
         else:
-            f = open(dbmclog,mode='r'); msg = f.read(); f.close()
+            f = open(dbmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - dbmc.log" % "[COLOR white]" + msg + "[/COLOR]")
 
     if os.path.exists(spmclog):
         if os.path.exists(spmclog) and os.path.exists(spmcold):
             choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
             if choice == 0:
-                f = open(spmclog,mode='r'); msg = f.read(); f.close()
+                f = open(spmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
                 TextBoxes(Title+' - Log Viewer',"%s - spmc.log" % "[COLOR white]" + msg + "[/COLOR]")
             else:
-                f = open(spmcold,mode='r'); msg = f.read(); f.close()
+                f = open(spmcold,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
                 TextBoxes(Title+' - Log Viewer',"%s - spmc.old.log" % "[COLOR white]" + msg + "[/COLOR]")
         else:
-            f = open(spmclog,mode='r'); msg = f.read(); f.close()
+            f = open(spmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - spmc.log" % "[COLOR white]" + msg + "[/COLOR]")
-
+        
     if os.path.exists(kodilog):
         if os.path.exists(kodilog) and os.path.exists(kodiold):
             choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
             if choice == 0:
-                f = open(kodilog,mode='r'); msg = f.read(); f.close()
+                f = open(kodilog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
                 TextBoxes(Title+' - Log Viewer',"%s - kodi.log" % "[COLOR white]" + msg + "[/COLOR]")
             else:
-                f = open(kodiold,mode='r'); msg = f.read(); f.close()
+                f = open(kodiold,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
                 TextBoxes(Title+' - Log Viewer',"%s - kodi.old.log" % "[COLOR white]" + msg + "[/COLOR]")
         else:
-            f = open(kodilog,mode='r'); msg = f.read(); f.close()
+            f = open(kodilog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - kodi.log" % "[COLOR white]" + msg + "[/COLOR]")
 
-    if os.path.isfile(kodilog) or os.path.isfile(spmclog) or os.path.isfile(dbmclog):
-        return True
     else:
         dialog.ok(Title,'Sorry, No log file was found.','','[COLOR smokewhite]Thank you for using MK-IV Wizard[/COLOR]')
 
     xbmc.executebuiltin("Container.Refresh")
 
-def Restore():
-        if not os.path.exists(RestorePath):
-            if xbmcgui.Dialog().yesno(Title,'You need to select a file to restore in settings first','','Open Settings now?'):
-                Addon_Settings()
-                sys.exit(0)
-            else:
-                return False, 0
-        else:
-            pass
+def Restore(url):
         xbmc.log('======================   MK-IV Wizard   ========================')
         xbmc.log('==============**********************************================')
         xbmc.log('===============   Start Restoring backup file   ================')
@@ -1096,7 +1105,7 @@ def Restore():
             #pass
         addonfolder = xbmc.translatePath(os.path.join('special://','home'))
         try: 
-            extract.all(RestorePath,addonfolder,dp)
+            extract.all(url,addonfolder,dp)
         except BaseException as e:
             pass  
         dp.update(90,"Extracting and Writing Files... [COLOR lime] DONE[/COLOR]", "Checking paths and cleaning up...")
@@ -1201,7 +1210,6 @@ def UNIVERSAL_BACKUP():
             sys.exit(0)
         else:
             return False, 0
-    fullbackuppath = xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
     if not os.path.exists(fullbackuppath):
         os.makedirs(fullbackuppath)
     vq = _get_keyboard( heading="Enter a name for this backup" )
@@ -1262,45 +1270,46 @@ def UNIVERSAL_BACKUP():
     #else: pass
     dialog.ok("[COLOR lime][B]SUCCESS![/B][/COLOR]", 'You Are Now Backed Up.')
     dialog.ok("Backup has been saved to:", '[COLOR yellow]'+backup_zip+'[/COLOR]')
+    xbmc.executebuiltin('Container.Refresh')
+
+def RestoreOther():
+    if RestorePath != "":
+        url=RestorePath
+        addItem(file,url,9,ICON,FANART,'')
+    else:
+        if xbmcgui.Dialog().yesno(Title,'Choose the backup file you wish to restore in Settings.','','Open Settings now?'):
+            Addon_Settings()
+            sys.exit(0)
+        else:
+            return False, 0
 
 def ListBackRes():
-    fullbackuppath = xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
     if os.path.exists(fullbackuppath):
         for file in os.listdir(fullbackuppath):
             if file.endswith(".zip"):
-                url =  xbmc.translatePath(os.path.join(fullbackuppath,file))
-                addItem(file,url,52,ICON,FANART,'','')
-    else: 
-        if xbmcgui.Dialog().yesno(Title,'You need to set a Backup Path in Settings first', 'Open Settings now?'):
-            Addon_Settings()
-            sys.exit(0)
-        else:
-            return False, 0
+                url=xbmc.translatePath(os.path.join(fullbackuppath,file))
+                addItem(file,url,9,ICON,FANART,'')
     
 def ListBackDel():
-    fullbackuppath = xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
     if os.path.exists(fullbackuppath):
         for file in os.listdir(fullbackuppath):
             if file.endswith(".zip"):
-                url =  xbmc.translatePath(os.path.join(fullbackuppath,file))
-                addItem(file,url,52,ICON,FANART,'','')
-    else: 
-        if xbmcgui.Dialog().yesno(Title,'You need to set a Backup Path in Settings first', 'Open Settings now?'):
-            Addon_Settings()
-            sys.exit(0)
-        else:
-            return False, 0
+                url=xbmc.translatePath(os.path.join(fullbackuppath,file))
+                addItem(file,url,52,ICON,FANART,'')
 
 def DeleteBackup(url):
     if dialog.yesno(Title,"[COLOR smokewhite]" + url + "[/COLOR]","Do you want to delete this backup?"):
         os.remove(url)
+        xbmc.executebuiltin('Container.Refresh')
         dialog.ok(Title,"[COLOR smokewhite]" + url + "[/COLOR]","Successfully deleted.")
 
+
+
 def DeleteAllBackups():
-    fullbackuppath = xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
     if dialog.yesno(Title,"Do you want to delete all backups?"):
         shutil.rmtree(fullbackuppath)
         os.makedirs(fullbackuppath)
+        xbmc.executebuiltin('Container.Refresh')
         dialog.ok(Title,"All backups successfully deleted.")
 
 #============================================   Fanriffic Themes   ==========================================================

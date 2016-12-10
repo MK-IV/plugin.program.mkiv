@@ -240,7 +240,7 @@ elif mode==8:
        mk4.EndUser()
        
 elif mode==9:
-        mk4.Restore()
+        mk4.Restore(url)
     
 elif mode==10:
         mk4.ADDONWIZ(name,url,description)
@@ -451,6 +451,18 @@ elif mode==69:
     
 elif mode==70:
     mk4.EnableAll()
+    
+elif mode==71:
+    mk4.ListBackRes()
+    
+elif mode==72:
+    mk4.DeleteBackup(url)
+    
+elif mode==73:
+    mk4.DeleteAllBackups()
+    
+elif mode==74:
+    mk4.RestoreOther()
 
 elif mode==100:
             mk4.MKIVMENU() 
