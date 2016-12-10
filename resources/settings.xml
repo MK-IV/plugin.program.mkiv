@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-        <category label="Backup/Restore">
+        <category label="Backup Folder">
             <setting type="lsep" label="[COLOR red][B]BACK-UP[/B][/COLOR]"/>
             <setting type="lsep" label="DO NOT use a location inside your Kodi setup."/>
             <setting id="backup" type="folder"    label="Choose Backup Folder"   source="local"   default=""/>
-            <setting type="sep"/>
-            <setting type="lsep" label="[COLOR red][B]RESTORE[/B][/COLOR]"/>
-            <setting id="restore" type="file"    label="Choose Backup To Restore"    source="local"  default=""/>	</category>
+        </category>
         <category label="General">
             <setting type="lsep" label="[COLOR red][B]MK-IV Wizardness[/B][/COLOR]"/>
             <setting id="InstallRepo" type="bool" label="Automatically Install MK-IV Repo" default="false"/>

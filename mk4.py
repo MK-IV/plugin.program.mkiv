@@ -53,7 +53,6 @@ skin=xbmc.getSkinDir()
 EXCLUDES=['kodi.log','script.areswizard','plugin.program.mkiv','plugin.program.mkiv-master','script.module.addon.common','autoexec.py','service.xbmc.versioncheck','metadata.tvdb.com','metadata.common.imdb.com']
 BackupPath=ADDON.getSetting('backup')
 fullbackuppath=xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
-RestorePath=ADDON.getSetting('restore')
 WorkPath=ADDON.getSetting('MK4WorkFolder')
 Downloader=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'downloader.py'))
 Extractor=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'extract.py'))
@@ -62,12 +61,13 @@ Localtmp=xbmc.translatePath(os.path.join('special://home/addons/',addon_id+'-tmp
 Master=xbmc.translatePath(os.path.join('special://home/addons/',addon_id+'-master'))
 ART=BASEURL+'/Admin/Pictures/'
 PACKAGES=xbmc.translatePath(os.path.join('special://home/addons','packages'))
-USERDATA=xbmc.translatePath(os.path.join('special://home/userdata',''))
+USERDATA=xbmc.translatePath(os.path.join('special://home/','userdata'))
 MEDIA=xbmc.translatePath(os.path.join('special://home/media',''))
 MAIN=xbmc.translatePath(os.path.join('special://home',''))
 AUTOEXEC=xbmc.translatePath(os.path.join(USERDATA,'autoexec.py'))
 ADDON_DATA=xbmc.translatePath(os.path.join('special://home/userdata/','addon_data/'))
 SkinSettings=xbmc.translatePath(os.path.join('special://home/userdata/addon_data/','%s')) % skin
+SkinSettingsXML=xbmc.translatePath(os.path.join('special://home/userdata/addon_data/%s/','settings.xml')) % skin
 PLAYLISTS=xbmc.translatePath(os.path.join(USERDATA,'playlists'))
 ADDONS=xbmc.translatePath(os.path.join('special://home','addons'))
 GUISETTINGS=os.path.join(USERDATA,'guisettings.xml')
@@ -138,6 +138,7 @@ def INDEX(): #1
         addItem('[B][/B]',BASEURL,101,ICON,FANART,'')
         addItem('[B][COLOR yellow]Contact Form[/COLOR][/B]','http://www.mkiv.ca/contact.html',19,'http://downloadicons.net/sites/default/files/contacts-icon-14474.png',FANART,'')
         addItem('[B][COLOR lightskyblue]View Changelog[/COLOR][/B]',BASEURL,58,'http://www.workschedule.net/wp-content/uploads/2014/08/changelog1.png',FANART,'')
+        addItem('[COLOR yellow][B]Settings[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
         addItem('[B][/B]',BASEURL,0,ICON,FANART,'')
         if myplatform == 'android':
             addItem('[B][COLOR deepskyblue]OPEN MK-IV ON YOUR PC TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,0,ICON,FANART,'')
@@ -181,7 +182,6 @@ def BUILDERS():
     addItem('[B]Force Close[/B]',BASEURL,28,'http://dreadpirate.info/images/jollyroger2.jpg',FANART,'')
 
 def BackupMenu():
-    addItem('[COLOR yellow][B]--->Start Here<---[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
     addItem('[B]Universal Backup[/B]',BASEURL,12,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(fullbackuppath):
         try:
@@ -367,19 +367,21 @@ def Crash():  #Exhaust resources to crash the interpreter *** Creates a crash lo
         f(f) 
 
 def ADULTCONTENT():
-    if password == "":
+    if ADDON.getSetting('password') == "":
         choice = xbmcgui.Dialog().yesno(Title, 'This section contains access to adult content', 'To proceed please set a password','', nolabel='Take Me Back',yeslabel='Set Password')
         if choice == 0:
             return
 
         elif choice == 1:           
-            Addon_Settings()
+            password=xbmcgui.Dialog().input('Enter your password', type=xbmcgui.INPUT_NUMERIC, option=xbmcgui.ALPHANUM_HIDE_INPUT)
+            SetSetting('password',password)
             return
     else:
-        vq = _get_keyboard( heading="Please Enter Your Password" )
-        if ( not vq ): return False, 0
-        title = urllib.quote_plus(vq)
-        if title == password:
+        title=xbmcgui.Dialog().input('Enter your password', type=xbmcgui.INPUT_NUMERIC, option=xbmcgui.ALPHANUM_HIDE_INPUT)
+       # vq = _get_keyboard( heading="Please Enter Your Password" )
+        #if ( not vq ): return False, 0
+        #title = urllib.quote_plus(vq)
+        if title == ADDON.getSetting('password'):
             pass
         else:
             return
@@ -489,9 +491,23 @@ def RunConsole():
 
 #====================================================   Maintenance Definitions   ============================================================
 
+def copytree(src, dst, symlinks=False, ignore=None):
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            shutil.copytree(s, d, symlinks, ignore)
+        else:
+            shutil.copy2(s, d)
+
+def InstallAddon(id):
+    xbmc.executebuiltin('InstallAddon('+id+')')
+    
+def HasAddon(id):
+    xbmc.executebuiltin('System.HasAddon('+id+')')
+    
 def SetSetting(id, value):
     ADDON.setSetting(id, value)
-
 
 def TriggerMigration():
     f = open(Addons26, mode='w')
@@ -853,6 +869,16 @@ def FIX_SPECIAL(url):
     xbmc.log('======================   MK-IV Wizard   ========================')
     xbmc.log('==============**********************************================')
     xbmc.log('===================   Start fixing paths   =====================')
+    myplatform = platform()            
+    if myplatform == 'android':
+        userpath="/storage/emulated/0/"
+    elif myplatform == 'osx':
+        userpath=xbmc.translatePath('special://home/').replace('/Library/Application Support/Kodi','')
+    elif myplatform == 'linux':
+        userpath=xbmc.translatePath('special://home/').replace('/.kodi','')
+    elif myplatform == 'windows':
+        userpath=xbmc.translatePath('special://home/').replace('/AppData/Roaming/Kodi','')
+    else: pass
     urlUSERDATA=urllib.quote_plus(USERDATA)
     urlADDONS=urllib.quote_plus(ADDONS)
     urlMEDIA=urllib.quote_plus(MEDIA)
@@ -893,9 +919,30 @@ def FIX_SPECIAL(url):
                         f = open((os.path.join(root, file)), mode='w')
                         f.write(str(b))
                         f.close()
-                        xbmc.log('======================   MK-IV Wizard   ========================')
-                        xbmc.log('==============**********************************================')
-                        xbmc.log('===============   Paths successfully changed   =================')                       
+    if mode != 74:                    
+        if userpath in open(SkinSettingsXML).read():
+            if xbmcgui.Dialog().yesno('[COLOR yellow]Pictures outside of Backup Path Detected[/COLOR]','Would you like to migrate your Background pictures into your set-up?'):
+                xbmcgui.Dialog().ok('[COLOR yellow]Select your background pictures Parent folder[/COLOR]','This will contain your subfolders or pictures depending on your set-up')
+                Pictures=xbmcgui.Dialog().browse(0,'Choose your pictures Parent folder','files')
+                BGpics=xbmc.translatePath(os.path.join(USERDATA , 'Background_pictures/'))
+                if Pictures != '':
+                    if not os.path.exists(BGpics):
+                        os.makedirs(BGpics)
+                    copytree(Pictures, BGpics)
+                    for root, dirs, files in os.walk(url):
+                        for file in files: 
+                            if file.endswith(".xml"):
+                                dp.update(0,"Scanning",file, 'Please Wait')
+                                a=open((os.path.join(root, file))).read()
+                                b=a.replace(Pictures, 'special://home/userdata/Background_pictures/')
+                                f = open((os.path.join(root, file)), mode='w')                                                                                                                                      
+                                f.write(str(b))
+                                f.close()
+    else: pass
+                        
+    xbmc.log('======================   MK-IV Wizard   ========================')
+    xbmc.log('==============**********************************================')
+    xbmc.log('===============   Paths successfully changed   =================')                       
 
 #=========================  Huge thanks to TV Addons and TDB Devs for the Log related code!!!  =========================================#  
 def view_LastError():
@@ -1110,8 +1157,8 @@ def Restore(url):
             pass  
         dp.update(90,"Extracting and Writing Files... [COLOR lime] DONE[/COLOR]", "Checking paths and cleaning up...")
         time.sleep(.5)
-        FIX_SPECIAL(HOME)
-        time.sleep(.5)
+        #FIX_SPECIAL(HOME)
+        #time.sleep(.5)
         #xbmc.executebuiltin('UpdateLocalAddons')
         #time.sleep(.5)
         #xbmc.executebuiltin('ReloadSkin()')
@@ -1122,6 +1169,9 @@ def Restore(url):
         try:
             EnableAll() 
             #UpdateKryptonDB()
+            dialog = xbmcgui.Dialog()
+            dialog.ok("Your Restore Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
+            killxbmc()
         except: pass
         dialog = xbmcgui.Dialog()
         dialog.ok("Your Restore Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
@@ -1205,9 +1255,10 @@ def ARCHIVE_CB(sourcefile, destfile, message_header, message1, message2, message
 def UNIVERSAL_BACKUP():
     Delete_Logs()
     if not os.path.exists(BackupPath):
-        if xbmcgui.Dialog().yesno(Title,'You need to select a backup folder in settings first','','Open Settings now?'):
-            Addon_Settings()
-            sys.exit(0)
+        if xbmcgui.Dialog().yesno(Title,'You need to select a backup folder in settings first','','Choose folder now?'):
+            Backupfolder=xbmcgui.Dialog().browse(0,'Choose your Backup folder','files')
+            SetSetting('backup',Backupfolder)
+            pass
         else:
             return False, 0
     if not os.path.exists(fullbackuppath):
@@ -1273,15 +1324,14 @@ def UNIVERSAL_BACKUP():
     xbmc.executebuiltin('Container.Refresh')
 
 def RestoreOther():
-    if RestorePath != "":
-        url=RestorePath
-        addItem(file,url,9,ICON,FANART,'')
+    url=xbmcgui.Dialog().browse(1,'Choose your backup file','files','.zip')
+    if url != '':
+        try:
+            Restore(url)
+            killxbmc()
+        except: sys.exit(0)
     else:
-        if xbmcgui.Dialog().yesno(Title,'Choose the backup file you wish to restore in Settings.','','Open Settings now?'):
-            Addon_Settings()
-            sys.exit(0)
-        else:
-            return False, 0
+        sys.exit(0)
 
 def ListBackRes():
     if os.path.exists(fullbackuppath):
@@ -1554,9 +1604,10 @@ def unzip(_in, _out, dp):
 
 def MakePointerFile():
     if not os.path.exists(WorkPath):
-        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Open Settings now?'):
-            Addon_Settings()
-            sys.exit(0)
+        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work foder now?'):
+            Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
+            SetSetting('MK4WorkFolder',Workfolder)
+            pass
         else:
             return False, 0
     else:
@@ -1608,9 +1659,10 @@ def MakePointerFile():
 
 def MakeRssFile():
     if not os.path.exists(WorkPath):
-        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Open Settings now?'):
-            Addon_Settings()
-            sys.exit(0)
+        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work foder now?'):
+            Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
+            SetSetting('MK4WorkFolder',Workfolder)
+            pass
         else:
             return False, 0
     else:
@@ -1651,11 +1703,12 @@ def MakeRssFile():
 
 def BuildAWizard():
     if not os.path.exists(WorkPath):
-        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Open Settings now?'):
-            Addon_Settings()
-            sys.exit(0)
+        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work foder now?'):
+            Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
+            SetSetting('MK4WorkFolder',Workfolder)
+            pass
         else:
-            return False, 0        
+            return False, 0    
     else:
         pass      
     xbmc.log('================  MK-IV Wizard  ================')
@@ -1983,6 +2036,8 @@ def platform():
         return 'atv2'
     elif xbmc.getCondVisibility('system.platform.ios'):
         return 'ios'
+    elif xbmc.getCondVisibility('system.platform.Linux.RaspberryPi'):
+        return 'linux'
 
 def ReplaceText(File,ReplaceThis,WithThis):
     a=open(File).read()
@@ -2058,7 +2113,8 @@ def Notify(title,message,times,icon):
     xbmc.executebuiltin("XBMC.Notification("+title+","+message+","+times+","+icon+")")
 
 def Toast(var):
-    xbmc.executebuiltin(Title,'+var+',5000,ICON)
+    xbmcgui.Dialog().notification(Title, var, xbmcgui.NOTIFICATION_INFO, 5000, False)
+    #xbmc.executebuiltin(Title,'+var+',5000,ICON)
 
 def OPEN_URL(url):
     req = urllib2.Request(url)
@@ -2070,6 +2126,9 @@ def OPEN_URL(url):
 
 def Addon_Settings():	
     ADDON.openSettings(sys.argv[0])
+    while xbmc.getCondVisibility('Window.IsVisible(10140)'):  
+        time.sleep(.5)
+    xbmc.executebuiltin('Container.Refresh')
     #self.openSettings&query=0.0
 
 def _get_keyboard( default="", heading="", hidden=False ):
@@ -2735,4 +2794,16 @@ def Check4Update():
                     killxbmc()
                 else: pass
     except: pass
+
+
+
+
+
+
+
+
+
+
+
+
 
