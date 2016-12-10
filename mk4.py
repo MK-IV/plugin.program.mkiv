@@ -2619,7 +2619,7 @@ def NewSession():
             else: pass
         except: pass
 
-        if os.path.exists(repo1):
+        '''if os.path.exists(repo1):
             pass
         else:
             if InstallRepo=='true':
@@ -2634,7 +2634,7 @@ def NewSession():
             else:
                 pass
 
-            '''if AutoUpdate=='true':
+            if AutoUpdate=='true':
                 if not os.path.exists(Slave):
                     xbmc.log('=====================  MK-IV Wizard  =====================')
                     xbmc.log('========  Installing MK-IV Slave (Auto-Updater)  =========')

@@ -17,6 +17,7 @@ ART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id + '/re
 phoenix = xbmc.translatePath(os.path.join('special://home/addons/','plugin.video.phstreams'))
 AresTracker = xbmc.translatePath(os.path.join('special://home/userdata/addon_data/script.areswizard/','buildinstall'))
 RequestPatch=xbmc.translatePath(os.path.join('special://home/addons/script.module.requests/lib/requests/','packages'))
+skin=xbmc.getSkinDir()
 myplatform = mk4.platform()
 dp           =  xbmcgui.DialogProgress()
 GoogleOne = "http://www.google.com"
@@ -109,10 +110,12 @@ if ADDON.getSetting('UpdateAddons') == 'true':
 else: pass
 
 if not os.path.exists(RequestPatch) and ADDON.getSetting('KodiVersion') == 'Krypton':
-    time.sleep(20)
-    if xbmcgui.Dialog().yesno(Title,'[COLOR red]A patch is available to fix errors you might be having...[/COLOR]','','Would you like to apply a patch?'):
-        mk4.ADDONWIZ('Python Requests Module','http://mkiv.netne.net/Admin/Addon%20Packs/script.module.requests-2.9.1.zip','script.module.requests')
-        pass
+    if skin != 'skin.estuary' and skin != 'skin.estouchy':
+        time.sleep(20)
+        if xbmcgui.Dialog().yesno(Title,'[COLOR red]A patch is available to fix errors you might be having...[/COLOR]','','Would you like to apply a patch?'):
+            mk4.ADDONWIZ('Python Requests Module','http://mkiv.netne.net/Admin/Addon%20Packs/script.module.requests-2.9.1.zip','script.module.requests')
+            pass
+        else: pass
     else: pass
 else: pass
 

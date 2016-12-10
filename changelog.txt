@@ -1,11 +1,5 @@
 Known changes for next update:
-    Backup file list and delete single option (done)
-    Backup file delete all option (done)
-    Backup file list and restore backups that are in KODI Backups folder (done)
-    Reverse log when viewing full log so latest info is at the top (done)
-    Highlight Errors and Warnings when viewing full log (done)   
-    Fix unautorized repo install
-    Fix Patch prompt to show only when default skin is not active.
+    Backup file delete option
     Background picture backup option
     Skin settings backup exception will be added to fresh start when detected
     (possibly) more Build-A- Options
