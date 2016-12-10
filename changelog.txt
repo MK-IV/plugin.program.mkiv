@@ -1,5 +1,9 @@
 Known changes for next update:
-    Backup file delete option
+    Backup file list and delete single option (done)
+    Backup file delete all option (done)
+    Backup file list and restore backups that are in KODI Backups folder (done)
+    Reverse log when viewing full log so latest info is at the top (done)
+    Highlight Errors and Warnings when viewing full log (done)    
     Background picture backup option
     Skin settings backup exception will be added to fresh start when detected
     (possibly) more Build-A- Options
