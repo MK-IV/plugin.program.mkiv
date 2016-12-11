@@ -45,7 +45,7 @@ if os.path.exists(dbmclog):
         f = open(dbmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
         TextBoxes(Title+' - Log Viewer',"%s - dbmc.log" % "[COLOR white]" + msg + "[/COLOR]")
 
-if os.path.exists(spmclog):
+elif os.path.exists(spmclog):
     if os.path.exists(spmclog) and os.path.exists(spmcold):
         choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
         if choice == 0:
@@ -58,7 +58,7 @@ if os.path.exists(spmclog):
         f = open(spmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
         TextBoxes(Title+' - Log Viewer',"%s - spmc.log" % "[COLOR white]" + msg + "[/COLOR]")
         
-if os.path.exists(kodilog):
+elif os.path.exists(kodilog):
     if os.path.exists(kodilog) and os.path.exists(kodiold):
         choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
         if choice == 0:

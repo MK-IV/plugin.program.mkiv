@@ -1081,7 +1081,7 @@ def viewLogFile():
             f = open(dbmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - dbmc.log" % "[COLOR white]" + msg + "[/COLOR]")
 
-    if os.path.exists(spmclog):
+    elif os.path.exists(spmclog):
         if os.path.exists(spmclog) and os.path.exists(spmcold):
             choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
             if choice == 0:
@@ -1094,7 +1094,7 @@ def viewLogFile():
             f = open(spmclog,mode='r'); rawmsg = f.read().replace(' ERROR: ',' [COLOR red]ERROR[/COLOR]: ').replace(' WARNING: ',' [COLOR gold]WARNING[/COLOR]: '); msg = '\n'.join(rawmsg.splitlines()[::-1]); f.close()
             TextBoxes(Title+' - Log Viewer',"%s - spmc.log" % "[COLOR white]" + msg + "[/COLOR]")
         
-    if os.path.exists(kodilog):
+    elif os.path.exists(kodilog):
         if os.path.exists(kodilog) and os.path.exists(kodiold):
             choice = xbmcgui.Dialog().yesno(Title,"Current & Old Log Detected on your system.","Which log would you like to view?","", yeslabel='[B]OLD[/B]',nolabel='[B]CURRENT[/B]')
             if choice == 0:
@@ -1108,7 +1108,7 @@ def viewLogFile():
             TextBoxes(Title+' - Log Viewer',"%s - kodi.log" % "[COLOR white]" + msg + "[/COLOR]")
 
     else:
-        dialog.ok(Title,'Sorry, No log file was found.','','[COLOR smokewhite]Thank you for using MK-IV Wizard[/COLOR]')
+        dialog.ok(Title,'Sorry, No log file was found.','','[COLOR white]Thank you for using MK-IV Wizard[/COLOR]')
 
     xbmc.executebuiltin("Container.Refresh")
 
@@ -1348,10 +1348,10 @@ def ListBackDel():
                 addItem(file,url,52,ICON,FANART,'')
 
 def DeleteBackup(url):
-    if dialog.yesno(Title,"[COLOR smokewhite]" + url + "[/COLOR]","Do you want to delete this backup?"):
+    if dialog.yesno(Title,"[COLOR white]" + url + "[/COLOR]","Do you want to delete this backup?"):
         os.remove(url)
         xbmc.executebuiltin('Container.Refresh')
-        dialog.ok(Title,"[COLOR smokewhite]" + url + "[/COLOR]","Successfully deleted.")
+        dialog.ok(Title,"[COLOR white]" + url + "[/COLOR]","Successfully deleted.")
 
 
 
@@ -1854,7 +1854,7 @@ def BuildAWizard():
     shutil.copy(Extractor,outputfolder)
     shutil.copy(Downloader,outputfolder)
     shutil.copy(icontmp,outputfolder)
-    dp.update(30,'Copying core files...[COLOR lime]Complete[/COLOR]','Personalizing [COLOR smokewhite]'+name+'[/COLOR]...')
+    dp.update(30,'Copying core files...[COLOR lime]Complete[/COLOR]','Personalizing [COLOR white]'+name+'[/COLOR]...')
     time.sleep(1)
     a=open(addonxml).read()
     b=a.replace('addonname','plugin.program.'+id).replace('wizardname',name).replace('providername',proname)
@@ -1867,7 +1867,7 @@ def BuildAWizard():
     f = open(defaultpy, mode='w')
     f.write(str(b))
     f.close()
-    dp.update(60,'Personalizing [COLOR smokewhite]'+name+'[/COLOR]...[COLOR lime]Complete[/COLOR]','Creating installable zip file...')
+    dp.update(60,'Personalizing [COLOR white]'+name+'[/COLOR]...[COLOR lime]Complete[/COLOR]','Creating installable zip file...')
     time.sleep(1)
     ZipIt(workfolder, workfolder,'plugin.program.'+id)
     time.sleep(.5)
@@ -2345,7 +2345,7 @@ def WIZARD(name,url,version):
     #localfile.close()
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()        
-    dp.create(Title,"Downloading [COLOR smokewhite]"+name+"[/COLOR]... ",'', '')
+    dp.create(Title,"Downloading [COLOR white]"+name+"[/COLOR]... ",'', '')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -2354,7 +2354,7 @@ def WIZARD(name,url,version):
     downloader.download(url, lib, dp)
     addonfolder = xbmc.translatePath(os.path.join('special://','home'))
     if ADDON.getSetting('KodiVersion')=='Krypton':
-        dp.update(0,"Downloading [COLOR smokewhite]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Applying Patch...", '')
+        dp.update(0,"Downloading [COLOR white]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Applying Patch...", '')
         path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
         reqzip=os.path.join(path,'requests.zip')
         try:
@@ -2374,7 +2374,7 @@ def WIZARD(name,url,version):
         dp.update(0,"Applying Patch...[COLOR lime]DONE[/COLOR]","Extracting...")
         pass
     else:
-        dp.update(0,"Downloading [COLOR smokewhite]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Extracting...")
+        dp.update(0,"Downloading [COLOR white]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Extracting...")
         pass
     try: 
         addonfolder = xbmc.translatePath(os.path.join('special://','home'))
@@ -2463,7 +2463,7 @@ def ADDONWIZ(name,url,description):
     xbmc.log('================================================')
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()
-    dp.create(Title,"Downloading [COLOR smokewhite]"+name+"[/COLOR]",'', '')
+    dp.create(Title,"Downloading [COLOR white]"+name+"[/COLOR]",'', '')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -2733,6 +2733,7 @@ def NewSession():
                 os.rename(Local,Localtmp)
                 os.rename(Master,Local)
                 shutil.rmtree(Localtmp)
+                DeleteThumbnails('')
                 xbmc.executebuiltin('Container.Refresh')
                 #xbmcgui.Dialog().ok(Title,Title+' Restart required...','','Press OK to close the add-on')
                 #sys.exit(0)
@@ -2771,10 +2772,10 @@ def Check4Update():
                 addonfolder = xbmc.translatePath(os.path.join('special://','home'))
                 time.sleep(.5)
                 if fresh == 'false':
-                    dp.update(0,'Downloading [COLOR smokewhite]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...')
+                    dp.update(0,'Downloading [COLOR white]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...')
                     pass
                 else:
-                    dp.update(0,'Downloading [COLOR smokewhite]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...','Screen will go black for a moment')
+                    dp.update(0,'Downloading [COLOR white]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...','Screen will go black for a moment')
                     time.sleep(1)
                     xbmc.executebuiltin('UnloadSkin()')
                     pass
