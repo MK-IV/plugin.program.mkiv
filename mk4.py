@@ -259,8 +259,8 @@ def AddToAres1():
     addItem('[B]Click here to Backup[/B]',BASEURL,12,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     addItem('[COLOR deepskyblue]-----     Step 2: Upload the backup and get its link     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'Alpha')#Md.Emu
     addItem('[B]Click here to go to Archive.org[/B]','https://archive.org/',19,'http://blog.archive.org/wp-content/uploads/2013/04/Internetlogo.jpg',FANART,'')
-    addItem('[COLOR deepskyblue]-----     Step 3:Make a pointer file with links to two pictures and your zip file     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'Alpha')#Md.Emu
-    addItem('[B]Click here to build a Pointer File (Wizard.xml)[/B]','https://ares-forum.uk',43,'http://codecondo.com/wp-content/uploads/2015/10/7-Good-Reasons-why-you-must-learn-Python-programming-in-2015_785.png?478983',FANART,'')
+    addItem('[COLOR deepskyblue]----- Step 3:Make a pointer file with links to two pictures and your zip file -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'Alpha')#Md.Emu
+    addItem('[B]Click here to build a Pointer File[/B]','https://ares-forum.uk',43,'http://codecondo.com/wp-content/uploads/2015/10/7-Good-Reasons-why-you-must-learn-Python-programming-in-2015_785.png?478983',FANART,'')
     addItem('[COLOR deepskyblue]-----     Step 4:Upload your Pointer File and get its link     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'Alpha')#Md.Emu
     addItem('[B]Click here to go to Archive.org[/B]','https://archive.org/',19,'http://blog.archive.org/wp-content/uploads/2013/04/Internetlogo.jpg',FANART,'')
     addItem('[COLOR deepskyblue]-----     Step 5: Give your Pointer File\'s link to Ares     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'Alpha')#Md.Emu
