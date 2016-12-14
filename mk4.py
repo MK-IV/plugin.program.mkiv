@@ -1828,7 +1828,7 @@ def MakeRssFile():
         line = urllib.unquote_plus(newLine)
         ReplaceText(RssFile,'    </channel>','  <item>\n   <title>'+line+'                                                       </title>\n  </item>\n    </channel>')
         addLine = xbmcgui.Dialog().yesno(Title,'Would you like to add another line?','', '', nolabel='No',yeslabel='Yes')  
-    if xbmcgui.Dialog().yesno('Rss file made', 'If you would like to upload it now and get the url', 'you can update the media center ticker now.', '(Saved to: [COLOR deepskyblue]'+RssFile+'[/COLOR]', nolabel='No thanks',yeslabel='Enter URL'):
+    if xbmcgui.Dialog().yesno('Rss file made', 'If you would like to upload it now and get the url', 'you can update the media center ticker now.', '(Saved to: [COLOR deepskyblue]'+RssFile+'[/COLOR])', nolabel='No thanks',yeslabel='Enter URL'):
         choice = xbmcgui.Dialog().yesno(Title, 'For your rss.xml file...', 'Does your link start with http:// or https://?','All links are CaSe SeNsItIvE!', nolabel='HTTP://',yeslabel='HTTPS://')
         if choice == 0:
             protocol="http://"
@@ -1870,7 +1870,7 @@ def BuildAWizard():
     vqproname = _get_keyboard(heading="Enter a provider name for your wizard" )
     if ( not vqproname ): return False, 0
     proname = urllib.unquote_plus(vqproname)
-    choice = xbmcgui.Dialog().yesno('Step 4: Your Wizard.xml URL', 'For your URL to your pointer file.', 'Does your link start with http:// or https://?','All links and are CaSe SeNsItIvE!', nolabel='HTTP://',yeslabel='HTTPS://')
+    choice = xbmcgui.Dialog().yesno('Step 4: Your Pointer file URL', 'For your URL to your pointer file.', 'Does your link start with http:// or https://?','All links and are CaSe SeNsItIvE!', nolabel='HTTP://',yeslabel='HTTPS://')
     if choice == 0:
         protocol="http://"
     elif choice == 1:
