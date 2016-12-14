@@ -1726,7 +1726,7 @@ def MakePointerFile():
     vqdes = _get_keyboard(heading="Enter a description of your build." )
     if ( not vqdes ): vqdes = ""
     description = urllib.unquote_plus(vqdes)
-    vqver = _get_keyboard(default='1.0.0',heading="Enter a description of your build." )
+    vqver = _get_keyboard(default='1.0.0',heading="Enter the version of your build." )
     if ( not vqver ): vqdes = "1.0.0"
     version = urllib.unquote_plus(vqver)
     choice = xbmcgui.Dialog().select('What format would you like your pointer to be?', ['Wizard.xml', 'Wizard.txt', 'index.html'])
