@@ -1,8 +1,19 @@
-Known changes for next update:
-    Backup file delete option
-    Background picture backup option
-    Skin settings backup exception will be added to fresh start when detected
-    (possibly) more Build-A- Options
+Coming up...
+    More Build-A- Options
+    Dependency installer
+    More add-ons, sources, etc.
+    ???
+
+v1.0.18d
+    Added background manager for MK-IV Builds
+    Added folder sizes to Maintenance
+    Added xml, txt and html output options to Build a Pointer with unlimited entries
+    Added local image selection to import picture and rename it to icon.png for Build a Wizard
+    Muted Toast notifications
+    Added file browser windows for Add-on settings items
+    Reversed Log so latest info is shown first and added error and warning highlights
+    Added background migration to import picture outside of the backup path
+
 
 v1.0.18
     Added:

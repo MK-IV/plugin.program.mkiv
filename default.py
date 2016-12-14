@@ -463,12 +463,21 @@ elif mode==73:
     
 elif mode==74:
     mk4.RestoreOther()
+    
+elif mode==75:
+    mk4.MK4Backgrounds()
+    
+elif mode==76:
+    mk4.RestoreMK4Backgrounds()
+    
+elif mode==77:
+    mk4.DeleteMK4BackgroundsBackup()
+    
+elif mode==78:
+    mk4.Contact()
 
 elif mode==100:
             mk4.MKIVMENU() 
-            
-elif mode==101:
-        sys.exit(0)
 
     
     

@@ -32,6 +32,7 @@ import glob
 #import subprocess
 import speedtest
 #import uploadlog
+from lib import smtplib
 
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 addon_id='plugin.program.mkiv'
@@ -50,7 +51,7 @@ repo1=xbmc.translatePath(os.path.join('special://home/addons/' , 'repository.mki
 H='http://'
 Hs='https://'
 skin=xbmc.getSkinDir()
-EXCLUDES=['kodi.log','script.areswizard','plugin.program.mkiv','plugin.program.mkiv-master','script.module.addon.common','autoexec.py','service.xbmc.versioncheck','metadata.tvdb.com','metadata.common.imdb.com']
+EXCLUDES=['BackgroundsBackup.zip','kodi.log','script.areswizard','plugin.program.mkiv','plugin.program.mkiv-master','script.module.addon.common','autoexec.py','service.xbmc.versioncheck','metadata.tvdb.com','metadata.common.imdb.com']
 BackupPath=ADDON.getSetting('backup')
 fullbackuppath=xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
 WorkPath=ADDON.getSetting('MK4WorkFolder')
@@ -77,6 +78,9 @@ GUI=xbmc.translatePath(os.path.join(USERDATA,'guisettings.xml'))
 GuiBackup=xbmc.translatePath(os.path.join(USERDATA,'guisettingsbackup'))
 _SkinSettings=xbmc.translatePath(os.path.join(USERDATA,'SkinSettingsBackup'))
 SkinSettingsBackup=xbmc.translatePath(os.path.join('special://home/userdata/','SkinSettingsBackup.zip'))
+Backgrounds=xbmc.translatePath(os.path.join(USERDATA,'Background_pics'))
+BackgroundsBackup=xbmc.translatePath(os.path.join(USERDATA,'BackgroundsBackup'))
+BackgroundsBackupZip=xbmc.translatePath(os.path.join(USERDATA,'BackgroundsBackup.zip'))
 ScriptSkin=xbmc.translatePath(os.path.join('special://home/userdata/addon_data/','script.skinsettings'))
 ScriptSkinBackup=xbmc.translatePath(os.path.join('special://home/userdata/','ScriptSkinSettingsBackup.zip'))
 Requests=xbmc.translatePath(os.path.join('special://home/addons/','script.module.requests'))
@@ -135,7 +139,7 @@ def INDEX(): #1
         if ShowAdult=='true':
             addDir('[B]Adult Content[/B]',BASEURL,18,'http://kodi.iptvaddon.com/wp-content/uploads/2015/03/xxx-ADULT-ADDON-FOR-KODI-XBMC-new-video-and-addon.jpg',FANART,'','')
         else: pass
-        addItem('[B][/B]',BASEURL,101,ICON,FANART,'')
+        addItem('[B][/B]','service.xbmc.versioncheck',101,ICON,FANART,'')
         addItem('[B][COLOR yellow]Contact Form[/COLOR][/B]','http://www.mkiv.ca/contact.html',19,'http://downloadicons.net/sites/default/files/contacts-icon-14474.png',FANART,'')
         addItem('[B][COLOR lightskyblue]View Changelog[/COLOR][/B]',BASEURL,58,'http://www.workschedule.net/wp-content/uploads/2014/08/changelog1.png',FANART,'')
         addItem('[COLOR yellow][B]Settings[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
@@ -152,21 +156,25 @@ def BUILDMENU():
     addDir('[COLOR yellow][B]ADD YOUR BUILD TO MK-IV[/B][/COLOR]',BASEURL,16,ART+'website.jpg',FANART,'','')
 
 def MAINTENANCE():
-        addItem('[B]Delete Cache[/B]','url',4,'http://a3.mzstatic.com/eu/r30/Purple20/v4/8a/d6/08/8ad6089c-37f1-6670-7aa1-069ba44de89e/icon128-2x.png',FANART,'')
-        addItem('[B]Delete Thumbnails[/B]','url',11,'http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Pictures-Folder-icon.png',FANART,'')
-        addItem('[B]Delete Packages[/B]','url',7,'http://www.freeiconspng.com/uploads/packages-icon-21.png',FANART,'')
+        Toast('[COLOR lime]Populating sizes[/COLOR]')
+        CacheSize = GETFOLDERSIZE(xbmc.translatePath('special://home/cache'))
+        ThumbsSize = GETFOLDERSIZE(xbmc.translatePath('special://home/userdata/Thumbnails'))
+        PackagesSize = GETFOLDERSIZE(xbmc.translatePath('special://home/addons/packages'))
+        BuildSize = GETFOLDERSIZE(xbmc.translatePath('special://home/'))
+        addItem('[B]Delete Cache[/B] ('+CacheSize+')','url',4,'http://a3.mzstatic.com/eu/r30/Purple20/v4/8a/d6/08/8ad6089c-37f1-6670-7aa1-069ba44de89e/icon128-2x.png',FANART,'')
+        addItem('[B]Delete Thumbnails[/B] ('+ThumbsSize+')','url',11,'http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Pictures-Folder-icon.png',FANART,'')
+        addItem('[B]Delete Packages[/B] ('+PackagesSize+')','url',7,'http://www.freeiconspng.com/uploads/packages-icon-21.png',FANART,'')
         if ADDON.getSetting('KodiVersion') == 'Krypton':
             addItem('[B]Enable All Addons[/B]','url',70,'http://clipartix.com/wp-content/uploads/2016/04/Thumbs-up-clipart-2.png',FANART,'')
             #addItem('[B]Check Sources[/B]',BASEURL,50,ART+'checksources.png',FANART,'')
             addItem('[B]     -----     [/B]','url',0,ICON,FANART,'')
-            addItem('[COLOR red][B]Fresh Start[/B][/COLOR]','url',6,'http://www.southdecaturchurch.com/files/southdecatur/Pic%20and%20Sermons/FreshStart_preview.jpg',FANART,'')
+            addItem('[COLOR red][B]Fresh Start[/B][/COLOR] ('+BuildSize+')','url',6,'http://www.southdecaturchurch.com/files/southdecatur/Pic%20and%20Sermons/FreshStart_preview.jpg',FANART,'')
         if ADDON.getSetting('KodiVersion') == 'Jarvis':
             #addItem('[B]Check Sources[/B]',BASEURL,50,ART+'checksources.png',FANART,'')
             addItem('[COLOR deepskyblue][B]     -----     [/B][/COLOR]','url',0,ICON,FANART,'')
-            addItem('[COLOR red][B]Fresh Start[/B][/COLOR]','url',6,'http://www.southdecaturchurch.com/files/southdecatur/Pic%20and%20Sermons/FreshStart_preview.jpg',FANART,'')
+            addItem('[COLOR red][B]Fresh Start[/B][/COLOR] ('+BuildSize+')','url',6,'http://www.southdecaturchurch.com/files/southdecatur/Pic%20and%20Sermons/FreshStart_preview.jpg',FANART,'')
 
 def BUILDERS():
-    addItem('[COLOR yellow][B]Add-on Settings[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
     addDir('[B]Add your build to Ares Wizard[/B]',BASEURL,57,'http://0716zip.ares8.seedr.io/ares_home.jpg',FANART,'','')
     addDir('[B]Build-A-Wizard Section[/B]',BASEURL,37,Build_A_Icon,FANART,'','')
     addItem('[B]Convert Physical Paths To \'special://home/\'[/B]',HOME,29,'http://www.magix.info/mcpool01/10/9B/A5/D2/30/95/7A/11/E1/94/24/AB/1C/59/9A/71/41/9BABC5A0957A11E1A739DD97599A7141.jpg',FANART,'')
@@ -240,7 +248,7 @@ def CANADABUILDS():
 
 def BuildAWizardMenu():
     addItem('[COLOR yellow][B]Add-on Settings[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
-    addItem('[B]Build a Pointer File (Wizard.xml)[/B]','https://ares-forum.uk',43,'http://codecondo.com/wp-content/uploads/2015/10/7-Good-Reasons-why-you-must-learn-Python-programming-in-2015_785.png?478983',FANART,'')
+    addItem('[B]Build a Pointer File[/B]','https://ares-forum.uk',43,'http://codecondo.com/wp-content/uploads/2015/10/7-Good-Reasons-why-you-must-learn-Python-programming-in-2015_785.png?478983',FANART,'')
     addItem('[B]Build A Wizard[/B]','https://ares-forum.uk',45,'http://blog.stoneriverelearning.com/wp-content/uploads/2016/07/Programmer.jpg',FANART,'')
     addItem('[B]Build an RSS file[/B]','https://ares-forum.uk',44,'http://icons.iconarchive.com/icons/fasticon/social-bookmark/256/Feeds-icon.png',FANART,'')
 
@@ -277,7 +285,16 @@ def MKIVMENU():
             addDir('[B][COLOR red]Install MK-IV[/COLOR][/B]',BASEURL,32,ICON,FANART,'','')
             addItem('[B][COLOR blue]MK-IV Website[/COLOR][/B]','http://mkiv.ca',19,FANART,FANART,'')
             addItem('[B][COLOR red]Donate to MK-IV[/COLOR][/B]','https://paypal.me/mkiv',19,'http://www.fofrescue.org/wp-content/uploads/2013/09/paypal-logo-donate.png',FANART,'')
-            addItem('[B][COLOR blue]Get AceStreams Engine[/COLOR][/B]',BASEURL,34,'http://freeiptv.weightlosstoday.org/wp-content/uploads/2016/01/Ace-Stream-Media-Full-Free-Download.jpg',FANART,'')
+            addItem('[B][COLOR white][/COLOR][/B]','http://mkiv.ca',666,FANART,FANART,'')
+            addItem('[COLOR powderblue]Get AceStreams Engine[/COLOR]',BASEURL,34,'http://freeiptv.weightlosstoday.org/wp-content/uploads/2016/01/Ace-Stream-Media-Full-Free-Download.jpg',FANART,'')
+            addItem('[COLOR deepskyblue]Edit Backgrounds[/COLOR]',BASEURL,75,ICON,FANART,'')
+            if os.path.exists(BackgroundsBackupZip):
+                addItem('[COLOR powderblue]Restore Backgrounds[/COLOR]','http://mkiv.ca',76,FANART,FANART,'')
+                addItem('',BASEURL,32,ICON,FANART,'')
+                addItem('[COLOR orangered]Delete Backgrounds Backup[/COLOR]','http://mkiv.ca',77,FANART,FANART,'')
+            else: pass
+
+
 
 def PlayStoreMenu():
     addItem('[COLOR deepskyblue]-----     PlayStore Apps     -----[/COLOR]','com.explusalpha.MdEmu',999,'https://cdn1.iconfinder.com/data/icons/app-stores-2/128/Google_Play_3.png',FANART,'Alpha')#Md.Emu
@@ -424,6 +441,62 @@ def GetAceStream():
         if dialog.yesno(Title, 'The AceStream Engine is required to play some sports section content.', 'After its installed sign into the app and thats it.','Would you like to download and install now?', nolabel='SKIP',yeslabel='Yes'):
             dialog.ok(Title,'Press OK to launch your browser to the download page.','You only need the engine.','')
             OpenWebpage('http://wiki.acestream.org/wiki/index.php/AceStream_3.0/en')
+            
+            
+            
+def Contact():
+    from email.mime.text import MIMEText
+    choice = xbmcgui.Dialog().select('Choose a subject', ['Issue', 'Request', 'Comment','Other'])
+    if choice == 0:
+        subject = 'Issue'
+        pass
+    elif choice == 1:
+        subject = 'Request'
+        pass
+    elif choice == 2:
+        subject = 'Comment'
+        pass
+    elif choice == 3:
+        subject = 'Other'
+        pass
+    
+    vqsender = _get_keyboard(heading="Enter your email address (optional)" )
+    if ( not vqsender ): vqsender = ""
+    sender = urllib.unquote_plus(vqsender)
+    vqbody = _get_keyboard(heading="Enter your message." )
+    if ( not vqbody ): vqbody = ""
+    body = urllib.unquote_plus(vqbody)
+    
+    f = urllib.urlopen("http://www.canyouseeme.org/")
+    html_doc = f.read()
+    f.close()
+    m = re.search('(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)',html_doc)
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+
+    msg = MIMEText(body+'Internal IP: '+s.getsockname()[0]+'External IP:'+m.group(0))
+
+    # me == the sender's email address
+    # you == the recipient's email address
+    msg['Subject'] = subject 
+    msg['From'] = sender
+    msg['To'] = 'mkiv@protonmail.com'
+
+    # Send the message via our own SMTP server, but don't include the
+    # envelope header.
+    xbmc.log(msg.as_string())
+    #s = smtplib.SMTP('localhost')
+    server = smtplib.SMTP('gmail-smtp-in.l.google.com','25')
+    server.starttls()
+    server.ehlo("example.com")
+    server.mail(me)
+    server.rcpt([you])
+    server.data(msg.as_string())
+    server.quit()  
+    #s = smtplib.SMTP('smtp.gmail.com','465')
+   # s.sendmail(me, [you], msg.as_string())
+    #s.quit()
 
 #=========================================================   Android definitions   =======================================================
 
@@ -598,6 +671,7 @@ def DeletePackages(url):
                         shutil.rmtree(os.path.join(root, d))
                     dialog = xbmcgui.Dialog()
                     dialog.ok(Title, "Packages Successfuly Removed", "")
+                    xbmc.executebuiltin('Container.Refresh')
 
     except: 
         dialog = xbmcgui.Dialog()
@@ -919,25 +993,25 @@ def FIX_SPECIAL(url):
                         f = open((os.path.join(root, file)), mode='w')
                         f.write(str(b))
                         f.close()
-    if mode != 74:                    
-        if userpath in open(SkinSettingsXML).read():
-            if xbmcgui.Dialog().yesno('[COLOR yellow]Pictures outside of Backup Path Detected[/COLOR]','Would you like to migrate your Background pictures into your set-up?'):
-                xbmcgui.Dialog().ok('[COLOR yellow]Select your background pictures Parent folder[/COLOR]','This will contain your subfolders or pictures depending on your set-up')
-                Pictures=xbmcgui.Dialog().browse(0,'Choose your pictures Parent folder','files')
-                BGpics=xbmc.translatePath(os.path.join(USERDATA , 'Background_pictures/'))
-                if Pictures != '':
-                    if not os.path.exists(BGpics):
-                        os.makedirs(BGpics)
-                    copytree(Pictures, BGpics)
-                    for root, dirs, files in os.walk(url):
-                        for file in files: 
-                            if file.endswith(".xml"):
-                                dp.update(0,"Scanning",file, 'Please Wait')
-                                a=open((os.path.join(root, file))).read()
-                                b=a.replace(Pictures, 'special://home/userdata/Background_pictures/')
-                                f = open((os.path.join(root, file)), mode='w')                                                                                                                                      
-                                f.write(str(b))
-                                f.close()
+                        
+    if userpath in open(SkinSettingsXML).read():
+        if xbmcgui.Dialog().yesno('[COLOR yellow]Pictures outside of Backup Path Detected[/COLOR]','Would you like to migrate your Background pictures into your set-up?'):
+            xbmcgui.Dialog().ok('[COLOR yellow]Select your background pictures Parent folder[/COLOR]','This will contain your subfolders or pictures depending on your set-up')
+            Pictures=xbmcgui.Dialog().browse(0,'Choose your pictures Parent folder','files')
+            BGpics=xbmc.translatePath(os.path.join(USERDATA , 'Background_pictures/'))
+            if Pictures != '':
+                if not os.path.exists(BGpics):
+                    os.makedirs(BGpics)
+                copytree(Pictures, BGpics)
+                for root, dirs, files in os.walk(url):
+                    for file in files: 
+                        if file.endswith(".xml"):
+                            dp.update(0,"Scanning",file, 'Please Wait')
+                            a=open((os.path.join(root, file))).read()
+                            b=a.replace(Pictures, 'special://home/userdata/Background_pictures/')
+                            f = open((os.path.join(root, file)), mode='w')                                                                                                                                      
+                            f.write(str(b))
+                            f.close()
     else: pass
                         
     xbmc.log('======================   MK-IV Wizard   ========================')
@@ -1200,7 +1274,7 @@ def DeleteThumbnails(url):
     except: 
         dialog = xbmcgui.Dialog()
         dialog.ok(Title, "Sorry we were not able to remove Thumbnail Files", "")
-
+    Toast('Thumbnails Cleared!')
     xbmc.executebuiltin("Container.Refresh")
 
 def Delete_Logs():  
@@ -1604,7 +1678,7 @@ def unzip(_in, _out, dp):
 
 def MakePointerFile():
     if not os.path.exists(WorkPath):
-        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work foder now?'):
+        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
             Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
             SetSetting('MK4WorkFolder',Workfolder)
             pass
@@ -1614,7 +1688,7 @@ def MakePointerFile():
         pass 
     xbmc.log('================  MK-IV Wizard  ================')
     xbmc.log('===========  Making A Pointer File  ============')
-    fullworkpath = xbmc.translatePath(os.path.join(WorkFolder,'KODI Work Folder'))
+    fullworkpath = xbmc.translatePath(os.path.join(WorkFolder,'KODI Work Folder/'))
     if not os.path.exists(fullworkpath):
         os.makedirs(fullworkpath)
     #if xbmcgui.Dialog().yesno(Title, 'A tutorial video is available for this section.', 'Would you like to see it?','', nolabel='SKIP',yeslabel='YES'):
@@ -1652,14 +1726,81 @@ def MakePointerFile():
     vqdes = _get_keyboard(heading="Enter a description of your build." )
     if ( not vqdes ): vqdes = ""
     description = urllib.unquote_plus(vqdes)
-    PointerFile = xbmc.translatePath(os.path.join(fullworkpath,'Wizard.xml'))
-    WriteFile(PointerFile,'<MK4MakeAWizard>\n   name="'+name+'"\n   url="'+zip+'"\n   img="'+icon+'"\n   fanart="'+fan+'"\n   description="'+description+'"\n   version="1.0.0"\n</MK4MakeAWizard>')    
+    vqver = _get_keyboard(default='1.0.0',heading="Enter a description of your build." )
+    if ( not vqver ): vqdes = "1.0.0"
+    version = urllib.unquote_plus(vqver)
+    choice = xbmcgui.Dialog().select('What format would you like your pointer to be?', ['Wizard.xml', 'Wizard.txt', 'index.html'])
+    if choice == 0:
+        output = 0
+        PointerFile = xbmc.translatePath(os.path.join(fullworkpath,'Wizard.xml'))
+        WriteFile(PointerFile,'<MK4MakeAWizard>\n   name="'+name+'"\n   url="'+zip+'"\n   img="'+icon+'"\n   fanart="'+fan+'"\n   description="'+description+'"\n   version="'+version+'"\n</MK4MakeAWizard>')    
+        pass
+    elif choice == 1:
+        output = 1
+        PointerFile = xbmc.translatePath(os.path.join(fullworkpath,'Wizard.txt'))
+        WriteFile(PointerFile,'\nname="'+name+'"\nurl="'+zip+'"\nimg="'+icon+'"\nfanart="'+fan+'"\ndescription="'+description+'"\nversion="'+version+'"\n\n\n')          
+        pass
+    elif choice == 2:
+        output = 2
+        PointerFile = xbmc.translatePath(os.path.join(fullworkpath,'index.html'))
+        WriteFile(PointerFile,'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<html>\n <head>\n  <title>Index of /</title>\n </head>\n <body>\n<h1>Index of /</h1>\n  <table>\nname="'+name+'"<br>\nurl="'+zip+'"<br>\nimg="'+icon+'"<br>\nfanart="'+fan+'"<br>\ndescription="'+description+'"<br>\nversion="'+version+'"<br>\n<br>\n<br>\n</table>\n</body></html>')          
+        pass
+        
+    AddBuild = xbmcgui.Dialog().yesno(Title,'Would you like to add another build to this file?')
+    while AddBuild ==1:
+        vqname = _get_keyboard(heading="Enter the name of your build" )
+        if ( not vqname ): return False, 0
+        name = urllib.unquote_plus(vqname)
+        choice = xbmcgui.Dialog().yesno(Title, 'For your builds zip file...', 'Does your link start with http:// or https://?','All links are CaSe SeNsItIvE!', nolabel='HTTP://',yeslabel='HTTPS://')
+        if choice == 0:
+            protocol="http://"
+        elif choice == 1:
+            protocol="https://"   
+        vqzip = _get_keyboard(default=protocol,heading="Enter the url of your build.zip" )
+        if ( not vqzip ): return False, 0
+        zip = urllib.unquote_plus(vqzip)
+        choice = xbmcgui.Dialog().yesno(Title, 'For your icon image...', 'Does your link start with http:// or https://?','All links are CaSe SeNsItIvE!', nolabel='HTTP://',yeslabel='HTTPS://')
+        if choice == 0:
+            protocol="http://"
+        elif choice == 1:
+            protocol="https://"
+        vqicon = _get_keyboard(default=protocol,heading="Enter the url of your icon image." )
+        if ( not vqicon ): return False, 0
+        icon = urllib.unquote_plus(vqicon)
+        choice = xbmcgui.Dialog().yesno(Title, 'For your Fanart image...', 'Does your link start with http:// or https://?','All links and are CaSe SeNsItIvE!', nolabel='HTTP://',yeslabel='HTTPS://')
+        if choice == 0:
+            protocol="http://"
+        elif choice == 1:
+            protocol="https://"
+        vqfan = _get_keyboard(default=protocol,heading="Enter the url of your fanart image." )
+        if ( not vqfan ): vqfan = ""
+        fan = urllib.unquote_plus(vqfan)
+        vqdes = _get_keyboard(heading="Enter a description of your build." )
+        if ( not vqdes ): vqdes = ""
+        description = urllib.unquote_plus(vqdes)
+        vqver = _get_keyboard(default='1.0.0',heading="Enter the version of your build." )
+        if ( not vqver ): vqdes = "1.0.0"
+        version = urllib.unquote_plus(vqver)
+        if output == 0:
+            PointerFile = xbmc.translatePath(fullworkpath+'Wizard.xml')
+            ReplaceText(PointerFile,'</MK4MakeAWizard>','\n   name="'+name+'"\n   url="'+zip+'"\n   img="'+icon+'"\n   fanart="'+fan+'"\n   description="'+description+'"\n   version="'+version+'"\n</MK4MakeAWizard>')    
+            pass
+        elif output == 1:
+            PointerFile = xbmc.translatePath(fullworkpath+'Wizard.txt')
+            ReplaceText(PointerFile,'End of file','name="'+name+'"\nurl="'+zip+'"\nimg="'+icon+'"\nfanart="'+fan+'"\ndescription="'+description+'"\nversion="'+version+'"\n\nEnd of file')          
+            pass
+        elif output == 2:
+            PointerFile = xbmc.translatePath(fullworkpath+'index.html')
+            ReplaceText(PointerFile,'End of file<br>','name="'+name+'"<br>\nurl="'+zip+'"<br>\nimg="'+icon+'"<br>\nfanart="'+fan+'"<br>\ndescription="'+description+'"<br>\nversion="'+version+'"<br>\n<br>\nEnd of file<br>')
+            pass
+        AddBuild = xbmcgui.Dialog().yesno(Title,'Would you like to add another build to this file?')
+
     xbmcgui.Dialog().ok(Title,'Pointer file successfully created!','It has been saved to:','[COLOR deepskyblue]'+PointerFile+'[/COLOR]')
     sys.exit()
 
 def MakeRssFile():
     if not os.path.exists(WorkPath):
-        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work foder now?'):
+        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
             Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
             SetSetting('MK4WorkFolder',Workfolder)
             pass
@@ -1703,7 +1844,7 @@ def MakeRssFile():
 
 def BuildAWizard():
     if not os.path.exists(WorkPath):
-        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work foder now?'):
+        if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
             Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
             SetSetting('MK4WorkFolder',Workfolder)
             pass
@@ -1829,7 +1970,7 @@ def BuildAWizard():
                 time.sleep(.5)
                 dp.close()
                 CheckLink = xbmcgui.Dialog().yesno('[COLOR red]404 Error[/COLOR]','The site at the link you provided could not be reached!','Would you like to try again?','', nolabel='Skip',yeslabel='Retry')  
-
+  
     addontmp = xbmc.translatePath(os.path.join(Media1,'addon.xml'))
     defaulttmp = xbmc.translatePath(os.path.join(Media1,'default.py'))
     icontmp = xbmc.translatePath(os.path.join(Media1,'icon.png'))
@@ -1839,10 +1980,20 @@ def BuildAWizard():
     outputfile = xbmc.translatePath(os.path.join(Media1,workfolder+'.zip'))
     addonxml =  xbmc.translatePath(os.path.join(outputfolder,'addon.xml'))
     defaultpy = xbmc.translatePath(os.path.join(outputfolder,'default.py'))
+    iconpng = xbmc.translatePath(os.path.join(outputfolder,'icon.png'))
+     
     if not os.path.exists(workfolder):
         os.makedirs(workfolder)
     if not os.path.exists(outputfolder):
-        os.makedirs(outputfolder)
+        os.makedirs(outputfolder)        
+    xbmcgui.Dialog().ok('Step 5: Your Wizards Icon','Select the image you want to use for your wizard.') 
+    #icon = xbmcgui.Dialog().browse(1,'Add Wizard icon','files','.png|.jpg|.jpeg',True)
+    #icon = xbmc.translatePath(''+icon+'')
+    #Toast(icon)
+    icon = xbmcgui.Dialog().browseMultiple(1,'Add icon image','files','.png|.jpg|.jpeg')
+    for file in icon:
+        file = xbmc.translatePath(file)
+        shutil.copy(file,iconpng)
     dialog = xbmcgui.Dialog()
     if dialog.yesno(Title,'Would you like to allow your wizard to automatically check and apply updates to the source code when available?'):
         shutil.copy(updater,outputfolder)
@@ -1853,7 +2004,6 @@ def BuildAWizard():
     shutil.copy(defaulttmp,outputfolder)
     shutil.copy(Extractor,outputfolder)
     shutil.copy(Downloader,outputfolder)
-    shutil.copy(icontmp,outputfolder)
     dp.update(30,'Copying core files...[COLOR lime]Complete[/COLOR]','Personalizing [COLOR white]'+name+'[/COLOR]...')
     time.sleep(1)
     a=open(addonxml).read()
@@ -1880,7 +2030,7 @@ def BuildAWizard():
     dp.update(99,'Cleaning up...[COLOR lime]Complete[/COLOR]')
     time.sleep(1)
     dp.close()
-    dialog.ok(Title, 'Your wizard is finished and saved to:','[COLOR deepskyblue]'+WorkPath+'[/COLOR]','You can replace the icon.png file to your own, just make sure it\'s called \'[COLOR deepskyblue]icon.png[/COLOR]\'')
+    dialog.ok(Title, 'Your wizard is finished and saved to:','[COLOR deepskyblue]'+fullworkpath+'[/COLOR]')
     sys.exit()
 
 def MKIVWIZARD():
@@ -1909,7 +2059,7 @@ def WEBSITE():
         webbrowser.open_new_tab('http://mkiv.ca')
 
 def BuildAWizardTextBox():
-        TextBoxes('Build-A-Wizard Section','[B][COLOR dodgerblue]Making a Pointer File:[/COLOR][/B]\n\nA pointer file is a file that contains all of the information a wizard needs to make a menu item for your build.\n\nMore commonly known as a [COLOR yellow]\'Wizard.txt\'[/COLOR] file, this wizard will create a [COLOR yellow]\'Wizard.xml\'[/COLOR] file which will work the same... but allows hosting on sites that do not allow .txt format.\n\nTo successfully make this file you will need:\n\n[COLOR yellow]To have uploaded your builds/backups zip file and gotten the download url.[/COLOR] <---If you put this link in a webbrowser it should start downloading the zip file, not open a webpage.\n\n[COLOR yellow]A url to a .jpg or .png file for your icon.[/COLOR] <---This is the small picture that represents your build when highlighted\n\n[COLOR yellow]A url to a .jpg or .png file for your fanart[/COLOR] <---This is the background picture that appears when your build is highlighted.\n\n\n[B][COLOR dodgerblue]Making a Wizard:[/COLOR][/B]\n\nA Wizard is tool that downloads and installs your Media Center backup onto another device.\n\n To successfully make this a wizard you need to upload your pointer file and get its url.\n\n[COLOR yellow]Once it is completed you may want to pick your own icon and overwrite the icon.png in your wizards folder.[/COLOR]\n\n\n[B][COLOR dodgerblue]Making a RSS File:[/COLOR][/B]\n\nTo make a RSS file you only need the information you would like to provide.\n\n[COLOR yellow]***Once the file is made you will be prompted to upload it and enter its URL to apply the info to your build. (Optional)[/COLOR]\n\n\n[COLOR lime]Now, let\'s get started![/COLOR]') #Initial Textbox Explanation
+        TextBoxes('Build-A-Wizard Section','[B][COLOR dodgerblue]Making a Pointer File:[/COLOR][/B]\n\nA pointer file is a file that contains all of the information a wizard needs to make a menu item for your build.\n\nMore commonly known as a [COLOR yellow]\'Wizard.txt\'[/COLOR] file, this wizard will create a [COLOR yellow]\'Wizard.txt, \'Wizard.xml\' or \'Wizard.html\'[/COLOR] (output will be index.html for this one)\n\nTo successfully make this file you will need:\n\n[COLOR yellow]To have uploaded your builds/backups zip file and gotten the download url.[/COLOR] <---If you put this link in a webbrowser it should start downloading the zip file, not open a webpage.\n\n[COLOR yellow]A url to a .jpg or .png file for your icon.[/COLOR] <---This is the small picture that represents your build when highlighted\n\n[COLOR yellow]A url to a .jpg or .png file for your fanart[/COLOR] <---This is the background picture that appears when your build is highlighted.\n\n\n[B][COLOR dodgerblue]Making a Wizard:[/COLOR][/B]\n\nA Wizard is tool that downloads and installs your Media Center backup onto another device.\n\n To successfully make this a wizard you need to upload your pointer file and get its url.\n\n\n[B][COLOR dodgerblue]Making a RSS File:[/COLOR][/B]\n\nTo make a RSS file you only need the information you would like to provide.\n\n[COLOR yellow]***Once the file is made you will be prompted to upload it and enter its URL to apply the info to your build. (Optional)[/COLOR]\n\n\n[COLOR lime]Now, let\'s get started![/COLOR]') #Initial Textbox Explanation
 
 def OpenTextbox(title,message):
         TextBoxes(title,message)
@@ -2113,8 +2263,8 @@ def Notify(title,message,times,icon):
     xbmc.executebuiltin("XBMC.Notification("+title+","+message+","+times+","+icon+")")
 
 def Toast(var):
-    xbmcgui.Dialog().notification(Title, var, xbmcgui.NOTIFICATION_INFO, 5000, False)
-    #xbmc.executebuiltin(Title,'+var+',5000,ICON)
+    xbmcgui.Dialog().notification(Title, var, ICON, 5000, False)
+    #xbmc.executebuiltin(Title,'+var+',5000,'''xbmcgui.NOTIFICATION_INFO''')
 
 def OPEN_URL(url):
     req = urllib2.Request(url)
@@ -2635,13 +2785,186 @@ def DeleteSkinBackup():
     else: pass
     xbmc.executebuiltin("Container.Refresh")
 
+def MK4Backgrounds():
+    Initial_Size = GETFOLDERSIZE(Backgrounds)
+    #xbmc.executebuiltin('ActivateWindow(10003,'+folder+',return)')
+    if ADDON.getSetting('KodiVersion') == 'Jarvis' and skin == 'skin.aeon.nox.silvo':
+        Fix = os.path.join(Resources,'FileBrowser.xml')
+        FB = xbmc.translatePath(os.path.join('special://home/addons/skin.aeon.nox.silvo/1080i/','FileBrowser.xml'))
+        os.remove(FB)
+        shutil.copy(Fix,FB)
+        xbmc.executebuiltin('ReloadSkin')
+    elif ADDON.getSetting('KodiVersion') == 'Krypton' and skin == 'skin.aeon.nox.silvo':
+        Fix = os.path.join(Resources,'FileBrowser2.xml')
+        FB = xbmc.translatePath(os.path.join('special://home/addons/skin.aeon.nox.silvo/1080i/','FileBrowser.xml'))
+        os.remove(FB)
+        shutil.copy(Fix,FB)
+        xbmc.executebuiltin('ReloadSkin')
+            
+    section=xbmcgui.Dialog().select('Add images or browse in which section?',['LiveTV', 'TV Shows','Movies','Music','Kids Zone','Her Place','Man Cave','Add-ons','System','Premium TV'])
+#                                                                                 0          1          2       3          4          5           6         7          8         9      
+    if section == 0:
+        folder = xbmc.translatePath(os.path.join('special://home/userdata/Background_pics/','sports/'))
+        sec = 'LiveTV'
+        pass
+    elif section == 1:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/tv shows/')
+        sec = 'TV Shows'
+        pass
+    elif section == 2:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/movies/')
+        sec = 'Movies'
+        pass
+    elif section == 3:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/music/')
+        sec = 'Music'
+        pass
+    elif section == 4:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/kids/')
+        sec = 'Kids Zone'
+        pass
+    elif section == 5:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/ladies/')
+        sec = 'Her Place'
+        pass        
+    elif section == 6:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/mens area/')
+        sec = 'Man Cave'
+        pass
+    elif section == 7:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/addons/')
+        sec = 'Add-ons'
+        pass
+    elif section == 8:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/settings/')
+        sec = 'System'
+        pass
+    elif section == 9:
+        folder = xbmc.translatePath('special://home/userdata/Background_pics/premium/')
+        sec = 'Premium TV'
+        pass
+
+    if xbmcgui.Dialog().yesno(Title,'Do you want to add images to this section or view it in File Manager?',nolabel='[COLOR lime]Add[/COLOR]',yeslabel='[COLOR red]File Manager[/COLOR]'):
+        Toast('[COLOR orangered]Directing File Manager to[/COLOR] [COLOR yellow]'+sec+'[/COLOR]')
+        xbmc.executebuiltin('ActivateWindow(10003,'+folder+',return)')
+        #images = xbmcgui.Dialog().browseMultiple(2,'Remove background images','files','',False,False,''+folder)
+                #confirm = xbmcgui.Dialog().select('Confirm deletion',['Cancel','[COLOR red]Delete[/COLOR]'])
+
+    else:
+        Toast('[COLOR lime]Adding to[/COLOR] '+sec)
+        Default = ADDON.getSetting('backup')
+        images = xbmcgui.Dialog().browseMultiple(2,'Add background images','files','',False,False,Default)
+        for file in images:
+            file = xbmc.translatePath(file)
+            shutil.copy(file, folder)
+            
+    EditMore = xbmcgui.Dialog().yesno(Title,'Would you like to edit another section?')
+    while EditMore == 1:
+        section=xbmcgui.Dialog().select('Add images or Browse in which section?',['LiveTV', 'TV Shows','Movies','Music','Kids Zone','Her Place','Man Cave','Add-ons','System','Premium TV'])
+#                                                                                     0          1          2       3          4          5           6         7          8         9      
+        if section == 0:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/sports/')
+            sec = 'LiveTV'
+            pass
+        elif section == 1:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/tv shows/')
+            sec = 'TV Shows'
+            pass
+        elif section == 2:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/movies/')
+            sec = 'Movies'
+            pass
+        elif section == 3:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/music/')
+            sec = 'Music'
+            pass
+        elif section == 4:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/kids/')
+            sec = 'Kids Zone'
+            pass
+        elif section == 5:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/ladies/')
+            sec = 'Her Place'
+            pass        
+        elif section == 6:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/mens area/')
+            sec = 'Man Cave'
+            pass
+        elif section == 7:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/addons/')
+            sec = 'Add-ons'
+            pass
+        elif section == 8:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/settings/')
+            sec = 'System'
+            pass
+        elif section == 9:
+            folder = xbmc.translatePath('special://home/userdata/Background_pics/premium/')
+            sec = 'Premium TV'
+            pass
+
+
+        if xbmcgui.Dialog().yesno(Title,'Do you want to add images to this section or view it in File Manager?',nolabel='[COLOR lime]Add[/COLOR]',yeslabel='[COLOR red]File Manager[/COLOR]'):
+            Toast('[COLOR orangered]Browsing[/COLOR] '+sec)
+            xbmc.executebuiltin('ActivateWindow(10003,'+folder+',return)')
+            '''images = xbmcgui.Dialog().browseMultiple(2,'Remove background images','files','',False,False,folder)
+            for file in images:
+                file = xbmc.translatePath(file)
+                confirm = xbmcgui.Dialog().select('Confirm deletion',['Cancel','[COLOR red]Delete[/COLOR]'])
+                if file == '':
+                    return
+                elif confirm == 0:
+                    return
+                elif confirm == 1:
+                    try:
+                        os.unlink(file)
+                    except: 
+                        shutil.rmtree(file)'''
+        else:
+            Toast('[COLOR lime]Adding to[/COLOR] [COLOR yellow]'+sec+'[/COLOR]')
+            Default = ADDON.getSetting('backup')
+            images = xbmcgui.Dialog().browseMultiple(2,'Add background images','files','',False,False,Default)
+            for file in images:
+                file = xbmc.translatePath(file)
+                shutil.copy(file, folder)
+        EditMore = xbmcgui.Dialog().yesno(Title,'Would you like to edit another section?')
+    Post_Size = GETFOLDERSIZE(Backgrounds)
+    if Post_Size != Initial_Size:
+        Toast('Backing up changes')
+        if os.path.exists(BackgroundsBackup):
+            os.remove(BackgroundsBackup)
+        else: pass
+        ZipIt(BackgroundsBackup,USERDATA,'Background_pics')
+    else:
+        sys.exit(0)
+        
+def RestoreMK4Backgrounds():
+    #try:
+        if os.path.exists(BackgroundsBackup):   
+            shutil.rmtree(Backgrounds)
+            extract.all(BackgroundsBackup,USERDATA)
+        else: pass
+    #except: pass
+        Toast('Backgrounds Restored')
+        xbmc.executebuiltin("Container.Refresh")
+
+def DeleteMK4BackgroundsBackup():
+    if os.path.exists(BackgroundsBackupZip):
+        os.remove(BackgroundsBackupZip)
+        pass
+    else:
+        pass
+    xbmc.executebuiltin("Container.Refresh")
+
 def NewSession():
     if ADDON.getSetting('NewSession') == 'true':
         try:
+            Toast('Welcome back to the '+Title)
             myplatform = platform()            
             if myplatform == 'android':
                 if BackupPath=="":
                     SetSetting("backup","/storage/emulated/0/")
+                    RepoAction('Android Device', '/storage/emulated/0/')
                     pass
                 else: pass
                 if WorkPath=="":  
@@ -2651,6 +2974,7 @@ def NewSession():
             elif myplatform == 'osx':
                 if BackupPath=="": 
                     SetSetting('backup',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/Library/Application Support/Kodi',''))
+                    RepoAction('Desktop',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/Library/Application Support/Kodi',''))
                     pass
                 else: pass
                 if WorkPath=="": 
@@ -2660,6 +2984,7 @@ def NewSession():
             elif myplatform == 'linux':
                 if BackupPath=="": 
                     SetSetting('backup',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/.kodi',''))
+                    RepoAction('Desktop',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/.kodi',''))
                     pass
                 else: pass
                 if WorkPath=="": 
@@ -2669,6 +2994,7 @@ def NewSession():
             elif myplatform == 'windows':
                 if BackupPath=="": 
                     SetSetting('backup',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/AppData/Roaming/Kodi',''))
+                    RepoAction('Desktop',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/AppData/Roaming/Kodi',''))
                     pass
                 else: pass
                 if WorkPath=="": 
@@ -2704,7 +3030,8 @@ def NewSession():
                     pass'''
                     
         SetSetting('NewSession','false')
-        
+        paths = ADDON.getSetting("backup")
+        Toast('Backup folder set to: '+paths)
         #try:
         dp = xbmcgui.DialogProgress()
         dp.create(Title,'Checking for updates...','', 'Please Wait')
@@ -2795,16 +3122,3 @@ def Check4Update():
                     killxbmc()
                 else: pass
     except: pass
-
-
-
-
-
-
-
-
-
-
-
-
-
