@@ -33,7 +33,7 @@ import glob
 import speedtest
 #import uploadlog
 from lib import smtplib
-
+import hashlib
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 addon_id='plugin.program.mkiv'
 ADDON=xbmcaddon.Addon(id=addon_id)
@@ -55,6 +55,7 @@ EXCLUDES=['BackgroundsBackup.zip','kodi.log','script.areswizard','plugin.program
 BackupPath=ADDON.getSetting('backup')
 fullbackuppath=xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
 WorkPath=ADDON.getSetting('MK4WorkFolder')
+fullworkpath=xbmc.translatePath(os.path.join(WorkPath,'KODI Work Folder'))
 Downloader=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'downloader.py'))
 Extractor=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'extract.py'))
 Local=xbmc.translatePath(os.path.join('special://home/addons/',addon_id))
@@ -139,15 +140,17 @@ def INDEX(): #1
         if ShowAdult=='true':
             addDir('[B]Adult Content[/B]',BASEURL,18,'http://kodi.iptvaddon.com/wp-content/uploads/2015/03/xxx-ADULT-ADDON-FOR-KODI-XBMC-new-video-and-addon.jpg',FANART,'','')
         else: pass
-        addItem('[B][/B]','service.xbmc.versioncheck',101,ICON,FANART,'')
+        addItem('[B][/B]','service.xbmc.versioncheck',83,ICON,FANART,'')
         addItem('[B][COLOR yellow]Contact Form[/COLOR][/B]','http://www.mkiv.ca/contact.html',19,'http://downloadicons.net/sites/default/files/contacts-icon-14474.png',FANART,'')
-        addItem('[B][COLOR lightskyblue]View Changelog[/COLOR][/B]',BASEURL,58,'http://www.workschedule.net/wp-content/uploads/2014/08/changelog1.png',FANART,'')
+        addItem('[B][COLOR deepskyblue]View Changelog[/COLOR][/B]',BASEURL,58,'http://www.workschedule.net/wp-content/uploads/2014/08/changelog1.png',FANART,'')
         addItem('[COLOR yellow][B]Settings[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
-        addItem('[B][/B]',BASEURL,0,ICON,FANART,'')
+        addItem('[COLOR deepskyblue][B]Force update check[/B][/COLOR]',BASEURL,79,ICON,FANART,'')
+        addItem('[B][COLOR yellow]Reset [/COLOR][/B]'+Title+'[B][COLOR yellow] Settings[/COLOR][/B]','service.xbmc.versioncheck',82,ICON,FANART,'')
+        addItem('[B][/B]','service.xbmc.versioncheck',666,ICON,FANART,'')
         if myplatform == 'android':
-            addItem('[B][COLOR deepskyblue]OPEN MK-IV ON YOUR PC TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,0,ICON,FANART,'')
+            addItem('[B][COLOR blue]OPEN MK-IV ON YOUR PC TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,0,ICON,FANART,'')
         else:
-            addItem('[B][COLOR deepskyblue]OPEN MK-IV ON YOUR ANDROID TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,0,ICON,FANART,'')
+            addItem('[B][COLOR blue]OPEN MK-IV ON YOUR ANDROID TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,0,ICON,FANART,'')
 
 def BUILDMENU():
     addDir('[COLOR red][B]Canadian Builds[/B][/COLOR]',BASEURL,14,ART+'ca.jpg',FANART,'','')
@@ -156,6 +159,10 @@ def BUILDMENU():
     addDir('[COLOR yellow][B]ADD YOUR BUILD TO MK-IV[/B][/COLOR]',BASEURL,16,ART+'website.jpg',FANART,'','')
 
 def MAINTENANCE():
+        try:
+            os.remove(Textures13)
+            pass
+        except: pass
         Toast('[COLOR lime]Populating sizes[/COLOR]')
         CacheSize = GETFOLDERSIZE(xbmc.translatePath('special://home/cache'))
         ThumbsSize = GETFOLDERSIZE(xbmc.translatePath('special://home/userdata/Thumbnails'))
@@ -281,10 +288,20 @@ def AddToAres2():
 #def UKBUILDS():
 #      addDir('[B][COLOR yellow]Coming Soon...[/COLOR][/B]',BASEURL,20,ART+'uk.jpg',FANART,'','')
 
-def MKIVMENU():           
+def MKIVMENU(): 
+            if ADDON.getSetting('Update') == 'true' and ADDON.getSetting('BuildName') != '':
+                Updater='[COLOR lime]ON[/COLOR]'
+                pass
+            elif ADDON.getSetting('Update') == 'false' and ADDON.getSetting('BuildName') != '':
+                Updater='[COLOR red]OFF[/COLOR]'
+                pass
+            else:
+                Updater='[COLOR orangered]Not Available[/COLOR]'
+                pass
             addDir('[B][COLOR red]Install MK-IV[/COLOR][/B]',BASEURL,32,ICON,FANART,'','')
             addItem('[B][COLOR blue]MK-IV Website[/COLOR][/B]','http://mkiv.ca',19,FANART,FANART,'')
             addItem('[B][COLOR red]Donate to MK-IV[/COLOR][/B]','https://paypal.me/mkiv',19,'http://www.fofrescue.org/wp-content/uploads/2013/09/paypal-logo-donate.png',FANART,'')
+            addItem('[B][COLOR blue]MK-IV Auto-update[/COLOR] %s'% Updater+'[/B]',BASEURL,81,ICON,FANART,'')
             addItem('[B][COLOR white][/COLOR][/B]','http://mkiv.ca',666,FANART,FANART,'')
             addItem('[COLOR powderblue]Get AceStreams Engine[/COLOR]',BASEURL,34,'http://freeiptv.weightlosstoday.org/wp-content/uploads/2016/01/Ace-Stream-Media-Full-Free-Download.jpg',FANART,'')
             addItem('[COLOR deepskyblue]Edit Backgrounds[/COLOR]',BASEURL,75,ICON,FANART,'')
@@ -308,13 +325,36 @@ def PlayStoreMenu():
     addItem('Kodi','org.xbmc.kodi',39,'http://sideloadfiretv.com/wp-content/uploads/2015/01/preview_84a70e233a1a6d1ac0d93d2e9f1f2de0e7c2d64d289f1e6f17434fe4c3752717.png','http://cdn.wallpapersafari.com/67/60/fEqKbm.jpg','')  
     addItem('SPMC','com.semperpac.spmc16',39,'http://s15.postimg.org/fu5jq82ff/1280_splash.png','http://dvxjmen5kgvfb.cloudfront.net/wp-content/uploads/2014/08/SPMC-Splash.jpg','')
     addItem('Team Viewer','com.teamviewer.teamviewer.market.mobile',39,'https://screenshots.en.sftcdn.net/en/scrn/60000/60958/teamviewer-09-535x535.png','https://lh3.googleusercontent.com/iba_vTCnUpAPv5DAcT_u_UMdmIQvCyE62AKGKnxD4m0NrWTf64lWn-JoAOx_mZIBLw=h900','')
-    addItem('[COLOR deepskyblue]-----     MK Store Apps     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'')
     try:
+        addItem('[COLOR deepskyblue]-----     MK Store Apps     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'')
         link = OPEN_URL('http://androidmenu.mkiv.ca').replace('\n','').replace('\r','')
         match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
         for name,url,iconimage,fanart,description in match:
             addItem(name,url,23,iconimage,fanart,description)
     except: pass
+    try:
+        addItem('[COLOR deepskyblue]-----     Kobra Apps     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'')
+        link = OPEN_URL('http://kobracustombuilds.com/apks/wizard/wizard.txt').replace('\n','').replace('\r','')
+        match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+        for name,url,iconimage,fanart,description in match:
+            addItem(name,url,23,iconimage,fanart,description)
+    except: pass
+    try:
+        addItem('[COLOR deepskyblue]-----     Emulator Apps     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'')
+        link = OPEN_URL('http://kobracustombuilds.com/emulators/wizard/wizard.txt').replace('\n','').replace('\r','')
+        match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+        for name,url,iconimage,fanart,description in match:
+            addItem(name,url,23,iconimage,fanart,description)
+    except: pass
+    if ShowAdult=='true':
+        try:
+            addItem('[COLOR deepskyblue]-----     Adults Only Apps     -----[/COLOR]','com.explusalpha.MdEmu',999,ICON,FANART,'')
+            link = OPEN_URL('http://kobracustombuilds.com/adult/wizard/wizard.txt').replace('\n','').replace('\r','')
+            match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+            for name,url,iconimage,fanart,description in match:
+                addItem(name,url,23,iconimage,fanart,description)
+        except: pass
+    else: pass
 
 def LogMenu():
     addItem('[B]View Last Error[/B]',BASEURL,48,'http://www.iconshock.com/img_jpg/STROKE/communications/jpg/256/log_file_icon.jpg',FANART,'')
@@ -924,6 +964,8 @@ def FRESHSTART(params):
         os.makedirs(Database)
         pass
     else: pass
+    KillMK4Settings()
+    time.sleep(.5)
     shutil.copy(FreshStart,Addons26)
     REMOVE_EMPTY_FOLDERS()
     REMOVE_EMPTY_FOLDERS()
@@ -934,6 +976,7 @@ def FRESHSTART(params):
     REMOVE_EMPTY_FOLDERS()
     time.sleep(.5)
     dp.close()
+    ResetMK4Settings()
     dialog = xbmcgui.Dialog()
     dialog.ok(Title,'Fresh Start Successful','','The MC will now close')
     killxbmc()
@@ -1747,7 +1790,7 @@ def MakePointerFile():
         pass
         
     AddBuild = xbmcgui.Dialog().yesno(Title,'Would you like to add another build to this file?')
-    while AddBuild ==1:
+    while AddBuild == 1:
         vqname = _get_keyboard(heading="Enter the name of your build" )
         if ( not vqname ): return False, 0
         name = urllib.unquote_plus(vqname)
@@ -2083,7 +2126,7 @@ def SPEEDTEST():
 
 def YouTube(url):
     try:
-        youtubecode=url
+        youtubecode=url.replace('https://www.youtube.com/watch?v=','')
         uurl = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubecode
         xbmc.executebuiltin("xbmc.PlayMedia("+uurl+"),1")
         xbmc.executebuiltin("xbmc.PayerControl(Stop")
@@ -3031,6 +3074,7 @@ def NewSession():
                     
         SetSetting('NewSession','false')
         paths = ADDON.getSetting("backup")
+        time.sleep(1)
         Toast('Backup folder set to: '+paths)
         #try:
         dp = xbmcgui.DialogProgress()
@@ -3060,6 +3104,7 @@ def NewSession():
                 os.rename(Local,Localtmp)
                 os.rename(Master,Local)
                 shutil.rmtree(Localtmp)
+                time.sleep(1)
                 DeleteThumbnails('')
                 xbmc.executebuiltin('Container.Refresh')
                 #xbmcgui.Dialog().ok(Title,Title+' Restart required...','','Press OK to close the add-on')
@@ -3122,3 +3167,126 @@ def Check4Update():
                     killxbmc()
                 else: pass
     except: pass
+
+def MK4WizUpdate():
+    #try:
+        dp = xbmcgui.DialogProgress()
+        dp.create(Title,'Checking for updates...','', 'Please Wait')
+        link = OPEN_URL('https://raw.githubusercontent.com/MK-IV/plugin.program.mkiv/master/addon.xml').replace('\n','').replace('\r','')
+        match = re.compile('mk4version="(.+?)"').findall(link)
+        for mk4version in match:
+            xbmc.log('version='+mk4version+' Addon='+ADDON.getAddonInfo("version")+'')
+            if mk4version > ADDON.getAddonInfo('version'):
+                #try:
+                path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
+                dp = xbmcgui.DialogProgress()
+                dp.create(Title,'Downloading '+Title+' update...','', 'Please Wait')
+                lib=os.path.join(path, 'plugin.program.mkiv-master.zip')
+                try:
+                    os.remove(lib)
+                except:
+                    pass
+                downloader.download('https://github.com/MK-IV/plugin.program.mkiv/archive/master.zip', lib, dp)
+                dp.update(0,'Downloading '+Title+' update... [COLOR lime]Finished[/COLOR]', 'Installing...')
+                extract.all(lib,ADDONS,dp)
+                time.sleep(.5)
+                try:
+                    os.remove(lib)
+                except:
+                    pass
+                os.rename(Local,Localtmp)
+                os.rename(Master,Local)
+                shutil.rmtree(Localtmp)
+                time.sleep(1)
+                DeleteThumbnails('')
+                xbmc.executebuiltin('Container.Refresh')
+                #xbmcgui.Dialog().ok(Title,Title+' Restart required...','','Press OK to close the add-on')
+                #sys.exit(0)
+                #except: pass
+            else: pass
+    #except: pass
+
+def OpenExecute(addon, mode):
+    xbmc.executebuiltin('ActivateWindow(10001,"plugin://'+addon+'&mode='+mode+')')
+
+def AddonInstallWindow():
+    xbmc.executebuiltin('ActivateWindow(10040,"addons://install/",return)')
+    
+def UpdateSwitch():
+    build=ADDON.getSetting('BuildName')
+    if ADDON.getSetting('Update') == 'false' and ADDON.getSetting('BuildName') != '':
+        SetSetting('Update','true')
+        Toast('AutoUpdate [COLOR lime]Enabled[/COLOR] for '+build)
+        xbmc.executebuiltin('Container.Refresh')
+    elif ADDON.getSetting('Update') == 'true' and ADDON.getSetting('BuildName') != '': 
+        SetSetting('Update','false')
+        Toast('AutoUpdate [COLOR red]Disabled[/COLOR] for '+build)
+        xbmc.executebuiltin('Container.Refresh')
+    else:
+        Toast('[COLOR orangered]Feature is not available[/COLOR]')
+        
+def ResetMK4Settings():
+    SetSetting('backup','')
+    time.sleep(.5)
+    SetSetting('InstallRepo','false')
+    time.sleep(.5)
+    SetSetting('UpdateAddons','false')
+    time.sleep(.5)
+    SetSetting('MK4Build','false')
+    time.sleep(.5)
+    SetSetting('FirstMK4Startup','true')
+    time.sleep(.5)
+    SetSetting('NewSession','true')
+    time.sleep(.5)
+    SetSetting('ShowAdult','false')
+    time.sleep(.5)
+    SetSetting('password','')
+    time.sleep(.5)
+    SetSetting('MK4WorkFolder','')
+    time.sleep(.5)
+    SetSetting('MAIN','500')
+    time.sleep(.5)
+    SetSetting('INFO','515')
+    Toast(Title+' Settings reset')
+    
+def KillMK4Settings():
+    settings=xbmc.translatePath(os.path.join(ADDON_DATA+addon_id,'settings.xml'))
+    try: 
+        os.remove(settings)
+    except:
+        pass
+        
+def RepoFiles():
+    Addonsxml = xbmc.translatePath(os.path.join(fullworkpath,'addons.xml'))
+    Addonsxmlmd5 = xbmc.translatePath(os.path.join(fullworkpath,'addons.xml.md5'))
+    if os.path.exists(Addonsxml) or os.path.exists(Addonsxmlmd5):
+        xbmcgui.Dialog().ok('[COLOR red]Warning![/COLOR]','addons.xml and/or addons.xml.md5 have been detected in your work folder','They will be overwritten if you do not move them now.')
+    xbmcgui.Dialog().ok(Title,'Select the first add-on to include in the addons.xml','')
+    vqid = _get_keyboard(heading='[COLOR white]Enter a plugin id[/COLOR]  (i.e. plugin.program.mkiv)')
+    if ( not vqid ): return False, 0
+    try:
+        a=open((os.path.join(ADDONS+'/'+vqid,'addon.xml'))).read()
+        b=a.replace('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<addons>').replace('</addon>','</addon>\n</addons>').replace('<?xml version="1.0" encoding="UTF-8"?>','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<addons>').replace('<!--suppress ALL -->','')
+        WriteFile(Addonsxml,str(b))
+        pass
+    except:
+        Toast('Addon does not exist, Please try again')
+        sys.exit(0)
+    addmore = xbmcgui.Dialog().yesno(Title,'Add another add-on to include in the addons.xml file?')
+    while addmore == 1:
+        vqid = _get_keyboard(heading='[COLOR white]Enter a plugin id[/COLOR]  (i.e. plugin.program.mkiv)')
+        if ( not vqid ): pass
+        try:
+            a=open((os.path.join(ADDONS+'/'+vqid,'addon.xml'))).read()
+            b=a.replace('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>','').replace('<?xml version="1.0" encoding="UTF-8"?>','').replace('<!--suppress ALL -->','')
+            c=open(Addonsxml).read()
+            d=c.replace('</addons>',str(b)+'\n</addons>')
+            f = open(Addonsxml, mode='w')
+            f.write(str(d))
+            f.close()
+        except:
+            Toast('Addon does not exist, Please try again')
+        addmore = xbmcgui.Dialog().yesno(Title,'Add another add-on to include in the addons.xml file?')
+    a=open(Addonsxml).read()
+    b=hashlib.md5(str(a)).hexdigest()
+    WriteFile(Addonsxmlmd5,str(b))

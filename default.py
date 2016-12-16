@@ -475,6 +475,21 @@ elif mode==77:
     
 elif mode==78:
     mk4.Contact()
+    
+elif mode==79:
+    mk4.MK4WizUpdate()
+    
+elif mode==80:
+    mk4.AddonInstallWindow()
+    
+elif mode==81:
+    mk4.UpdateSwitch()
+        
+elif mode==82:
+    mk4.ResetMK4Settings()
+    
+elif mode==83:
+    mk4.RepoFiles()
 
 elif mode==100:
             mk4.MKIVMENU() 
