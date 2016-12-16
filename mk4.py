@@ -3257,10 +3257,13 @@ def KillMK4Settings():
         pass
         
 def RepoFiles():
+    if not os.path.exists(fullworkpath):
+        os.makedirs(fullworlpath)
     Addonsxml = xbmc.translatePath(os.path.join(fullworkpath,'addons.xml'))
     Addonsxmlmd5 = xbmc.translatePath(os.path.join(fullworkpath,'addons.xml.md5'))
     if os.path.exists(Addonsxml) or os.path.exists(Addonsxmlmd5):
-        xbmcgui.Dialog().ok('[COLOR red]Warning![/COLOR]','addons.xml and/or addons.xml.md5 have been detected in your work folder','They will be overwritten if you do not move them now.')
+        Toast('Work Folder: '+fullworkpath)
+        xbmcgui.Dialog().ok('[COLOR red]Warning![/COLOR]','addons.xml and/or addons.xml.md5 have been detected in your work folder.','They will be overwritten if you do not move them now.')
     xbmcgui.Dialog().ok(Title,'Select the first add-on to include in the addons.xml','')
     vqid = _get_keyboard(heading='[COLOR white]Enter a plugin id[/COLOR]  (i.e. plugin.program.mkiv)')
     if ( not vqid ): return False, 0
@@ -3290,3 +3293,4 @@ def RepoFiles():
     a=open(Addonsxml).read()
     b=hashlib.md5(str(a)).hexdigest()
     WriteFile(Addonsxmlmd5,str(b))
+    xbmcgui.Dialog().ok(Title,'Your files have been successfully created and saved to: '+fullworkpath)
