@@ -486,10 +486,31 @@ elif mode==81:
     mk4.UpdateSwitch()
         
 elif mode==82:
-    mk4.ResetMK4Settings()
+    Passcode=xbmcgui.Dialog().input('Type 1234', type=xbmcgui.INPUT_NUMERIC)
+    if PasscodeAttempt == '1234':
+        mk4.ResetMK4Settings()
+    else: sys.exit(0)
     
 elif mode==83:
     mk4.RepoFiles()
+    
+elif mode==84:
+    mk4.md5File()
+    
+elif mode==85:
+    import hashlib
+    passcode = ADDON.getSetting('Test')
+    PasscodeAttempt=xbmcgui.Dialog().input('Enter Passcode', type=xbmcgui.INPUT_NUMERIC)
+    PasscodeAttempt=hashlib.md5(PasscodeAttempt).hexdigest()
+    if PasscodeAttempt == passcode:
+        mk4.TestMenu()
+    else:
+        mk4.Toast('[COLOR red]Nope, try again[/COLOR]')
+        sys.exit(0)
+
+elif mode==86:
+    mk4.BuildARepo()
+
 
 elif mode==100:
             mk4.MKIVMENU() 

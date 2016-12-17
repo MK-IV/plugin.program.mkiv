@@ -121,6 +121,7 @@ THE_TIME=time.strftime("%H:%M %p")
 THE_DATE=time.strftime("%A %B %d %Y")
 Build_A_Icon=xbmc.translatePath(os.path.join(Media1,'icon.png'))
 
+
 def INDEX(): #1
         addDir('[B][COLOR red]MK-IV Build Menu[/COLOR][/B]','JVtHtoiKYAE',100,ICON,FANART,'','')
         #addDir('[B][COLOR red]BUILDS[/B]',BASEURL,20,ART+'builds.png',FANART,'','')
@@ -140,7 +141,7 @@ def INDEX(): #1
         if ShowAdult=='true':
             addDir('[B]Adult Content[/B]',BASEURL,18,'http://kodi.iptvaddon.com/wp-content/uploads/2015/03/xxx-ADULT-ADDON-FOR-KODI-XBMC-new-video-and-addon.jpg',FANART,'','')
         else: pass
-        addItem('[B][/B]','service.xbmc.versioncheck',83,ICON,FANART,'')
+        addItem('[B][/B]','service.xbmc.versioncheck',666,ICON,FANART,'')
         addItem('[B][COLOR yellow]Contact Form[/COLOR][/B]','http://www.mkiv.ca/contact.html',19,'http://downloadicons.net/sites/default/files/contacts-icon-14474.png',FANART,'')
         addItem('[B][COLOR deepskyblue]View Changelog[/COLOR][/B]',BASEURL,58,'http://www.workschedule.net/wp-content/uploads/2014/08/changelog1.png',FANART,'')
         addItem('[COLOR yellow][B]Settings[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
@@ -148,9 +149,9 @@ def INDEX(): #1
         addItem('[B][COLOR yellow]Reset [/COLOR][/B]'+Title+'[B][COLOR yellow] Settings[/COLOR][/B]','service.xbmc.versioncheck',82,ICON,FANART,'')
         addItem('[B][/B]','service.xbmc.versioncheck',666,ICON,FANART,'')
         if myplatform == 'android':
-            addItem('[B][COLOR blue]OPEN MK-IV ON YOUR PC TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,0,ICON,FANART,'')
+            addDir('[B][COLOR blue]OPEN MK-IV ON YOUR PC TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,85,ICON,FANART,'','')
         else:
-            addItem('[B][COLOR blue]OPEN MK-IV ON YOUR ANDROID TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,0,ICON,FANART,'')
+            addDir('[B][COLOR blue]OPEN MK-IV ON YOUR ANDROID TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,85,ICON,FANART,'','')
 
 def BUILDMENU():
     addDir('[COLOR red][B]Canadian Builds[/B][/COLOR]',BASEURL,14,ART+'ca.jpg',FANART,'','')
@@ -2978,6 +2979,7 @@ def MK4Backgrounds():
             os.remove(BackgroundsBackup)
         else: pass
         ZipIt(BackgroundsBackup,USERDATA,'Background_pics')
+        xbmc.executebuiltin('Container.Refresh')
     else:
         sys.exit(0)
         
@@ -3080,10 +3082,10 @@ def NewSession():
         dp = xbmcgui.DialogProgress()
         dp.create(Title,'Checking for updates...','', 'Please Wait')
         link = OPEN_URL('https://raw.githubusercontent.com/MK-IV/plugin.program.mkiv/master/addon.xml').replace('\n','').replace('\r','')
-        match = re.compile('mk4version="(.+?)"').findall(link)
-        for mk4version in match:
-            xbmc.log('version='+mk4version+' Addon='+ADDON.getAddonInfo("version")+'')
-            if mk4version > ADDON.getAddonInfo('version'):
+        match = re.compile('id="(.+?)".+?ame="(.+?)".+?ersion="(.+?)"').findall(link)  
+        for id, name, version in match:
+            xbmc.log('version='+version+' Addon='+ADDON.getAddonInfo("version")+'')
+            if version > ADDON.getAddonInfo('version'):
                 #try:
                 path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
                 dp = xbmcgui.DialogProgress()
@@ -3173,10 +3175,10 @@ def MK4WizUpdate():
         dp = xbmcgui.DialogProgress()
         dp.create(Title,'Checking for updates...','', 'Please Wait')
         link = OPEN_URL('https://raw.githubusercontent.com/MK-IV/plugin.program.mkiv/master/addon.xml').replace('\n','').replace('\r','')
-        match = re.compile('mk4version="(.+?)"').findall(link)
-        for mk4version in match:
-            xbmc.log('version='+mk4version+' Addon='+ADDON.getAddonInfo("version")+'')
-            if mk4version > ADDON.getAddonInfo('version'):
+        match = re.compile('id="(.+?)".+?ame="(.+?)".+?ersion="(.+?)"').findall(link)
+        for id, name, version in match:
+            xbmc.log(name+'---'+id+'----version='+version+' Addon='+ADDON.getAddonInfo("version")+'')
+            if version > ADDON.getAddonInfo('version'):
                 #try:
                 path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
                 dp = xbmcgui.DialogProgress()
@@ -3257,14 +3259,22 @@ def KillMK4Settings():
         pass
         
 def RepoFiles():
+    RepoFolder=xbmc.translatePath(os.path.join(fullworkpath,'Repository/'))
     if not os.path.exists(fullworkpath):
-        os.makedirs(fullworlpath)
-    Addonsxml = xbmc.translatePath(os.path.join(fullworkpath,'addons.xml'))
-    Addonsxmlmd5 = xbmc.translatePath(os.path.join(fullworkpath,'addons.xml.md5'))
-    if os.path.exists(Addonsxml) or os.path.exists(Addonsxmlmd5):
-        Toast('Work Folder: '+fullworkpath)
-        xbmcgui.Dialog().ok('[COLOR red]Warning![/COLOR]','addons.xml and/or addons.xml.md5 have been detected in your work folder.','They will be overwritten if you do not move them now.')
-    xbmcgui.Dialog().ok(Title,'Select the first add-on to include in the addons.xml','')
+        os.makedirs(fullworkpath)
+    if not os.path.exists(RepoFolder):
+        os.makedirs(RepoFolder)
+    Addonsxml = xbmc.translatePath(os.path.join(RepoFolder,'addons.xml'))
+    Addonsxmlmd5 = xbmc.translatePath(os.path.join(RepoFolder,'addons.xml.md5'))
+    if os.path.exists(Addonsxml) and not os.path.exists(Addonsxmlmd5):
+        xbmcgui.Dialog().ok('[COLOR red]Warning![/COLOR]','addons.xml has been detected in your work folder.','It will be overwritten if you do not move them now.')
+    elif os.path.exists(Addonsxmlmd5) and not os.path.exists(Addonsxml):
+        xbmcgui.Dialog().ok('[COLOR red]Warning![/COLOR]','addons.xml.md5 has been detected in your work folder.','It will be overwritten if you do not move them now.')
+    elif os.path.exists(Addonsxml) and  os.path.exists(Addonsxmlmd5):
+        xbmcgui.Dialog().ok('[COLOR red]Warning![/COLOR]','addons.xml and addons.xml.md5 have been detected in your work folder.','They will be overwritten if you do not move them now.')
+    else: pass
+    Toast('Work Folder: '+fullworkpath)
+    xbmcgui.Dialog().ok(Title,'Enter the first add-on ID to include in the addons.xml','')
     vqid = _get_keyboard(heading='[COLOR white]Enter a plugin id[/COLOR]  (i.e. plugin.program.mkiv)')
     if ( not vqid ): return False, 0
     try:
@@ -3293,4 +3303,90 @@ def RepoFiles():
     a=open(Addonsxml).read()
     b=hashlib.md5(str(a)).hexdigest()
     WriteFile(Addonsxmlmd5,str(b))
-    xbmcgui.Dialog().ok(Title,'Your files have been successfully created and saved to: '+fullworkpath)
+    xbmcgui.Dialog().ok(Title,'addons.xml & md5 saved to: '+fullworkpath)
+    
+def md5File():
+        file = xbmcgui.Dialog().browseSingle(1,'Select Add-on','files','')
+        file2 = xbmc.translatePath(file)
+        a=open(file2).read()
+        b=hashlib.md5(str(a)).hexdigest()
+        output=file2+'.md5'
+        WriteFile(output,str(b))
+        
+def BuildARepo():
+    RepoFolder=xbmc.translatePath(os.path.join(fullworkpath,'Repository/'))
+    plugins=xbmc.translatePath(os.path.join(RepoFolder,'plugins/'))
+    Addonsxml = xbmc.translatePath(os.path.join(RepoFolder,'addons.xml'))
+    if not os.path.exists(Addonsxml):
+        RepoFiles()
+    dp = xbmcgui.DialogProgress()
+    dp.create(Title,'')
+    a=open(Addonsxml).read()
+    match = re.compile('id="(.+?)".+?ame="(.+?)".+?ersion="(.+?)"').findall(a)
+    for id, name, version in match:
+        dp.update(0,'[COLOR lime]Adding:[/COLOR] ID: '+id+' Version: '+version)
+        PluginFolder=xbmc.translatePath(os.path.join(plugins,id))
+        Pluginxml=xbmc.translatePath(os.path.join(PluginFolder,'addon.xml'))
+        Pluginicon=xbmc.translatePath(os.path.join(PluginFolder,'icon.png'))
+        Pluginchangelog=xbmc.translatePath(os.path.join(PluginFolder,'changelog.txt'))
+        PluginZip=xbmc.translatePath(os.path.join(PluginFolder,id+'-'+version))
+        addonfolder=xbmc.translatePath(os.path.join(ADDONS,id))
+        addonxml=xbmc.translatePath(os.path.join(addonfolder,'addon.xml'))
+        addonicon=xbmc.translatePath(os.path.join(addonfolder,'icon.png'))
+        addonchangelog=xbmc.translatePath(os.path.join(addonfolder,'changelog.txt'))
+        if not os.path.exists(plugins):
+            os.makedirs(plugins)
+        if not os.path.exists(PluginFolder):
+            os.makedirs(PluginFolder)
+        try:shutil.copy(addonxml,Pluginxml)
+        except: pass
+        try: shutil.copy(addonicon,Pluginicon)
+        except: pass
+        try: shutil.copy(addonchangelog,Pluginchangelog)
+        except: pass
+        ZipIt(PluginZip,ADDONS,id)
+    '''b=open(Addonsxml).read()
+    match = re.compile('id="(.+?)".+?ersion="(.+?)".+?ame="(.+?)"').findall(b)
+    for id, name, version in match:
+        dp.update(0,'[COLOR lime]Adding:[/COLOR] ID: '+id+' Version: '+version)
+        PluginFolder=xbmc.translatePath(os.path.join(plugins,id))
+        Pluginxml=xbmc.translatePath(os.path.join(PluginFolder,'addon.xml'))
+        Pluginicon=xbmc.translatePath(os.path.join(PluginFolder,'icon.png'))
+        Pluginchangelog=xbmc.translatePath(os.path.join(PluginFolder,'changelog.txt'))
+        PluginZip=xbmc.translatePath(os.path.join(PluginFolder,id+'-'+version))
+        addonfolder=xbmc.translatePath(os.path.join(ADDONS,id))
+        addonxml=xbmc.translatePath(os.path.join(addonfolder,'addon.xml'))
+        addonicon=xbmc.translatePath(os.path.join(addonfolder,'icon.png'))
+        addonchangelog=xbmc.translatePath(os.path.join(addonfolder,'changelog.txt'))
+        if not os.path.exists(plugins):
+            os.makedirs(plugins)
+        if not os.path.exists(PluginFolder):
+            os.makedirs(PluginFolder)
+        try:shutil.copy(addonxml,Pluginxml)
+        except: pass
+        try: shutil.copy(addonicon,Pluginicon)
+        except: pass
+        try: shutil.copy(addonchangelog,Pluginchangelog)
+        except: pass
+        ZipIt(PluginZip,ADDONS,id)'''
+    dp.close()
+    xbmcgui.Dialog().ok('[COLOR lime]Your repository is ready![/COLOR]','Saved to: '+RepoFolder)
+    
+def RepoUpdater():
+    
+
+
+
+
+def TestMenu():
+        Toast('Entering Testing Area')
+        addItem('md5File',BASEURL,84,ICON,FANART,'')
+        addItem('Repo Files',BASEURL,83,ICON,FANART,'')
+        addItem('Build A Repo',BASEURL,86,ICON,FANART,'')
+        
+       # time.sleep(3)
+        #if xbmcgui.Dialog().yesno(Title,'Disable Password for Test Area?'):
+            #SetSetting('Test','')
+            #pass
+        #else: pass
+
