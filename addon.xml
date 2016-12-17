@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.mkiv" name="[COLOR red][B]MK-IV[/B] [/COLOR][COLOR blue]Wizard[/COLOR]" version="1.0.18d" mk4version="1.0.18d" provider-name="[COLOR deepskyblue][B]CamC[/B][/COLOR]">
+<addon id="plugin.program.mkiv" name="[COLOR red][B]MK-IV[/B] [/COLOR][COLOR blue]Wizard[/COLOR]" version="1.0.18e" mk4version="1.0.18d" provider-name="[COLOR deepskyblue][B]CamC[/B][/COLOR]">
   <requires>
     <import addon="xbmc.python" version="2.23.0"/>
 	<import addon="script.module.addon.common" />
