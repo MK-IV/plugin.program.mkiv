@@ -3345,6 +3345,9 @@ def BuildARepo():
         try: shutil.copy(addonchangelog,Pluginchangelog)
         except: pass
         ZipIt(PluginZip,ADDONS,id)
+        
+        # This next block is necessary for addons like 1channel that have the version and name switched in the addons.xml, 
+        # but it screws up others adding folders named as the providername of other addons like this one and BOB.
     '''b=open(Addonsxml).read()
     match = re.compile('id="(.+?)".+?ersion="(.+?)".+?ame="(.+?)"').findall(b)
     for id, name, version in match:
@@ -3375,7 +3378,7 @@ def BuildARepo():
 def RepoUpdater():
     
 
-
+def RepoAddon():
 
 
 def TestMenu():
