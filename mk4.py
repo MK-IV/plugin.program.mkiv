@@ -37,6 +37,7 @@ import hashlib
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 addon_id='plugin.program.mkiv'
 ADDON=xbmcaddon.Addon(id=addon_id)
+version=ADDON.getAddonInfo('version')
 AddonID='plugin.program.mkiv'
 Title="[COLOR red]MK-IV[/COLOR] [COLOR deepskyblue]Wizard[/COLOR]"
 dialog=xbmcgui.Dialog()
@@ -122,8 +123,26 @@ THE_DATE=time.strftime("%A %B %d %Y")
 Build_A_Icon=xbmc.translatePath(os.path.join(Media1,'icon.png'))
 
 
+
+def TestMenu():
+        #Toast('Entering Testing Area')
+        addItem('md5File',BASEURL,84,ICON,FANART,'')
+        addItem('Repo Files',BASEURL,83,ICON,FANART,'')
+        addItem('Build A Repo',BASEURL,86,ICON,FANART,'')
+        addItem('Repo Addon',BASEURL,97,ICON,FANART,'')
+        addItem('Repo updater',BASEURL,98,ICON,FANART,'')
+        addDir('[B][COLOR red]MK-IV Video[/COLOR][/B]','JVtHtoiKYAE',87,ICON,FANART,'','')
+        
+       # time.sleep(3)
+        #if xbmcgui.Dialog().yesno(Title,'Disable Password for Test Area?'):
+            #SetSetting('Test','')
+            #pass
+        #else: pass
+
 def INDEX(): #1
-        addDir('[B][COLOR red]MK-IV Build Menu[/COLOR][/B]','JVtHtoiKYAE',100,ICON,FANART,'','')
+        StopPlayer()
+        addDir('[B][COLOR red]MK-IV [/COLOR][COLOR deepskyblue]Build Menu[/COLOR][/B]','JVtHtoiKYAE',100,ICON,FANART,'','')
+        addDir('[B][COLOR dodgerblue]MK-IV [/COLOR][COLOR white]Video[/COLOR][/B]','JVtHtoiKYAE',87,ICON,FANART,'','')
         #addDir('[B][COLOR red]BUILDS[/B]',BASEURL,20,ART+'builds.png',FANART,'','')
         myplatform = platform()            
         if myplatform == 'android':
@@ -149,9 +168,9 @@ def INDEX(): #1
         addItem('[B][COLOR yellow]Reset [/COLOR][/B]'+Title+'[B][COLOR yellow] Settings[/COLOR][/B]','service.xbmc.versioncheck',82,ICON,FANART,'')
         addItem('[B][/B]','service.xbmc.versioncheck',666,ICON,FANART,'')
         if myplatform == 'android':
-            addDir('[B][COLOR blue]OPEN MK-IV ON YOUR PC TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,85,ICON,FANART,'','')
+            addDir('[B][COLOR blue]OPEN MK-IV ON YOUR PC TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,666,ICON,FANART,'','')
         else:
-            addDir('[B][COLOR blue]OPEN MK-IV ON YOUR ANDROID TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,85,ICON,FANART,'','')
+            addDir('[B][COLOR blue]OPEN MK-IV ON YOUR ANDROID TO UNLOCK EVEN MORE[/COLOR][/B]',BASEURL,666,ICON,FANART,'','')
 
 def BUILDMENU():
     addDir('[COLOR red][B]Canadian Builds[/B][/COLOR]',BASEURL,14,ART+'ca.jpg',FANART,'','')
@@ -191,10 +210,8 @@ def BUILDERS():
     addDir('[B]Download Themes[/B]',BASEURL,62,'http://fanriffic.com/gallery_gen/f8cf5f20a1b5bd11d38f8f8292c430c0_383x400.png',FANART,'','')
     addDir('[B]Help Videos[/B]',BASEURL,2,'https://thinklivebepositive.files.wordpress.com/2014/05/helping-others-ws31.jpg',FANART,'','')
     addItem('[B]Speed Test[/B]',BASEURL,41,'http://lh3.ggpht.com/JHRfJdIQ91uybbg7vdqvSRGsii1BbTt8Pt_UXxIC1kZpLpAMfrIC_DETMEzc0Ek5tg=w300',FANART,'')
+    addDir('[B]More Tools[/B]',BASEURL,103,'https://openclipart.org/image/2400px/svg_to_png/192629/gear-tools.png',FANART,'','')
     addItem('[B][/B]',BASEURL,0,ICON,FANART,'')
-    myplatform = platform()
-    if myplatform == 'android':
-        addItem('[B][COLOR lime]Send Command to Terminal[/COLOR][/B]',BASEURL,35,'http://tr1.cbsistatic.com/hub/i/2016/07/05/2f15aab4-230a-4709-8e10-11d300e44ad5/termuxhero.jpg',FANART,'')
     addItem('[B]Force Close[/B]',BASEURL,28,'http://dreadpirate.info/images/jollyroger2.jpg',FANART,'')
 
 def BackupMenu():
@@ -259,6 +276,25 @@ def BuildAWizardMenu():
     addItem('[B]Build a Pointer File[/B]','https://ares-forum.uk',43,'http://codecondo.com/wp-content/uploads/2015/10/7-Good-Reasons-why-you-must-learn-Python-programming-in-2015_785.png?478983',FANART,'')
     addItem('[B]Build A Wizard[/B]','https://ares-forum.uk',45,'http://blog.stoneriverelearning.com/wp-content/uploads/2016/07/Programmer.jpg',FANART,'')
     addItem('[B]Build an RSS file[/B]','https://ares-forum.uk',44,'http://icons.iconarchive.com/icons/fasticon/social-bookmark/256/Feeds-icon.png',FANART,'')
+    addDir('[B]Build a Repository[/B]','https://ares-forum.uk',99,'http://asiaglobaltechnology.my/images/equella%20digital%20repository.png',FANART,'','')
+
+def BuildARepoMenu():
+    Addonsxml = xbmc.translatePath(os.path.join(fullworkpath, 'Repository/addons.xml'))
+    addItem('[B]Make a Repository[/B]',BASEURL,30,'http://asiaglobaltechnology.my/images/equella%20digital%20repository.png',FANART,'')
+    addItem('[B]Make a Repo Add-on[/B]',BASEURL,30,'http://more-sky.com/data/out/8/IMG_258740.jpg',FANART,'')
+    if os.path.exists(Addonsxml):
+        addItem('[B]Update Repository[/B]',BASEURL,30,'http://www.komando.com/wp-content/uploads/2015/04/update2-970x546.jpg',FANART,'')
+    else: pass
+    
+def ToolsMenu():
+    myplatform = platform()
+    if myplatform == 'android':
+        addItem('[B][COLOR lime]Send Command to Terminal[/COLOR][/B]',BASEURL,35,'http://tr1.cbsistatic.com/hub/i/2016/07/05/2f15aab4-230a-4709-8e10-11d300e44ad5/termuxhero.jpg',FANART,'')
+    addItem('[B]Create MD5 Hash from file[/B]',BASEURL,84,'https://lh6.ggpht.com/vz6k4Gx2DCF_0plmI5qgJ2pG1qdG3LbeKjjwm6j7v8UK36ZY8RCYxjPKHGDP3uOZ-YEV=w300',FANART,'')
+    addItem('[B]Base64 Encode File[/B]',BASEURL,101,'https://2.bp.blogspot.com/-NE7kCIPrTDk/V9PCr9qnxlI/AAAAAAAAG-Y/127QBCZ8A1otHiA-p-vGMsIFTSslsPAhgCLcB/s1600/base64%2BEncoding%2Band%2BDecoding%2BExample%2Bin%2BJava.png',FANART,'')
+    addItem('[B]Base64 Decode File[/B]',BASEURL,102,'https://2.bp.blogspot.com/-NE7kCIPrTDk/V9PCr9qnxlI/AAAAAAAAG-Y/127QBCZ8A1otHiA-p-vGMsIFTSslsPAhgCLcB/s1600/base64%2BEncoding%2Band%2BDecoding%2BExample%2Bin%2BJava.png',FANART,'')
+    addItem('[B]Base64 Decode and View File[/B]',BASEURL,104,'https://2.bp.blogspot.com/-NE7kCIPrTDk/V9PCr9qnxlI/AAAAAAAAG-Y/127QBCZ8A1otHiA-p-vGMsIFTSslsPAhgCLcB/s1600/base64%2BEncoding%2Band%2BDecoding%2BExample%2Bin%2BJava.png',FANART,'')
+    addDir('[B][COLOR yellow]Test Area[/COLOR][/B]',BASEURL,85,'http://vignette1.wikia.nocookie.net/fallout/images/3/32/X-8_terminal_to_test_area.jpg/revision/latest?cb=20130402140618',FANART,'','')
 
 def AddToAres1():
     addItem('[COLOR yellow][B]Add-on Settings[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
@@ -1905,7 +1941,7 @@ def BuildAWizard():
     dialog.ok('Step 1: Entering an ID for your wizard','The id is your addons xbmc ID... i.e. plugin.program.<your_id_here>','')
     vqid = _get_keyboard(heading="Enter an id for your wizard" )
     if ( not vqid ): return False, 0
-    id = urllib.unquote_plus(vqid).replace(' ','_').replace('!','').replace('@','').replace('#','').replace('$','').replace('%','').replace('^','').replace('&','').replace('*','').replace('(','').replace(')','').replace('/','')
+    id = urllib.unquote_plus(vqid).replace(' ','_').replace('!','').replace('@','').replace('#','').replace('$','').replace('%','').replace('^','').replace('&','').replace('*','').replace('(','').replace(')','').replace('/','').replace("'","\'")
     dialog.ok('Step 2: Entering a name for your wizard','This is your wizard\'s name.','','i.e. MK-IV Wizard or My Wizard')
     vqname = _get_keyboard(heading="Enter a name for your wizard" )
     if ( not vqname ): return False, 0
@@ -2127,15 +2163,21 @@ def SPEEDTEST():
 
 def YouTube(url):
     try:
-        youtubecode=url.replace('https://www.youtube.com/watch?v=','')
-        uurl = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubecode
-        xbmc.executebuiltin("xbmc.PlayMedia("+uurl+"),1")
-        xbmc.executebuiltin("xbmc.PayerControl(Stop")
-        HelpVideos()
-        sys.exit() 
+        window =GetWindowID()
+        WizardWindow=xbmc.getCondVisibility('Window.IsTopMost('+window+')')
+        id=url.replace('https://www.youtube.com/watch?v=','')
+        url = 'plugin://plugin.video.youtube/play/?video_id=%s' % id
+        xbmc.Player().play(url)
+        #window =GetWindowID()
+        #WizardWindow=xbmc.getCondVisibility('Window.IsTopMost(12005)')
+        #while WizardWindow:
+            #time.sleep(.5)
+        #xbmc.Player().stop()
+        #xbmc.executebuiltin('Action(Stop,12005')
+        #sys.exit(0)
     except:
         return False, 0
-
+        
 def killxbmc():
     myplatform = platform()
     xbmc.log("Platform: " + str(myplatform))
@@ -2298,6 +2340,7 @@ def TextBoxes(heading,announce):
   TextBox()
   while xbmc.getCondVisibility('Window.IsVisible(10147)'):  
     time.sleep(.5)
+
 
 def EndUser():
     TextBoxes('[B][COLOR blue]A message from Team Kodi[/COLOR][/B]', '[COLOR blue]   The official Kodi version does not contain any content what so ever. This means that you\nshould provide your own content from a local or remote storage location, DVD, Blu-Ray or any other media carrier that you own. \n[CR]   Additionally Kodi allows you to install third-party plugins that may provide access to content that is freely available on the official content provider website. \n[CR]   The watching or listening of illegal or pirated content which would otherwise need to be paid for is not endorsed or approved by Team Kodi. \n[CR][COLOR yellow]   For more information please go to www.kodi.tv[/COLOR][/COLOR]                                                                                                                                                                                                                                           [COLOR deepskyblue][/COLOR]                                                                                                                                                                                  \n***Neither this addon nor its developer or contents have any affiliation what so ever with Team Kodi, the XBMC Foundation or any of its/their affiliates in any way.***')
@@ -3376,20 +3419,181 @@ def BuildARepo():
     xbmcgui.Dialog().ok('[COLOR lime]Your repository is ready![/COLOR]','Saved to: '+RepoFolder)
     
 def RepoUpdater():
+    RepoFolder=xbmc.translatePath(os.path.join(fullworkpath,'Repository/'))
+    plugins=xbmc.translatePath(os.path.join(RepoFolder,'plugins/'))
+    Addonsxml = xbmc.translatePath(os.path.join(RepoFolder,'addons.xml'))
+    Addonsxmlmd5 = xbmc.translatePath(os.path.join(RepoFolder,'addons.xml.md5'))
+    b=open(Addonsxml).read()
+    match = re.compile('id="(.+?)".+?ame="(.+?)".+?ersion="(.+?)"').findall(b)
+    for id, name, version in match:
+        if xbmc.getCondVisibility('System.HasAddon('+id+')'):
+            Addon=xbmcaddon.Addon(id)
+            installedversion=Addon.getAddonInfo('version')
+            if installedversion > version:
+                dp = xbmcgui.DialogProgress()
+                dp.create(Title,'')
+                dp.update(0,'[COLOR lime]Updating:[/COLOR] ID: '+id+' From Version: '+version+' to Version: '+installedversion)
+                Toast('[COLOR lime]Updating:[/COLOR] ID: '+id+' From Version: '+version+' to Version: '+installedversion)
+                PluginFolder=xbmc.translatePath(os.path.join(plugins,id))
+                Pluginxml=xbmc.translatePath(os.path.join(PluginFolder,'addon.xml'))
+                Pluginicon=xbmc.translatePath(os.path.join(PluginFolder,'icon.png'))
+                Pluginchangelog=xbmc.translatePath(os.path.join(PluginFolder,'changelog.txt'))
+                PluginZip=xbmc.translatePath(os.path.join(PluginFolder,id+'-'+version))
+                addonfolder=xbmc.translatePath(os.path.join(ADDONS,id))
+                addonxml=xbmc.translatePath(os.path.join(addonfolder,'addon.xml'))
+                addonicon=xbmc.translatePath(os.path.join(addonfolder,'icon.png'))
+                addonchangelog=xbmc.translatePath(os.path.join(addonfolder,'changelog.txt'))
+                if not os.path.exists(plugins):
+                    os.makedirs(plugins)
+                if not os.path.exists(PluginFolder):
+                    os.makedirs(PluginFolder)
+                try:shutil.copy(addonxml,Pluginxml)
+                except: pass
+                try: shutil.copy(addonicon,Pluginicon)
+                except: pass
+                try: shutil.copy(addonchangelog,Pluginchangelog)
+                except: pass
+                ZipIt(PluginZip,ADDONS,id)
+                ReplaceText(Addonsxml,'version="'+version+'" provider', 'version="'+installedversion+'" provider' )
+    a=open(Addonsxml).read()
+    b=hashlib.md5(str(a)).hexdigest()
+    WriteFile(Addonsxmlmd5,str(b))
+    xbmcgui.Dialog().ok(Title,'[COLOR white]Repository update complete[/COLOR]')
+                
+def RepoAddon():
+    dialog = xbmcgui.Dialog()
+    dialog.ok('Step 1 of 7: Entering an ID for your repository','The id is your addons xbmc ID... i.e. repository.<your_id_here>','')
+    id = _get_keyboard(heading="Enter an id for your repository" )
+    if ( not id ): return False, 0
+    id = urllib.unquote_plus(id).replace(' ','_').replace('!','').replace('@','').replace('#','').replace('$','').replace('%','').replace('^','').replace('&','').replace('*','').replace('(','').replace(')','').replace('/','').replace("'","\'")
+    dialog.ok('Step 2 of 7: Entering an name for your wizard','The name is your addons name... i.e. CamC\'s Repository''','')
+    name = _get_keyboard(heading="Enter an id for your wizard" )
+    if ( not name ): return False, 0
+    name=name.replace("'", "\'")
+    dialog.ok('Step 3 of 7: Entering a provider name','This is your name or handle','')
+    provider = _get_keyboard(heading="Enter the provider name for your repo" )
+    if ( not provider ): return False, 0
+    provider=provider.replace("'", "\'")
+    choice = xbmcgui.Dialog().yesno('Step 4 of 7: Your addons.xml file URL', 'For your URL to your addons.xml file.', 'Does your link start with http:// or https://?','All links and are CaSe SeNsItIvE!', nolabel='HTTP://',yeslabel='HTTPS://')
+    if choice == 0:
+        protocol="http://"
+    elif choice == 1:
+        protocol="https://"
+    xmllink = _get_keyboard(default=protocol, heading="Enter your addons.xml link" )
+    if ( not xmllink ): return False, 0
+    choice = xbmcgui.Dialog().yesno('Step 5 of 7: Your addons.xml.md5 file URL', 'For your URL to your addons.xml.md5 file.', 'Does your link start with http:// or https://?','All links and are CaSe SeNsItIvE!', nolabel='HTTP://',yeslabel='HTTPS://')
+    if choice == 0:
+        protocol="http://"
+    elif choice == 1:
+        protocol="https://"
+    md5link = _get_keyboard(default=protocol, heading="Enter your addons.xml.md5 link" )
+    if ( not md5link ): return False, 0
+    choice = xbmcgui.Dialog().yesno('Step 6 of 7: Your plugins folder link', 'For your URL to your plugins folder.', 'Does your link start with http:// or https://?','It probably ends with plugins/', nolabel='HTTP://',yeslabel='HTTPS://')
+    if choice == 0:
+        protocol="http://"
+    elif choice == 1:
+        protocol="https://"
+    pluginslink = _get_keyboard(default=protocol, heading="Enter your plugins folder link" )
+    if ( not pluginslink ): return False, 0
+    workfolder=xbmc.translatePath(os.path.join(fullworkpath,'repository.'+id))
+    addonxml=xbmc.translatePath(os.path.join(workfolder,'addon.xml'))
+    iconpng=xbmc.translatePath(os.path.join(workfolder,'icon.png'))
+    if not os.path.exists(workfolder): os.makedirs(workfolder)
+    if xbmcgui.Dialog().yesno('Step 7 of 7: Your Icon Image','Would you like to select an image to represent your repository?'):
+        icon = xbmcgui.Dialog().browseMultiple(1,'Add icon image','files','.png|.jpg|.jpeg')
+        if( not icon ): pass
+        try:
+            for file in icon:
+                file = xbmc.translatePath(file)
+                shutil.copy(file,iconpng)
+        except: pass
+    else: pass
+    WriteFile(addonxml,'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<addon id="repository.'+id+'" name="'+name+'" version="1.0" provider-name="'+provider+'">\n	<extension point="xbmc.addon.repository" name="'+name+'">\n		<info compressed="false">'+xmllink+'</info>\n		<checksum>'+md5link+'</checksum>\n		<datadir zip="true">'+pluginslink+'</datadir>\n	</extension>\n	<extension point="xbmc.addon.metadata">\n		<summary>'+id+'</summary>\n		<description>'+name+'</description>\n		<platform>all</platform>\n	</extension>\n</addon>')
+    ZipIt(workfolder,fullworkpath,'repository.'+id)
+    shutil.rmtree(workfolder)
+    dialog.ok(Title,'[COLOR white]Your repository add-on is finished and saved to: [/COLOR][COLOR dodgerblue]'+fullworkpath+'[/COLOR]')
+    
+def ShowBusy():
+    xbmc.executebuiltin('Dialog.Close(busydialog)')
+
+def CloseBusy():
+    xbmc.executebuiltin('Dialog.Close(busydialog)')
+    
+def LockXbmc():
+    xbmcgui.lock()
+    
+def UnlockXbmc():
+    xbmcgui.unlock()
+    
+def ShowWindowId():
+    window = xbmcgui.getCurrentWindowId()
+    xbmcgui.Dialog().ok(Title,str(window))
+    
+def GetWindowID():
+    window = xbmcgui.getCurrentWindowId()
+    window =str(window)
+    return window
+
+def StopPlayer():
+    if xbmc.Player().isPlaying() == 'True':
+        xbmc.Player().stop()
+        
+def B64Encode():
+    import base64
+    input=xbmcgui.Dialog().browse(1,'Choose file to encode','files')
+    input=xbmc.translatePath(input)
+    a=open(input).read()
+    b=base64.b64encode(str(a))
+    c=PathLeaf(input).replace('(decoded)','').replace('(encoded)','')
+    d=str(c)+'(encoded)'
+    output=xbmc.translatePath(os.path.join(fullworkpath,d))
+    WriteFile(output,str(b))
+    xbmcgui.Dialog().ok(Title,'Your encoded file is saved as: '+output)
+ 
+    
+def B64Decode():
+    import base64
+    input=xbmcgui.Dialog().browse(1,'Choose file to decode','files')
+    input=xbmc.translatePath(input)
+    a=open(input).read()
+    c=PathLeaf(input).replace('(encoded)','').replace('(decoded)','')
+    d=str(c)+'(decoded)'
+    output=xbmc.translatePath(os.path.join(fullworkpath,d))
+    try:
+        b=base64.b64decode(str(a))
+        WriteFile(output,str(b))
+    except: pass
+    try:
+        b=base64.urlsafe_b64decode(a)
+        WriteFile(output,str(b))
+    except: 
+        b=base64.standard_b64decode(a)
+        WriteFile(output,str(b))
+        
+    xbmcgui.Dialog().ok(Title,'Your decoded file is saved as: '+output)
+    
+def B64View():
+    import base64
+    input=xbmcgui.Dialog().browse(1,'Choose file to decode','files')
+    input=xbmc.translatePath(input)
+    a=open(input).read()
+    try:
+        b=base64.b64decode(str(a))
+        TextBoxes(Title+' - Base64 Decode Viewer',b)
+    except: pass
+    try:
+        b=base64.urlsafe_b64decode(a)
+        TextBoxes(Title+' - Base64 Decode Viewer',b)
+    except:  
+        b=base64.standard_b64decode(a)
+        TextBoxes(Title+' - Base64 Decode Viewer',b)
     
 
-def RepoAddon():
-
-
-def TestMenu():
-        Toast('Entering Testing Area')
-        addItem('md5File',BASEURL,84,ICON,FANART,'')
-        addItem('Repo Files',BASEURL,83,ICON,FANART,'')
-        addItem('Build A Repo',BASEURL,86,ICON,FANART,'')
-        
-       # time.sleep(3)
-        #if xbmcgui.Dialog().yesno(Title,'Disable Password for Test Area?'):
-            #SetSetting('Test','')
-            #pass
-        #else: pass
-
+def PathLeaf(path):
+    import ntpath
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
+    #i.e. for tuple below
+'''>>> paths = ['a/b/c/', 'a/b/c', '\\a\\b\\c', '\\a\\b\\c\\', 'a\\b\\c', 'a/b/../../a/b/c/', 'a/b/../../a/b/c']
+   >>> [PathLeaf(path) for path in paths]
+   ['c', 'c', 'c', 'c', 'c', 'c', 'c']'''

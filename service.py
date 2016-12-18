@@ -3,6 +3,7 @@ import xbmc, xbmcgui,  xbmcaddon
 import re
 import mk4
 import time
+from lib import repo
 
 
 MK4Notifications   =  xbmc.translatePath(os.path.join('special://home/addons/' , 'plugin.program.mkiv.notifications'))
@@ -65,6 +66,11 @@ if not os.path.exists(MK4Notifications):
     pass
 elif os.path.exists(MK4Notifications):
     mk4.SetSetting('MK4Build', 'true')
+    pass
+else: pass
+
+if ADDON.getSetting('InstallRepo') == 'true':
+    repo.InstallRepo
     pass
 else: pass
  
