@@ -1,8 +1,25 @@
-Coming up...
-    More Build-A- Options
-    Dependency installer
-    More add-ons, sources, etc.
-    ???
+Coming next...
+    Fixes for the known issues
+    MK-IV Video makeover
+    Killer to stop built in player from playing when window is not top most
+    Whatever comes up for requests
+
+
+v2016.12.18
+    Added Repository builder to BuildAWizard Section
+    Changed updater check
+    Added MK-IV Video section
+    Added Testers Section
+    Various bug fixes
+    Added md5 and b64 tools
+    Added Addon settings reset
+    More addons in addon store
+    
+        Known issues:
+           Error notifications when exiting some sections in the middle of a task (repo builder mostly) Will be fixed soon
+           MK-IV Videos was thrown together in a couple of hours so bound to be buggy... TV trending section is hit and miss.
+           Cache folder size is not calculating in maintenance
+           
 
 v1.0.18d
     Added background manager for MK-IV Builds

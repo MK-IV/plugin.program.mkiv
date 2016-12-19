@@ -12,7 +12,7 @@
             <setting id="AutoClean" type="bool" label="Enable Cleaning on Startup" default="false"/>
             <setting type="sep"/>
             <setting type="lsep" label="[COLOR red][B]MK-IV Build Options[/B][/COLOR]"/>
-            <setting id="Update" type="bool" label="Enable MK-IV to check for Updates" default="false"/>
+            <setting id="Update" type="bool" label="Enable MK-IV to check for Updates" default="true"/>
             <setting id="KodiVersion" type="text" visible="false" default=""/>
             <setting id="MK4Build" type="bool" visible="false" default="false"/>
             <setting id="BuildName" type="text" visible="false" default=""/>

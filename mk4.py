@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
+    You should have received a copy of the GNU General Public License      sendclick exit or close()
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin,os,sys
@@ -140,7 +140,9 @@ def TestMenu():
         #else: pass
 
 def INDEX(): #1
-        StopPlayer()
+        xbmc.executebuiltin('SendClick(12005,Close)')
+        PlayerWindow=xbmcgui.Window(12005)
+        PlayerWindow.close()
         addDir('[B][COLOR red]MK-IV [/COLOR][COLOR deepskyblue]Build Menu[/COLOR][/B]','JVtHtoiKYAE',100,ICON,FANART,'','')
         addDir('[B][COLOR dodgerblue]MK-IV [/COLOR][COLOR white]Video[/COLOR][/B]','JVtHtoiKYAE',87,ICON,FANART,'','')
         #addDir('[B][COLOR red]BUILDS[/B]',BASEURL,20,ART+'builds.png',FANART,'','')
@@ -3597,3 +3599,8 @@ def PathLeaf(path):
 '''>>> paths = ['a/b/c/', 'a/b/c', '\\a\\b\\c', '\\a\\b\\c\\', 'a\\b\\c', 'a/b/../../a/b/c/', 'a/b/../../a/b/c']
    >>> [PathLeaf(path) for path in paths]
    ['c', 'c', 'c', 'c', 'c', 'c', 'c']'''
+
+def PathLeafHeads(path):
+    import ntpath
+    head, tail = ntpath.split(path)
+    return head or ntpath.basename(tail)

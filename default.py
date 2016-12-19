@@ -178,7 +178,7 @@ mode=None
 iconimage=None
 fanart=None
 description=None
-
+fav_mode=None
 
 try:
         url=urllib.unquote_plus(params["url"])
@@ -204,6 +204,10 @@ try:
         description=urllib.unquote_plus(params["description"])
 except:
         pass
+try:
+    fav_mode=int(params["fav_mode"])
+except:
+    pass
         
         
 print str(PATH)+': '+str(ADDON.getAddonInfo('version'))
@@ -366,7 +370,7 @@ elif mode==92: mv.Search()
 elif mode==93: mv.GetImdb(url)
 elif mode==94: mv.GetTV(url)
 elif mode==95: mv.GetShowContent(url)
-elif mode==96: mv.resolve(name,url,description)
+elif mode==96: mv.resolve(name,url,iconimage, description)
 elif mode==97: mk4.RepoAddon()
 elif mode==98: mk4.RepoUpdater()
 elif mode==99: mk4.BuildARepoMenu()
@@ -375,7 +379,30 @@ elif mode==101: mk4.B64Encode()
 elif mode==102: mk4.B64Decode()
 elif mode==103: mk4.ToolsMenu()
 elif mode==104: mk4.B64View()
-
+elif mode==105: mv.QueueItem()
+elif mode==106:
+    try:
+        name = name.split('\\ ')[1]
+    except:
+        pass
+    try:
+        name = name.split('  - ')[0]
+    except:
+        pass
+    mv.addFavorite(name,url,iconimage,fanart,fav_mode)
+elif mode==107:
+    try:
+        name = name.split('\\ ')[1]
+    except:
+        pass
+    try:
+        name = name.split('  - ')[0]
+    except:
+        pass
+    mv.rmFavorite(name)
+elif mode==108: xbmc.executebuiltin('ActivateWindow(10134,return)')#mv.GetFavourites()
+elif mode==109: mv.Movies()
+elif mode==110: mv.TV()
 
     
     
