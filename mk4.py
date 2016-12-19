@@ -676,57 +676,61 @@ def UpdateKryptonDB():
         pass
     except: 
         pass 
-    conn = sqlite3.connect(Addons26)
-    cursor = conn.cursor()
-
-    sql = """
-    UPDATE version 
-    SET idVersion = '20' 
-    WHERE idVersion = '26'
-    """
-    cursor.execute(sql)
-    conn.commit()
-    time.sleep(1)
-
-    shutil.copy(Addons26,Addons20)
     try:
-        os.remove(Textures13)
-    except: pass
+        conn = sqlite3.connect(Addons26)
+        cursor = conn.cursor()
 
-def RemoveTrigger():
-    if os.path.exists(Addons20):
-        os.remove(Addons20)
+        sql = """
+        UPDATE version 
+        SET idVersion = '20' 
+        WHERE idVersion = '26'
+        """
+        cursor.execute(sql)
+        conn.commit()
+        time.sleep(1)
+
+        shutil.copy(Addons26,Addons20)
         try:
             os.remove(Textures13)
         except: pass
-        pass
-    else: 
-        pass 
-    conn = sqlite3.connect(Addons26)
-    cursor = conn.cursor()
+    except: pass
 
-    sql = """
-    UPDATE version 
-    SET idVersion = '26' 
-    WHERE idVersion = '20'
-    """
-    cursor.execute(sql)
-    conn.commit()
-    time.sleep(1)
+def RemoveTrigger():
+    try:
+        if os.path.exists(Addons20):
+            os.remove(Addons20)
+            try:
+                os.remove(Textures13)
+            except: pass
+        else: 
+            pass 
+        conn = sqlite3.connect(Addons26)
+        cursor = conn.cursor()
 
+        sql = """
+        UPDATE version 
+        SET idVersion = '26' 
+        WHERE idVersion = '20'
+        """
+        cursor.execute(sql)
+        conn.commit()
+        time.sleep(1)
+    except: pass
 def EnableAll():
-    conn = sqlite3.connect(Addons26)
-    cursor = conn.cursor()
+    try:
+        conn = sqlite3.connect(Addons26)
+        cursor = conn.cursor()
 
-    sql = """
-    UPDATE installed 
-    SET enabled = '1' 
-    WHERE enabled = '0'
-    """
-    cursor.execute(sql)
-    conn.commit()
-    time.sleep(1)
-    xbmc.executebuiltin('UpdateLocalAddons')
+        sql = """
+        UPDATE installed 
+        SET enabled = '1' 
+        WHERE enabled = '0'
+        """
+        cursor.execute(sql)
+        conn.commit()
+        time.sleep(1)
+        xbmc.executebuiltin('UpdateLocalAddons')
+    except: pass
 
 def DeletePackages(url):
     xbmc.log('======================   MK-IV Wizard   ========================')
@@ -1456,7 +1460,7 @@ def UNIVERSAL_BACKUP():
         extract.all(lib,addonfolder,dp)
     except BaseException as e:
         pass'''    
-    EnableAll() 
+    #EnableAll() 
         #UpdateKryptonDB()
     time.sleep(.5)
     exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps','packages']
