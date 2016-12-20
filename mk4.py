@@ -1022,7 +1022,7 @@ def FRESHSTART(params):
     killxbmc()
     xbmc.executebuiltin('Quit')
 
-def FIX_SPECIAL(url):
+def FIX_SPECIAL():
     xbmc.log('======================   MK-IV Wizard   ========================')
     xbmc.log('==============**********************************================')
     xbmc.log('===================   Start fixing paths   =====================')
@@ -1040,7 +1040,7 @@ def FIX_SPECIAL(url):
     urlADDONS=urllib.quote_plus(ADDONS)
     urlMEDIA=urllib.quote_plus(MEDIA)
     dp.create(Title,"Renaming paths...",'[COLOR deepsky][/COLOR]', '')
-    for root, dirs, files in os.walk(url):  #Search all xml and script.skinshortcuts files and replace physical with special
+    for root, dirs, files in os.walk(USERDATA):  #Search all xml and script.skinshortcuts files and replace physical with special
         for file in files:
             if file.endswith(".xml"):
                  dp.update(0,"Checking xml file: ",file, 'Please Wait')
@@ -1049,7 +1049,7 @@ def FIX_SPECIAL(url):
                  f = open((os.path.join(root, file)), mode='w')
                  f.write(str(b))
                  f.close()
-    for root, dirs, files in os.walk(url):
+    for root, dirs, files in os.walk(USERDATA):
         for file in files: 
             if file.endswith(".hash"):
                      dp.update(0,"Checking hash file: ",file, 'Please Wait')
@@ -1058,7 +1058,7 @@ def FIX_SPECIAL(url):
                      f = open((os.path.join(root, file)), mode='w')
                      f.write(str(b))
                      f.close()
-    for root, dirs, files in os.walk(url):
+    for root, dirs, files in os.walk(USERDATA):
         for file in files: 
             if file.endswith(".properties"):
                          dp.update(0,"Checking properties file: ",file, 'Please Wait')
@@ -1067,7 +1067,7 @@ def FIX_SPECIAL(url):
                          f = open((os.path.join(root, file)), mode='w')
                          f.write(str(b))
                          f.close()    
-    for root, dirs, files in os.walk(url):
+    for root, dirs, files in os.walk(USERDATA):
         for file in files: 
             if file.endswith(".db"):
                         dp.update(0,"Checking database file: ",file, 'Please Wait')
@@ -1076,31 +1076,38 @@ def FIX_SPECIAL(url):
                         f = open((os.path.join(root, file)), mode='w')
                         f.write(str(b))
                         f.close()
-                        
-    if userpath in open(SkinSettingsXML).read():
-        if xbmcgui.Dialog().yesno('[COLOR yellow]Pictures outside of Backup Path Detected[/COLOR]','Would you like to migrate your Background pictures into your set-up?'):
-            xbmcgui.Dialog().ok('[COLOR yellow]Select your background pictures Parent folder[/COLOR]','This will contain your subfolders or pictures depending on your set-up')
-            Pictures=xbmcgui.Dialog().browse(0,'Choose your pictures Parent folder','files')
-            BGpics=xbmc.translatePath(os.path.join(USERDATA , 'Background_pictures/'))
-            if Pictures != '':
-                if not os.path.exists(BGpics):
-                    os.makedirs(BGpics)
-                copytree(Pictures, BGpics)
-                for root, dirs, files in os.walk(url):
-                    for file in files: 
-                        if file.endswith(".xml"):
-                            dp.update(0,"Scanning",file, 'Please Wait')
-                            a=open((os.path.join(root, file))).read()
-                            b=a.replace(Pictures, 'special://home/userdata/Background_pictures/')
-                            f = open((os.path.join(root, file)), mode='w')                                                                                                                                      
-                            f.write(str(b))
-                            f.close()
+    if os.path.exists:
+        try:
+            if userpath in open(SkinSettingsXML).read():
+                if xbmcgui.Dialog().yesno('[COLOR yellow]Pictures outside of Backup Path Detected[/COLOR]','Would you like to migrate your Background pictures into your set-up?'):
+                    xbmcgui.Dialog().ok('[COLOR yellow]Select your background pictures Parent folder[/COLOR]','This will contain your subfolders or pictures depending on your set-up')
+                    Pictures=xbmcgui.Dialog().browse(0,'Choose your pictures Parent folder','files')
+                    BGpics=xbmc.translatePath(os.path.join(USERDATA , 'Background_pictures/'))
+                    if Pictures != '':
+                        if not os.path.exists(BGpics):
+                            os.makedirs(BGpics)
+                        copytree(Pictures, BGpics)
+                        for root, dirs, files in os.walk(USERDATA):
+                            for file in files: 
+                                if file.endswith(".xml"):
+                                    dp.update(0,"Scanning",file, 'Please Wait')
+                                    a=open((os.path.join(root, file))).read()
+                                    b=a.replace(Pictures, 'special://home/userdata/Background_pictures/')
+                                    f = open((os.path.join(root, file)), mode='w')                                                                                                                                      
+                                    f.write(str(b))
+                                    f.close()
+        except: pass
     else: pass
                         
     xbmc.log('======================   MK-IV Wizard   ========================')
     xbmc.log('==============**********************************================')
-    xbmc.log('===============   Paths successfully changed   =================')                       
-    ReduceImageSize()
+    xbmc.log('===============   Paths successfully changed   =================')     
+    if xbmcgui.Dialog().yesno(Title,'Would you like to scan your images and reduce their sizes?', 'This will reduce pixel count by 60% for files:','1mb+ in the addons folder and for files 500kb+ in userdata'):
+        try:
+            ReduceImageSize()
+        except BaseException as e:
+            pass
+    
 #=========================  Huge thanks to TV Addons and TDB Devs for the Log related code!!!  =========================================#  
 def view_LastError():
         LogMenu()
@@ -1314,7 +1321,7 @@ def Restore(url):
             pass  
         dp.update(90,"Extracting and Writing Files... [COLOR lime] DONE[/COLOR]", "Checking paths and cleaning up...")
         time.sleep(.5)
-        #FIX_SPECIAL(USERDATA)
+        #FIX_SPECIAL()
         #time.sleep(.5)
         #xbmc.executebuiltin('UpdateLocalAddons')
         #time.sleep(.5)
@@ -1470,7 +1477,7 @@ def UNIVERSAL_BACKUP():
     message1 = "Archiving..."
     message2 = ""
     message3 = "Please Wait"
-    FIX_SPECIAL(USERDATA)
+    FIX_SPECIAL()
     time.sleep(.5)
     ARCHIVE_CB(HOME,backup_zip, message_header, message1, message2, message3, exclude_dirs, exclude_files)
     #if ADDON.getSetting('KodiVersion') == 'Krypton':
@@ -2633,7 +2640,7 @@ def WIZARD(name,url,version):
        os.remove(lib)
     except:
        pass
-    #FIX_SPECIAL(USERDATA)
+    #FIX_SPECIAL()
     #time.sleep(.5)
     #xbmc.executebuiltin('UpdateLocalAddons')
     #time.sleep(.5)

@@ -259,7 +259,7 @@ elif mode==26: mk4.MAINTENANCE()
 elif mode==27: mk4.WIZARD(name,url,version)
 elif mode==28: mk4.killxbmc()
 elif mode==29: 
-        mk4.FIX_SPECIAL(USERDATA)
+        mk4.FIX_SPECIAL()
         dialog = xbmcgui.Dialog()
         dialog.ok("Paths successfully changed.", "This process requires a restart \nPress OK to force close the MC.")
         mk4.killxbmc()
