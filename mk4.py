@@ -221,30 +221,27 @@ def BackupMenu():
     if os.path.exists(fullbackuppath):
         try:
             for file in os.listdir(fullbackuppath):
+                path=os.path.join(fullbackuppath, file)
                 if file.endswith('.zip'):    
-                    addDir('[B]Restore from Backup Folder[/B]',BASEURL,71,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
+                    addItem('[B]Restore '+file+'[/B]',path,71,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
                     pass
-        except:
-            pass
-    else: 
-        pass
-    addItem('[B]Restore from Specified Location[/B]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
+        except: pass
+
+    addItem('[B]Restore from another Location[/B]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
     addItem('[B]Backup Skin Settings[/B]',BASEURL,59,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(SkinSettingsBackup):
         addDir('[B]Restore Skin Settings[/B]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
         addItem('[B][/B]',BASEURL,0,'',FANART,'')
-        addItem('[B][COLOR yellow]Delete Skin Settings Backup[/COLOR][/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
-    else:
-        pass
+        addItem('[B][COLOR white]Delete Skin Settings Backup[/COLOR][/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+    else: pass
     if os.path.exists(fullbackuppath):
         try:
             for file in os.listdir(fullbackuppath):
+                path=os.path.join(fullbackuppath, file)
                 if file.endswith('.zip'):
-                    addDir('[B][COLOR yellow]Delete a Backup[/COLOR][/B]',BASEURL,53,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'','')
-                    addItem('[B][COLOR yellow]Delete all Backups[/COLOR][/B]',BASEURL,73,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+                    addItem('[B][COLOR white]Delete '+file+'[/COLOR][/B]',path,53,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
         except: pass
-    else:
-        pass
+        addItem('[B][COLOR white]Delete all Backups[/COLOR][/B]',BASEURL,73,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
 
 def RepoMenu(): #36
     addItem('[COLOR yellow][B]Sources will appear on next start[/B][/COLOR]','http://get.mkiv.ca',42,ICON,FANART,'')
@@ -1494,19 +1491,18 @@ def RestoreOther():
     else:
         sys.exit(0)
 
-def ListBackRes():
-    if os.path.exists(fullbackuppath):
-        for file in os.listdir(fullbackuppath):
-            if file.endswith(".zip"):
-                url=xbmc.translatePath(os.path.join(fullbackuppath,file))
-                addItem(file,url,9,ICON,FANART,'')
+def ListBackRes(url):
+    if dialog.yesno(Title,"[COLOR white]" + url + "[/COLOR]","Do you want to restore this backup?"):
+        try:
+            Restore(url)
+            killxbmc()
+        except: sys.exit(0)
     
-def ListBackDel():
-    if os.path.exists(fullbackuppath):
-        for file in os.listdir(fullbackuppath):
-            if file.endswith(".zip"):
-                url=xbmc.translatePath(os.path.join(fullbackuppath,file))
-                addItem(file,url,52,ICON,FANART,'')
+def ListBackDel(url):
+    if dialog.yesno(Title,"[COLOR white]" + url + "[/COLOR]","Do you want to delete this backup?"):
+        os.remove(url)
+        xbmc.executebuiltin('Container.Refresh')
+        dialog.ok(Title,"[COLOR white]" + url + "[/COLOR]","Successfully deleted.")
 
 def DeleteBackup(url):
     if dialog.yesno(Title,"[COLOR white]" + url + "[/COLOR]","Do you want to delete this backup?"):
