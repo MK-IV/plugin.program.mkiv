@@ -227,7 +227,7 @@ def BackupMenu():
                     pass
         except: pass
 
-    addItem('[B]Restore from another Location[/B]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
+    addItem('[B]Choose Restore Location[/B]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
     addItem('[B]Backup Skin Settings[/B]',BASEURL,59,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(SkinSettingsBackup):
         addDir('[B]Restore Skin Settings[/B]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
