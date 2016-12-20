@@ -1498,6 +1498,7 @@ def ListBackRes(url):
             killxbmc()
         except: sys.exit(0)
     
+    
 def ListBackDel(url):
     if dialog.yesno(Title,"[COLOR white]" + url + "[/COLOR]","Do you want to delete this backup?"):
         os.remove(url)
@@ -1509,6 +1510,7 @@ def DeleteBackup(url):
         os.remove(url)
         xbmc.executebuiltin('Container.Refresh')
         dialog.ok(Title,"[COLOR white]" + url + "[/COLOR]","Successfully deleted.")
+        xbmc.executebuiltin('Container.Refresh')
 
 
 
