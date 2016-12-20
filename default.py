@@ -224,14 +224,14 @@ if mode==None or url==None or len(url)<1:
         mk4.INDEX()
 elif mode==2: mk4.HelpVideos()
 elif mode==3: mk4.WebsitesMenu()
-elif mode==4: mk4.deletecachefiles(url)
+elif mode==4: mk4.deletecachefiles()
 elif mode==5: mk4.YouTube(url)
 elif mode==6: mk4.FRESHSTART(params)
-elif mode==7: mk4.DeletePackages(url)
+elif mode==7: mk4.DeletePackages()
 elif mode==8: mk4.EndUser()
 elif mode==9: mk4.Restore(url)
 elif mode==10: mk4.ADDONWIZ(name,url,description)
-elif mode==11: mk4.DeleteThumbnails(url)
+elif mode==11: mk4.DeleteThumbnails()
 elif mode==12: mk4.UNIVERSAL_BACKUP()
 elif mode==13: mk4.TESTWIZARDMENU()
 elif mode==14: mk4.CANADABUILDS()
@@ -259,7 +259,7 @@ elif mode==26: mk4.MAINTENANCE()
 elif mode==27: mk4.WIZARD(name,url,version)
 elif mode==28: mk4.killxbmc()
 elif mode==29: 
-        mk4.FIX_SPECIAL(url)
+        mk4.FIX_SPECIAL(USERDATA)
         dialog = xbmcgui.Dialog()
         dialog.ok("Paths successfully changed.", "This process requires a restart \nPress OK to force close the MC.")
         mk4.killxbmc()
@@ -403,7 +403,7 @@ elif mode==107:
 elif mode==108: xbmc.executebuiltin('ActivateWindow(10134,return)')#mv.GetFavourites()
 elif mode==109: mv.Movies()
 elif mode==110: mv.TV()
-
+elif mode==111: mk4.ReduceImageSize()
     
     
 		

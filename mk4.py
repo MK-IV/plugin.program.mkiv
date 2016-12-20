@@ -132,7 +132,7 @@ def TestMenu():
         addItem('Repo Addon',BASEURL,97,ICON,FANART,'')
         addItem('Repo updater',BASEURL,98,ICON,FANART,'')
         addDir('[B][COLOR red]MK-IV Video[/COLOR][/B]','JVtHtoiKYAE',87,ICON,FANART,'','')
-        
+        addItem('[B][COLOR red]Reduce image size[/COLOR][/B]','JVtHtoiKYAE',111,ICON,FANART,'')
        # time.sleep(3)
         #if xbmcgui.Dialog().yesno(Title,'Disable Password for Test Area?'):
             #SetSetting('Test','')
@@ -732,7 +732,7 @@ def EnableAll():
         xbmc.executebuiltin('UpdateLocalAddons')
     except: pass
 
-def DeletePackages(url):
+def DeletePackages():
     xbmc.log('======================   MK-IV Wizard   ========================')
     xbmc.log('==============**********************************================')
     xbmc.log('=================   Start deleting packages   ==================')
@@ -760,7 +760,7 @@ def DeletePackages(url):
         dialog = xbmcgui.Dialog()
         dialog.ok(Title, "Sorry we were not able to remove Package Files", "")
 
-def deletecachefiles(url):
+def deletecachefiles():
     xbmc_cache_path = os.path.join(xbmc.translatePath('special://home/'), 'cache')
     if os.path.exists(xbmc_cache_path)==True:    
         for root, dirs, files in os.walk(xbmc_cache_path):
@@ -1046,7 +1046,7 @@ def FIX_SPECIAL(url):
     for root, dirs, files in os.walk(url):  #Search all xml and script.skinshortcuts files and replace physical with special
         for file in files:
             if file.endswith(".xml"):
-                 dp.update(0,"Scanning",file, 'Please Wait')
+                 dp.update(0,"Checking xml file: ",file, 'Please Wait')
                  a=open((os.path.join(root, file))).read()
                  b=a.replace(USERDATA, 'special://home/userdata/').replace(ADDONS,'special://home/addons/').replace(MEDIA,'special://home/media/').replace(urlUSERDATA, 'special://home/userdata/').replace(urlADDONS,'special://home/addons/').replace(urlMEDIA,'special://home/media/')
                  f = open((os.path.join(root, file)), mode='w')
@@ -1055,7 +1055,7 @@ def FIX_SPECIAL(url):
     for root, dirs, files in os.walk(url):
         for file in files: 
             if file.endswith(".hash"):
-                     dp.update(0,"Scanning",file, 'Please Wait')
+                     dp.update(0,"Checking hash file: ",file, 'Please Wait')
                      a=open((os.path.join(root, file))).read()
                      b=a.replace(USERDATA, 'special://home/userdata/').replace(ADDONS,'special://home/addons/').replace(MEDIA,'special://home/media/').replace(urlUSERDATA, 'special://home/userdata/').replace(urlADDONS,'special://home/addons/').replace(urlMEDIA,'special://home/media/')
                      f = open((os.path.join(root, file)), mode='w')
@@ -1064,7 +1064,7 @@ def FIX_SPECIAL(url):
     for root, dirs, files in os.walk(url):
         for file in files: 
             if file.endswith(".properties"):
-                         dp.update(0,"Scanning",file, 'Please Wait')
+                         dp.update(0,"Checking properties file: ",file, 'Please Wait')
                          a=open((os.path.join(root, file))).read()
                          b=a.replace(USERDATA, 'special://home/userdata/').replace(ADDONS,'special://home/addons/').replace(MEDIA,'special://home/media/').replace(urlUSERDATA, 'special://home/userdata/').replace(urlADDONS,'special://home/addons/').replace(urlMEDIA,'special://home/media/')
                          f = open((os.path.join(root, file)), mode='w')
@@ -1073,7 +1073,7 @@ def FIX_SPECIAL(url):
     for root, dirs, files in os.walk(url):
         for file in files: 
             if file.endswith(".db"):
-                        dp.update(0,"Scanning",file, 'Please Wait')
+                        dp.update(0,"Checking database file: ",file, 'Please Wait')
                         a=open((os.path.join(root, file))).read()
                         b=a.replace(USERDATA, 'special://home/userdata/').replace(ADDONS,'special://home/addons/').replace(MEDIA,'special://home/media/').replace(urlUSERDATA, 'special://home/userdata/').replace(urlADDONS,'special://home/addons/').replace(urlMEDIA,'special://home/media/')
                         f = open((os.path.join(root, file)), mode='w')
@@ -1103,7 +1103,7 @@ def FIX_SPECIAL(url):
     xbmc.log('======================   MK-IV Wizard   ========================')
     xbmc.log('==============**********************************================')
     xbmc.log('===============   Paths successfully changed   =================')                       
-
+    ReduceImageSize()
 #=========================  Huge thanks to TV Addons and TDB Devs for the Log related code!!!  =========================================#  
 def view_LastError():
         LogMenu()
@@ -1317,7 +1317,7 @@ def Restore(url):
             pass  
         dp.update(90,"Extracting and Writing Files... [COLOR lime] DONE[/COLOR]", "Checking paths and cleaning up...")
         time.sleep(.5)
-        #FIX_SPECIAL(HOME)
+        #FIX_SPECIAL(USERDATA)
         #time.sleep(.5)
         #xbmc.executebuiltin('UpdateLocalAddons')
         #time.sleep(.5)
@@ -1325,7 +1325,7 @@ def Restore(url):
         #time.sleep(.5)
         #xbmc.executebuiltin('RefreshRSS')
         #time.sleep(.5)
-        #DeletePackages(url)
+        #DeletePackages()
         try:
             EnableAll() 
             #UpdateKryptonDB()
@@ -1337,7 +1337,7 @@ def Restore(url):
         dialog.ok("Your Restore Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
         killxbmc()
 
-def DeleteThumbnails(url):
+def DeleteThumbnails():
     xbmc.log('======================   MK-IV Wizard   ========================')
     xbmc.log('==============**********************************================')
     xbmc.log('===================   Deleting thumbails   =====================')
@@ -1463,16 +1463,17 @@ def UNIVERSAL_BACKUP():
     #EnableAll() 
         #UpdateKryptonDB()
     time.sleep(.5)
-    exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps','packages']
+    DeletePackages()
+    exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps']
     exclude_files = ["xbmc.log","xbmc.old.log","kodi.log","kodi.old.log","spmc.log","spmc.old.log","Textures13.db",'.DS_Store','.setup_complete','XBMCHelper.conf', 'advancedsettings.xml','Addons19.db','saltscache.db-shm','saltscache.db-wal']
     if ADDON.getSetting('KodiVersion') == 'Jarvis': 
-        exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps','packages']
+        exclude_dirs =  ['cache', 'system','temp','Thumbnails', "peripheral_data",'library','keymaps']
         exclude_files = ["xbmc.log","xbmc.old.log","kodi.log","kodi.old.log","spmc.log","spmc.old.log","Textures13.db",'.DS_Store','.setup_complete','XBMCHelper.conf', 'advancedsettings.xml','Addons19.db','Addons20.db','saltscache.db-shm','saltscache.db-wal']
     message_header = "Creating Universal Backup"
     message1 = "Archiving..."
     message2 = ""
     message3 = "Please Wait"
-    FIX_SPECIAL(HOME)
+    FIX_SPECIAL(USERDATA)
     time.sleep(.5)
     ARCHIVE_CB(HOME,backup_zip, message_header, message1, message2, message3, exclude_dirs, exclude_files)
     #if ADDON.getSetting('KodiVersion') == 'Krypton':
@@ -2634,7 +2635,7 @@ def WIZARD(name,url,version):
        os.remove(lib)
     except:
        pass
-    #FIX_SPECIAL(url)
+    #FIX_SPECIAL(USERDATA)
     #time.sleep(.5)
     #xbmc.executebuiltin('UpdateLocalAddons')
     #time.sleep(.5)
@@ -2642,7 +2643,7 @@ def WIZARD(name,url,version):
     #time.sleep(.5)
  #   xbmc.executebuiltin('RefreshRSS')
   #  time.sleep(.5)
-    #DeletePackages(url)
+    #DeletePackages()
     if ADDON.getSetting('KodiVersion')=='Krypton':
         try:
             dp.update(0,"Extracting...[COLOR lime]DONE[/COLOR]", "Updating Krypton Database...")
@@ -2809,11 +2810,11 @@ def addDir2(name,url,mode,iconimage,fanart,description):
         return ok
 
 def CleanOnStart():
-        DeleteThumbnails('')
+        DeleteThumbnails()
         time.sleep(1)
-        DeletePackages('')
+        DeletePackages()
         time.sleep(1)
-        deletecachefiles('')
+        deletecachefiles()
         sys.exit(0)
 
 def setView(content, viewType):
@@ -2877,6 +2878,121 @@ def DeleteSkinBackup():
         pass
     else: pass
     xbmc.executebuiltin("Container.Refresh")
+
+def ReduceImageSize(): # Will add slider to choose > file size and int(quality)
+    from PIL import Image
+    dp.create(Title,"Reducung Image Sizes...",'[COLOR deepsky][/COLOR]', '')
+    for root, dirs, files in os.walk(ADDONS):  #Search all png then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
+        for file in files:
+            if file.endswith(".png"):
+                dp.update(0,"Checking ",file, 'Please Wait')
+                image=os.path.join(root, file)
+                size = os.path.getsize(image)
+                if size >= 1000000 :
+                    i=1
+                    renameimage=image.replace('.png','.jpg')
+                    os.rename(image,renameimage)
+                    try: os.remove(image)
+                    except: pass
+                    while size >= 1000000:
+                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        a=Image.open(renameimage)
+                        a.save(renameimage,optimize=True,quality=60)
+                        if i==5: break
+                        size = os.path.getsize(renameimage)
+                        i=i+1
+                    os.rename(renameimage, image)
+    for root, dirs, files in os.walk(USERDATA):  #Search all png then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
+        for file in files:
+            if file.endswith(".png"):
+                dp.update(0,"Checking ",file, 'Please Wait')
+                image=os.path.join(root, file)
+                size = os.path.getsize(image)
+                if size >= 500000 :
+                    i=1
+                    renameimage=image.replace('.png','.jpg')
+                    os.rename(image,renameimage)
+                    try: os.remove(image)
+                    except: pass
+                    while size >= 500000:
+                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        a=Image.open(renameimage)
+                        a.save(renameimage,optimize=True,quality=60)
+                        if i==5: break
+                        size = os.path.getsize(renameimage)
+                        i=i+1
+                    os.rename(renameimage, image)
+    for root, dirs, files in os.walk(ADDONS):  #Search all jpg then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
+        for file in files:
+            if file.endswith(".jpg"):
+                dp.update(0,"Checking ",file, 'Please Wait')
+                image=os.path.join(root, file)
+                size = os.path.getsize(image)
+                if size >= 1000000 :  
+                    i=1
+                    while size >= 1000000:
+                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        a=Image.open(image)
+                        a.save(image,optimize=True,quality=60)
+                        if i==5: break
+                        i=i+1
+                        size = os.path.getsize(image)
+    for root, dirs, files in os.walk(USERDATA):  #Search all jpg then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
+        for file in files:
+            if file.endswith(".jpg"):
+                dp.update(0,"Checking ",file, 'Please Wait')
+                image=os.path.join(root, file)
+                size = os.path.getsize(image)
+                if size >= 500000 :  
+                    i=1
+                    while size >= 500000:
+                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        a=Image.open(image)
+                        a.save(image,optimize=True,quality=60)
+                        if i==5: break
+                        i=i+1
+                        size = os.path.getsize(image)
+    for root, dirs, files in os.walk(ADDONS):  #Search all jpeg then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
+        for file in files:
+            if file.endswith(".jpeg"):
+                dp.update(0,"Checking ",file, 'Please Wait')
+                image=os.path.join(root, file)
+                size = os.path.getsize(image)
+                if size >= 1000000 :  
+                    i=1
+                    renameimage=image.replace('.jpeg', '.jpg')
+                    os.rename(image,renameimage)
+                    try: os.remove(image)
+                    except: pass
+                    while size >= 1000000:
+                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        a=Image.open(renameimage)
+                        a.save(renameimage,optimize=True,quality=60)
+                        if i==5: break
+                        size = os.path.getsize(renameimage)
+                        i=i+1
+                    os.rename(renameimage, image)
+    for root, dirs, files in os.walk(USERDATA):  #Search all jpeg then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
+        for file in files:
+            if file.endswith(".jpeg"):
+                dp.update(0,"Checking ",file, 'Please Wait')
+                image=os.path.join(root, file)
+                size = os.path.getsize(image)
+                if size >= 500000 :  
+                    i=1
+                    renameimage=image.replace('.jpeg', '.jpg')
+                    os.rename(image,renameimage)
+                    try: os.remove(image)
+                    except: pass
+                    while size >= 500000:
+                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        a=Image.open(renameimage)
+                        a.save(renameimage,optimize=True,quality=60)
+                        if i==5: break
+                        size = os.path.getsize(renameimage)
+                        i=i+1
+                    os.rename(renameimage, image)
+                    
 
 def MK4Backgrounds():
     Initial_Size = GETFOLDERSIZE(Backgrounds)
@@ -3156,7 +3272,7 @@ def NewSession():
                 os.rename(Master,Local)
                 shutil.rmtree(Localtmp)
                 time.sleep(1)
-                DeleteThumbnails('')
+                DeleteThumbnails()
                 xbmc.executebuiltin('Container.Refresh')
                 #xbmcgui.Dialog().ok(Title,Title+' Restart required...','','Press OK to close the add-on')
                 #sys.exit(0)
@@ -3249,7 +3365,7 @@ def MK4WizUpdate():
                 os.rename(Master,Local)
                 shutil.rmtree(Localtmp)
                 time.sleep(1)
-                DeleteThumbnails('')
+                DeleteThumbnails()
                 xbmc.executebuiltin('Container.Refresh')
                 #xbmcgui.Dialog().ok(Title,Title+' Restart required...','','Press OK to close the add-on')
                 #sys.exit(0)
