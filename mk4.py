@@ -223,7 +223,7 @@ def BackupMenu():
             for file in os.listdir(fullbackuppath):
                 path=os.path.join(fullbackuppath, file)
                 if file.endswith('.zip'):    
-                    addItem('[B]Restore '+file+'[/B]',path,71,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
+                    addItem('[B]Restore '+file+'[/B]',path,9,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
                     pass
         except: pass
 
