@@ -2883,7 +2883,7 @@ def ReduceImageSize(): # Will add slider to choose > file size and int(quality)
     for root, dirs, files in os.walk(ADDONS):  #Search all png then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
         for file in files:
             if file.endswith(".png"):
-                dp.update(0,"Checking ",file, 'Please Wait')
+                dp.update(0,"Checking image size on "+file,'',  'Please Wait')
                 image=os.path.join(root, file)
                 size = os.path.getsize(image)
                 if size >= 1000000 :
@@ -2893,17 +2893,17 @@ def ReduceImageSize(): # Will add slider to choose > file size and int(quality)
                     try: os.remove(image)
                     except: pass
                     while size >= 1000000:
-                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        dp.update(0,"Resizing "+file,'',  'Please Wait')
                         a=Image.open(renameimage)
                         a.save(renameimage,optimize=True,quality=60)
-                        if i==5: break
+                        if i==2: break
                         size = os.path.getsize(renameimage)
                         i=i+1
                     os.rename(renameimage, image)
     for root, dirs, files in os.walk(USERDATA):  #Search all png then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
         for file in files:
             if file.endswith(".png"):
-                dp.update(0,"Checking ",file, 'Please Wait')
+                dp.update(0,"Checking image size on "+file,'',  'Please Wait')
                 image=os.path.join(root, file)
                 size = os.path.getsize(image)
                 if size >= 500000 :
@@ -2913,47 +2913,47 @@ def ReduceImageSize(): # Will add slider to choose > file size and int(quality)
                     try: os.remove(image)
                     except: pass
                     while size >= 500000:
-                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        dp.update(0,"Resizing "+file,'',  'Please Wait')
                         a=Image.open(renameimage)
                         a.save(renameimage,optimize=True,quality=60)
-                        if i==5: break
+                        if i==2: break
                         size = os.path.getsize(renameimage)
                         i=i+1
                     os.rename(renameimage, image)
     for root, dirs, files in os.walk(ADDONS):  #Search all jpg then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
         for file in files:
             if file.endswith(".jpg"):
-                dp.update(0,"Checking ",file, 'Please Wait')
+                dp.update(0,"Checking image size on "+file,'',  'Please Wait')
                 image=os.path.join(root, file)
                 size = os.path.getsize(image)
                 if size >= 1000000 :  
                     i=1
                     while size >= 1000000:
-                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        dp.update(0,"Resizing "+file,'',  'Please Wait')
                         a=Image.open(image)
                         a.save(image,optimize=True,quality=60)
-                        if i==5: break
+                        if i==2: break
                         i=i+1
                         size = os.path.getsize(image)
     for root, dirs, files in os.walk(USERDATA):  #Search all jpg then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
         for file in files:
             if file.endswith(".jpg"):
-                dp.update(0,"Checking ",file, 'Please Wait')
+                dp.update(0,"Checking image size on "+file,'',  'Please Wait')
                 image=os.path.join(root, file)
                 size = os.path.getsize(image)
                 if size >= 500000 :  
                     i=1
                     while size >= 500000:
-                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        dp.update(0,"Resizing "+file,'',  'Please Wait')
                         a=Image.open(image)
                         a.save(image,optimize=True,quality=60)
-                        if i==5: break
+                        if i==2: break
                         i=i+1
                         size = os.path.getsize(image)
     for root, dirs, files in os.walk(ADDONS):  #Search all jpeg then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
         for file in files:
             if file.endswith(".jpeg"):
-                dp.update(0,"Checking ",file, 'Please Wait')
+                dp.update(0,"Checking image size on "+file,'',  'Please Wait')
                 image=os.path.join(root, file)
                 size = os.path.getsize(image)
                 if size >= 1000000 :  
@@ -2963,17 +2963,17 @@ def ReduceImageSize(): # Will add slider to choose > file size and int(quality)
                     try: os.remove(image)
                     except: pass
                     while size >= 1000000:
-                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        dp.update(0,"Resizing "+file,'',  'Please Wait')
                         a=Image.open(renameimage)
                         a.save(renameimage,optimize=True,quality=60)
-                        if i==5: break
+                        if i==2: break
                         size = os.path.getsize(renameimage)
                         i=i+1
                     os.rename(renameimage, image)
     for root, dirs, files in os.walk(USERDATA):  #Search all jpeg then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
         for file in files:
             if file.endswith(".jpeg"):
-                dp.update(0,"Checking ",file, 'Please Wait')
+                dp.update(0,"Checking image size on "+file,'',  'Please Wait')
                 image=os.path.join(root, file)
                 size = os.path.getsize(image)
                 if size >= 500000 :  
@@ -2983,10 +2983,10 @@ def ReduceImageSize(): # Will add slider to choose > file size and int(quality)
                     try: os.remove(image)
                     except: pass
                     while size >= 500000:
-                        dp.update(0,"Resizing ",file, 'Please Wait')
+                        dp.update(0,"Resizing "+file,'',  'Please Wait')
                         a=Image.open(renameimage)
                         a.save(renameimage,optimize=True,quality=60)
-                        if i==5: break
+                        if i==2: break
                         size = os.path.getsize(renameimage)
                         i=i+1
                     os.rename(renameimage, image)
