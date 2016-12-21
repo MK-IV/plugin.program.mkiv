@@ -217,31 +217,31 @@ def BUILDERS():
     addItem('[B]Force Close[/B]',BASEURL,28,'http://dreadpirate.info/images/jollyroger2.jpg',FANART,'')
 
 def BackupMenu():
-    addItem('[B]Universal Backup[/B]',BASEURL,12,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
+    addItem('[COLOR dodgerblue][B]Universal Backup[/B][/COLOR]',BASEURL,12,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(fullbackuppath):
         try:
             for file in os.listdir(fullbackuppath):
                 path=os.path.abspath(os.path.join(fullbackuppath, file))
                 if file.endswith('.zip'):    
-                    addItem('[B]Restore '+file+'[/B]',path,9,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
+                    addItem('[COLOR deepskyblue][B]Restore [/COLOR][COLOR white]'+file+'[/B][/COLOR]',path,9,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
                     pass
         except: pass
 
-    addItem('[B]Choose Restore Location[/B]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
-    addItem('[B]Backup Skin Settings[/B]',BASEURL,59,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
+    addItem('[COLOR deepskyblue][B]Choose Restore Location[/B][/COLOR]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
+    addItem('[COLOR dodgerblue][B]Backup Skin Settings[/B][/COLOR]',BASEURL,59,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(SkinSettingsBackup):
-        addDir('[B]Restore Skin Settings[/B]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
+        addDir('[COLOR deepskyblue][B]Restore Skin Settings[/B][/COLOR]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
         addItem('[B][/B]',BASEURL,0,'',FANART,'')
-        addItem('[B][COLOR white]Delete Skin Settings Backup[/COLOR][/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+        addItem('[B][COLOR red]Delete Skin Settings Backup[/COLOR][/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
     else: pass
     if os.path.exists(fullbackuppath):
         try:
             for file in os.listdir(fullbackuppath):
                 path=os.path.join(fullbackuppath, file)
                 if file.endswith('.zip'):
-                    addItem('[B][COLOR white]Delete '+file+'[/COLOR][/B]',path,53,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+                    addItem('[B][COLOR orangered]Delete [/COLOR][COLOR white]'+file+'[/COLOR][/B]',path,53,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
         except: pass
-        addItem('[B][COLOR white]Delete all Backups[/COLOR][/B]',BASEURL,73,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+        addItem('[B][COLOR red]Delete all Backups[/COLOR][/B]',BASEURL,73,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
 
 def RepoMenu(): #36
     addItem('[COLOR yellow][B]Sources will appear on next start[/B][/COLOR]','http://get.mkiv.ca',42,ICON,FANART,'')
