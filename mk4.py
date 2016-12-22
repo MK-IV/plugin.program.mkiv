@@ -1076,6 +1076,20 @@ def FIX_SPECIAL():
                         f = open((os.path.join(root, file)), mode='w')
                         f.write(str(b))
                         f.close()
+    for root, dirs, files in os.walk(HOME):
+        for file in files: 
+            if file.endswith(".pyo"):
+                     dp.update(0,"Cleaning files: ",file, 'Please Wait')
+                     killfile=os.path.join(root, file)
+                     try: os.remove(killfile)
+                     except BaseException as e: pass
+    for root, dirs, files in os.walk(HOME):
+        for file in files: 
+            if file.endswith(".pyc"):
+                     dp.update(0,"Cleaning files: ",file, 'Please Wait')
+                     killfile=os.path.join(root, file)
+                     try: os.remove(killfile)
+                     except BaseException as e: pass
     if os.path.exists:
         try:
             if userpath in open(SkinSettingsXML).read():
