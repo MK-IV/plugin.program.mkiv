@@ -82,143 +82,62 @@ programaddons=None
 audioaddons=None
 sources=None
 local=None
-
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        guisettingslink=urllib.unquote_plus(params["guisettingslink"])
-except:
-        pass
-try:
-        name=urllib.unquote_plus(params["name"])
-except:
-        pass
-try:
-        iconimage=urllib.unquote_plus(params["iconimage"])
-except:
-        pass
-try:
-        fanart=urllib.unquote_plus(params["fanart"])
-except:
-        pass
-try:        
-        mode=str(params["mode"])
-except:
-        pass
-try:
-        link=urllib.unquote_plus(params["link"])
-except:
-        pass
-try:
-        skins=urllib.unquote_plus(params["skins"])
-except:
-        pass
-try:
-        videoaddons=urllib.unquote_plus(params["videoaddons"])
-except:
-        pass
-try:
-        audioaddons=urllib.unquote_plus(params["audioaddons"])
-except:
-        pass
-try:
-        programaddons=urllib.unquote_plus(params["programaddons"])
-except:
-        pass
-try:
-        pictureaddons=urllib.unquote_plus(params["pictureaddons"])
-except:
-        pass
-try:
-        local=urllib.unquote_plus(params["local"])
-except:
-        pass
-try:
-        sources=urllib.unquote_plus(params["sources"])
-except:
-        pass
-try:
-        adult=urllib.unquote_plus(params["adult"])
-except:
-        pass
-try:
-        buildname=urllib.unquote_plus(params["buildname"])
-except:
-        pass
-try:
-        updated=urllib.unquote_plus(params["updated"])
-except:
-        pass
-try:
-        version=urllib.unquote_plus(params["version"])
-except:
-        pass
-try:
-        author=urllib.unquote_plus(params["author"])
-except:
-        pass
-try:        
-        description=urllib.unquote_plus(params["description"])
-except:
-        pass
-try:        
-        video=urllib.unquote_plus(params["video"])
-except:
-        pass
-
-        
-
-                      
-params=plugintools.get_params()
-url=None
-name=None
-mode=None
-iconimage=None
 fanart=None
-description=None
 fav_mode=None
 
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        name=urllib.unquote_plus(params["name"])
-except:
-        pass
-try:
-        iconimage=urllib.unquote_plus(params["iconimage"])
-except:
-        pass
-try:        
-        mode=int(params["mode"])
-except:
-        pass
-try:        
-        fanart=urllib.unquote_plus(params["fanart"])
-except:
-        pass
-try:        
-        description=urllib.unquote_plus(params["description"])
-except:
-        pass
-try:
-    fav_mode=int(params["fav_mode"])
-except:
-    pass
-        
-        
+try: url=urllib.unquote_plus(params["url"])
+except: pass
+try: guisettingslink=urllib.unquote_plus(params["guisettingslink"])
+except: pass
+try: name=urllib.unquote_plus(params["name"])
+except: pass
+try: iconimage=urllib.unquote_plus(params["iconimage"])
+except: pass
+try: fanart=urllib.unquote_plus(params["fanart"])
+except: pass
+try: mode=str(params["mode"])
+except: pass
+try: link=urllib.unquote_plus(params["link"])
+except: pass
+try: skins=urllib.unquote_plus(params["skins"])
+except: pass
+try: videoaddons=urllib.unquote_plus(params["videoaddons"])
+except: pass
+try: audioaddons=urllib.unquote_plus(params["audioaddons"])
+except: pass
+try: programaddons=urllib.unquote_plus(params["programaddons"])
+except: pass
+try: pictureaddons=urllib.unquote_plus(params["pictureaddons"])
+except: pass
+try: local=urllib.unquote_plus(params["local"])
+except: pass
+try: sources=urllib.unquote_plus(params["sources"])
+except: pass
+try: adult=urllib.unquote_plus(params["adult"])
+except: pass
+try: buildname=urllib.unquote_plus(params["buildname"])
+except: pass
+try: updated=urllib.unquote_plus(params["updated"])
+except: pass
+try: version=urllib.unquote_plus(params["version"])
+except: pass
+try: author=urllib.unquote_plus(params["author"])
+except: pass
+try: description=urllib.unquote_plus(params["description"])
+except: pass
+try: video=urllib.unquote_plus(params["video"])
+except: pass
+try:fanart=urllib.unquote_plus(params["fanart"])
+except: pass
+try: fav_mode=int(params["fav_mode"])
+except: pass
+
 print str(PATH)+': '+str(ADDON.getAddonInfo('version'))
 print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
 print "IconImage: "+str(iconimage)
 
-
-        
-        
 if mode==None or url==None or len(url)<1:
         mk4.NewSession()
         mk4.INDEX()
@@ -404,7 +323,5 @@ elif mode==108: xbmc.executebuiltin('ActivateWindow(10134,return)')#mv.GetFavour
 elif mode==109: mv.Movies()
 elif mode==110: mv.TV()
 elif mode==111: mk4.ReduceImageSize()
-    
-    
-		
+
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
