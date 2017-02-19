@@ -2,11 +2,12 @@ import xbmcaddon, xbmcgui, xbmc, os, sys, urllib, urllib2, xbmcplugin, re, extra
 
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-addon_id="addonname"
+addon_id="plugin.program.testwizard"
 ADDON=xbmcaddon.Addon(id=addon_id)
-AddonTitle="wizardname"
-proname="providername"
-pointerurl="zipurl"
+version=ADDON.getAddonInfo('version')
+AddonTitle="Test Wizard"
+proname="CamC SandBox"
+pointerurl="https://mk-iv.github.io/Pointer"
 dialog=xbmcgui.Dialog()
 HOME=xbmc.translatePath('special://home/')
 dp=xbmcgui.DialogProgress()
@@ -15,25 +16,31 @@ ICON=xbmc.translatePath(os.path.join('special://home/addons/' + addon_id, 'icon.
 Updater=xbmc.translatePath(os.path.join('special://home/addons/' + addon_id , 'updater.py'))
 VERSION="1.0.0"
 Addons26=xbmc.translatePath(os.path.join('special://home/userdata/Database/','Addons26.db'))
-
+Addons27=xbmc.translatePath(os.path.join('special://home/userdata/Database/','Addons27.db'))
+EXCLUDES=['kodi.log',addon_id,Addons26,Addons27,'script.module.addon.common','autoexec.py','service.xbmc.versioncheck','metadata.tvdb.com','metadata.common.imdb.com']
+phoenix=xbmc.translatePath(os.path.join('special://home/addons/','plugin.video.phstreams'))
 
 
 def Index():
-        link = Open_Url(pointerurl).replace('\n','').replace('\r','')
-        match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
-        for name,url,iconimage,fanart,description in match:
-            addDir(name,url,1,iconimage,fanart,description)
-            
+        try:
+            link = Open_Url(pointerurl).replace('\n','').replace('\r','')
+            match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
+            for name,url,iconimage,fanart,description in match:
+                addDir(name,url,1,iconimage,fanart,description,version)
+        except:
+            link = Open_Url(pointerurl).replace('\n','').replace('\r','')
+            match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+            for name,url,iconimage,fanart,description in match:
+                addDir(name,url,1,iconimage,fanart,description,999)
 
-def addDir(name,url,mode,iconimage,fanart,description):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&fanart="+urllib.quote_plus(fanart)+"&description="+urllib.quote_plus(description)
+def addDir(name,url,mode,iconimage,fanart,description,version):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&fanart="+urllib.quote_plus(fanart)+"&description="+urllib.quote_plus(description)+"&version="+str(version)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description } )
         liz.setProperty( "Fanart_Image", fanart )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
         return ok
-
 
 def platform():
     if xbmc.getCondVisibility('system.platform.android'):
@@ -58,10 +65,19 @@ def Open_Url(url):
     response.close()
     return link
         
-def Wizard(name,url,description):
+def Wizard(name,url,description,version):
+    if  os.path.exists(phoenix):
+        choice = xbmcgui.Dialog().yesno(AddonTitle, 'It is recommended that you perform a Fresh Start before installing.', '','', nolabel='SKIP',yeslabel='FRESH START')
+        if choice == 0:
+            pass
+
+        elif choice == 1:
+            FRESHSTART()
+    else:
+        pass
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()        
-    dp.create("wizardname","Downloading "+name+"... ",'', 'Please Wait')
+    dp.create(AddonTitle,"Downloading "+name+"... ",'', 'Please Wait')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -141,7 +157,7 @@ def KillKodi():
         try: os.system('killall -9 Kodi')
         except: pass
         try: os._exit(0)
-        except: pass	
+        except: pass    
         try: sys.exit(2)
         except: pass
         Crash()
@@ -157,7 +173,7 @@ def KillKodi():
         try: os.system('killall -9 kodi.bin')
         except: pass
         try: os._exit(0)
-        except: pass	
+        except: pass    
         try: sys.exit(2)
         except: pass
         Crash()
@@ -179,7 +195,7 @@ def KillKodi():
         try : os.system('Process.killProcess(android.os.Process.org.fire,guru());')
         except: pass
         try: os._exit(0)
-        except: pass	
+        except: pass    
         try: sys.exit(2)
         except: pass
         Crash()
@@ -203,7 +219,7 @@ def KillKodi():
             os.system('TASKKILL /im XBMC.exe /f')
         except: pass
         try: os._exit(0)
-        except: pass	
+        except: pass    
         try: sys.exit(2)
         except: pass
         Crash()
@@ -218,17 +234,68 @@ def KillKodi():
         try: os.system('sudo initctl stop xbmc')
         except: pass
         try: os._exit(0)
-        except: pass	
+        except: pass    
         try: sys.exit(2)
         except: pass
         Crash()
         dialog.ok("[COLOR=red][B]WARNING  !!![/COLOR][/B]", "If you\'re seeing this message it means the force close", "was unsuccessful. Please force close the MC [COLOR=lime]DO NOT[/COLOR] exit via the menu.","Your platform could not be detected so just pull the power cable.")    
 
 def TriggerMigration():
-    f = open(Addons26, mode='w')
+    f = open(Addons27, mode='w')
     f.write('Wiped')
     f.close()
-    os.remove(Addons26)
+    os.remove(Addons27)
+    
+def FRESHSTART():
+    if xbmcgui.Dialog().yesno("[COLOR=red]Are You Sure?[/COLOR]", 'Last chance...', '', '', yeslabel='[COLOR lime]Yes, Fresh Start[/COLOR]',nolabel='[COLOR red]No[/COLOR]'):
+        dp.create(AddonTitle,"Counting files",'', '')
+        HOME=xbmc.translatePath('special://home/')
+        try:
+            rootlen = len(HOME)#
+            for_progress = []#
+            ITEM =[]#
+            for root, dirs, files in os.walk(HOME,topdown=True):
+                dirs[:] = [d for d in dirs if d not in EXCLUDES]
+                for file in files:#
+                    ITEM.append(file)#
+                    N_ITEM =len(ITEM)#
+                    for_progress.append(file)# 
+                    progress = len(for_progress) / float(N_ITEM) * 100#  
+                    dp.update(int(progress),"Deleting:",'[COLOR dodgerblue]%s[/COLOR]'%file)#
+                for name in files:
+                    try:
+                        os.remove(os.path.join(root,name))
+                        os.rmdir(os.path.join(root,name))
+                    except: pass
+
+                for name in dirs:
+                    try: os.rmdir(os.path.join(root,name)); os.rmdir(root)
+                    except: pass
+            REMOVE_EMPTY_FOLDERS()
+            REMOVE_EMPTY_FOLDERS()
+            REMOVE_EMPTY_FOLDERS()
+            REMOVE_EMPTY_FOLDERS()
+            REMOVE_EMPTY_FOLDERS()
+            REMOVE_EMPTY_FOLDERS()
+            REMOVE_EMPTY_FOLDERS()
+            time.sleep(.5)
+            dp.close()
+            dialog = xbmcgui.Dialog()
+            dialog.ok(AddonTitle,'Fresh Start Successful','','The MC will now close')
+            KillKodi()
+            xbmc.executebuiltin('Quit')
+        except: pass
+    else: return
+
+def REMOVE_EMPTY_FOLDERS():
+    empty_count = 0
+    used_count = 0
+    for curdir, subdirs, files in os.walk(HOME):
+        if len(subdirs) == 0 and len(files) == 0: #check for empty directories. len(files) == 0 may be overkill
+            empty_count += 1 #increment empty_count
+            os.rmdir(curdir) #delete the directory
+        elif len(subdirs) > 0 and len(files) > 0: #check for used directories
+            used_count += 1 #increment used_count
 
 def get_params():
         param=[]
@@ -292,21 +359,15 @@ print "IconImage: "+str(iconimage)
 
 
 if mode==None or url==None or len(url)<1:
-        xbmc.log('===========================================================================================')
         xbmc.log('-------------------------------'+AddonTitle+' Started-------------------------------------')
-        xbmc.log('===========================================================================================')
-        xbmc.log('-------Create your own Wizard with MK-IV\'s Build-A-Wizard Tool in the MK-IV Wizard--------')
-        xbmc.log('                                    ===---------===')
-        xbmc.log('     ----------------------   Get it at http://get.mkiv.ca   ---------------------')
-        xbmc.log('===========================================================================================')
         if os.path.exists(Updater):
             import updater 
             updater.UpdateCheck(AddonTitle, addon_id)
             pass
         else: pass
         Index()
-        
-elif mode==1:
-    Wizard(name,url,description)
+elif mode==1: Wizard(name,url,description,version)        
+elif mode==2: FRESHSTART()
+
         
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
