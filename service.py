@@ -122,19 +122,19 @@ if ADDON.getSetting('UpdateAddons') == 'true':
     pass
 else: pass
 
-if not os.path.exists(RequestPatch) and ADDON.getSetting('KodiVersion') == 'Krypton':
-    if skin != 'skin.estuary' and skin != 'skin.estouchy':
-        time.sleep(30)
-        if xbmcgui.Dialog().yesno(Title,'[COLOR red]A patch is available to fix errors you might be having...[/COLOR]','','Would you like to apply a patch?'):
-            mk4.ADDONWIZ('Python Requests Module','http://mkiv.netne.net/Admin/Addon%20Packs/script.module.requests-2.9.1.zip','script.module.requests')
-            time.sleep(2)
-            mk4.EnableAll()
-            time.sleep(2)
-            xbmc.executebuiltin('UpdateLocalAddons')
-            pass
-        else: pass
-    else: pass
-else: pass
+#if not os.path.exists(RequestPatch) and ADDON.getSetting('KodiVersion') == 'Krypton':
+#    if skin != 'skin.estuary' and skin != 'skin.estouchy':
+#        time.sleep(30)
+#        if xbmcgui.Dialog().yesno(Title,'[COLOR red]A patch is available to fix errors you might be having...[/COLOR]','','Would you like to apply a patch?'):
+#            mk4.ADDONWIZ('Python Requests Module','http://mkiv.netne.net/Admin/Addon%20Packs/script.module.requests-2.9.1.zip','script.module.requests')
+#            time.sleep(2)
+#            mk4.EnableAll()
+#            time.sleep(2)
+#            xbmc.executebuiltin('UpdateLocalAddons')
+#            pass
+#        else: pass
+#    else: pass
+#else: pass
 
 # Sleeper added due to the updating of addons.
 time.sleep(60)
