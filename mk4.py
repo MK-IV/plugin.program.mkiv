@@ -1332,7 +1332,7 @@ def Restore(url):
         #time.sleep(.5)
         #DeletePackages()
         try:
-            EnableAll() 
+            #EnableAll() 
             #UpdateKryptonDB()
             dialog = xbmcgui.Dialog()
             dialog.ok("Your Restore Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
@@ -2670,7 +2670,7 @@ def WIZARD(name,url,version):
     if ADDON.getSetting('KodiVersion')=='Krypton':
         try:
             dp.update(0,"Extracting...[COLOR lime]DONE[/COLOR]", "Updating Krypton Database...")
-            EnableAll() 
+            #EnableAll() 
             UpdateKryptonDB()
         except: pass
     else: pass
@@ -2786,7 +2786,7 @@ def InstallRequests():
             extract.all(reqzip,ADDONS, dp) 
         except BaseException as e:
             pass
-        EnableAll()
+        #EnableAll()
 
 
 def addItem(name,url,mode,iconimage,fanart,description):
@@ -3309,7 +3309,7 @@ def Check4Update():
                 else: pass
                 path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
                 dp = xbmcgui.DialogProgress()        
-                dp.create(Title,'Downloading update... ')
+                dp.create(Title,'Downloading [COLOR white]'+name+'[/COLOR] update... ')
                 lib=os.path.join(path, name+'.zip')
                 try:
                     os.remove(lib)
@@ -3354,7 +3354,7 @@ def RequiredUpdate():
 			if name == BuildName:
 				path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
 				dp = xbmcgui.DialogProgress()        
-				dp.create(Title,'Downloading '+name+'... ')
+				dp.create(Title,'Downloading [COLOR white]'+name+'[/COLOR]... ')
 				lib=os.path.join(path, name+'.zip')
 				try:
 					os.remove(lib)
