@@ -22,6 +22,7 @@
             <setting id="FreshStart" type="bool" visible="false" default="false"/>
             <setting id="FirstMK4Startup" type="bool" visible="false" default="true"/>
             <setting id="NewSession" type="bool" visible="false" default="false"/>
+            <setting id="UserPath" type="text" visible="false" default=""/>
             <setting id="Test" type="text" visible="false" default="320b3373df830abd7c324aef191d7a82"/>
         </category>
         <category label="Upload Log">

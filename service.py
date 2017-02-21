@@ -42,7 +42,10 @@ if version >= 16.0 and version <= 16.9:
     #else: pass
 elif version >= 17.0 and version <= 17.9:
     mk4.SetSetting('KodiVersion','Krypton')
-    pass
+    if ADDON.getSetting('BuildName') == "MK-IV" or ADDON.getSetting('BuildName') == "MK-IV (UK Server)":
+        mk4.RequiredUpdate()
+        pass
+    else: pass
     #if ADDON.getSetting('FreshStart') == 'false':
     #    try:
     #         mk4.ShowPic('https://raw.githubusercontent.com/MK-IV/Dependencies/master/ProgramSplash/fanart.jpg')

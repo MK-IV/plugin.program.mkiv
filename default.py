@@ -16,7 +16,6 @@
 """
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin  
 import mk4
-from lib import mk4video as mv
 import urllib
 import re
 import os
@@ -361,16 +360,6 @@ elif mode==85:
             sys.exit(0)
     #else: sys.exit(0)
 elif mode==86: mk4.BuildARepo()
-elif mode==87: mv.MK4Video()
-elif mode==88: mv.GetTvImdb(url)
-elif mode==89: mv.GetGenres(url)
-elif mode==90: mv.GetYears(url)
-elif mode==91: mv.GetContent(url)
-elif mode==92: mv.Search()
-elif mode==93: mv.GetImdb(url)
-elif mode==94: mv.GetTV(url)
-elif mode==95: mv.GetShowContent(url)
-elif mode==96: mv.resolve(name,url,iconimage, description)
 elif mode==97: mk4.RepoAddon()
 elif mode==98: mk4.RepoUpdater()
 elif mode==99: mk4.BuildARepoMenu()
@@ -379,30 +368,6 @@ elif mode==101: mk4.B64Encode()
 elif mode==102: mk4.B64Decode()
 elif mode==103: mk4.ToolsMenu()
 elif mode==104: mk4.B64View()
-elif mode==105: mv.QueueItem()
-elif mode==106:
-    try:
-        name = name.split('\\ ')[1]
-    except:
-        pass
-    try:
-        name = name.split('  - ')[0]
-    except:
-        pass
-    mv.addFavorite(name,url,iconimage,fanart,fav_mode)
-elif mode==107:
-    try:
-        name = name.split('\\ ')[1]
-    except:
-        pass
-    try:
-        name = name.split('  - ')[0]
-    except:
-        pass
-    mv.rmFavorite(name)
-elif mode==108: xbmc.executebuiltin('ActivateWindow(10134,return)')#mv.GetFavourites()
-elif mode==109: mv.Movies()
-elif mode==110: mv.TV()
 elif mode==111: mk4.ReduceImageSize()
     
     

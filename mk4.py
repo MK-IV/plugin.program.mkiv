@@ -1,5 +1,5 @@
 """
-    Copyright (C) 2016 MK-IV Wizard
+    Copyright (C) 2017 MK-IV Wizard
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -52,11 +52,11 @@ repo1=xbmc.translatePath(os.path.join('special://home/addons/' , 'repository.mki
 H='http://'
 Hs='https://'
 skin=xbmc.getSkinDir()
-EXCLUDES=['BackgroundsBackup.zip','kodi.log','script.areswizard','plugin.program.mkiv','plugin.program.mkiv-master','script.module.addon.common','autoexec.py','service.xbmc.versioncheck','metadata.tvdb.com','metadata.common.imdb.com']
+EXCLUDES=['BackgroundsBackup.zip','kodi.log','script.areswizard','sources.xml','favourites.xml','plugin.program.mkiv','plugin.program.mkiv-master','script.module.addon.common','autoexec.py','service.xbmc.versioncheck','metadata.tvdb.com','metadata.common.imdb.com']
 BackupPath=ADDON.getSetting('backup')
 fullbackuppath=xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
 WorkPath=ADDON.getSetting('MK4WorkFolder')
-fullworkpath=xbmc.translatePath(os.path.join(WorkPath,'KODI Work Folder'))
+fullworkpath=xbmc.translatePath(os.path.join(WorkPath,'/KODI Work Folder/'))
 Downloader=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'downloader.py'))
 Extractor=xbmc.translatePath(os.path.join('special://home/addons/'+ addon_id , 'extract.py'))
 Local=xbmc.translatePath(os.path.join('special://home/addons/',addon_id))
@@ -106,10 +106,12 @@ InstallRepo=ADDON.getSetting('InstallRepo')
 ShowAdult=ADDON.getSetting('ShowAdult')
 AutoUpdate=ADDON.getSetting('AutoUpdate')
 AutoUpdateClean=ADDON.getSetting('AutoUpdateClean')
+SettingsFile=xbmc.translatePath(os.path.join(ADDON_DATA+addon_id,'settings.xml'))
 JARVIS=xbmc.translatePath(os.path.join('special://home/','JARVIS.xml'))
 KODI16=xbmc.translatePath(os.path.join('special://home/userdata/Database/','Addons20.db'))
 Addons20=xbmc.translatePath(os.path.join('special://home/userdata/Database/','Addons20.db'))
 Addons26=xbmc.translatePath(os.path.join('special://home/userdata/Database/','Addons26.db'))
+Addons27=xbmc.translatePath(os.path.join('special://home/userdata/Database/','Addons27.db'))
 Database=xbmc.translatePath(os.path.join('special://home/userdata/','Database/'))
 FreshStart=xbmc.translatePath(os.path.join('special://home/addons/' + addon_id + '/resources/', 'FreshStart.db'))
 Textures13=xbmc.translatePath(os.path.join('special://home/userdata/Database/','Textures13.db'))
@@ -144,7 +146,6 @@ def INDEX(): #1
         PlayerWindow=xbmcgui.Window(12005)
         PlayerWindow.close()
         addDir('[B][COLOR red]MK-IV [/COLOR][COLOR deepskyblue]Build Menu[/COLOR][/B]','JVtHtoiKYAE',100,ICON,FANART,'','')
-        addDir('[B][COLOR dodgerblue]MK-IV [/COLOR][COLOR white]Video[/COLOR][/B]','JVtHtoiKYAE',87,ICON,FANART,'','')
         #addDir('[B][COLOR red]BUILDS[/B]',BASEURL,20,ART+'builds.png',FANART,'','')
         myplatform = platform()            
         if myplatform == 'android':
@@ -166,7 +167,7 @@ def INDEX(): #1
         addItem('[B][COLOR yellow]Contact Form[/COLOR][/B]','http://www.mkiv.ca/contact.html',19,'http://downloadicons.net/sites/default/files/contacts-icon-14474.png',FANART,'')
         addItem('[B][COLOR deepskyblue]View Changelog[/COLOR][/B]',BASEURL,58,'http://www.workschedule.net/wp-content/uploads/2014/08/changelog1.png',FANART,'')
         addItem('[COLOR yellow][B]Settings[/B][/COLOR]',BASEURL,30,'https://s-media-cache-ak0.pinimg.com/564x/c7/d6/9a/c7d69ab67de8553c02c0555409267b90.jpg',FANART,'')
-        addItem('[COLOR deepskyblue][B]Force update check[/B][/COLOR]',BASEURL,79,ICON,FANART,'')
+        addItem('[COLOR deepskyblue][B]Force update check[/B][/COLOR]  (Database Version: '+version+')',BASEURL,79,ICON,FANART,'')
         addItem('[B][COLOR yellow]Reset [/COLOR][/B]'+Title+'[B][COLOR yellow] Settings[/COLOR][/B]','service.xbmc.versioncheck',82,ICON,FANART,'')
         addItem('[B][/B]','service.xbmc.versioncheck',666,ICON,FANART,'')
         if myplatform == 'android':
@@ -217,31 +218,31 @@ def BUILDERS():
     addItem('[B]Force Close[/B]',BASEURL,28,'http://dreadpirate.info/images/jollyroger2.jpg',FANART,'')
 
 def BackupMenu():
-    addItem('[COLOR dodgerblue][B]Universal Backup[/B][/COLOR]',BASEURL,12,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
+    addItem('[B]Universal Backup[/B]',BASEURL,12,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(fullbackuppath):
         try:
             for file in os.listdir(fullbackuppath):
-                path=os.path.abspath(os.path.join(fullbackuppath, file))
+                path=os.path.join(fullbackuppath, file)
                 if file.endswith('.zip'):    
-                    addItem('[COLOR deepskyblue][B]Restore [/COLOR][COLOR white]'+file+'[/B][/COLOR]',path,9,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
+                    addItem('[B]Restore '+file+'[/B]',path,9,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
                     pass
         except: pass
 
-    addItem('[COLOR deepskyblue][B]Choose Restore Location[/B][/COLOR]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
-    addItem('[COLOR dodgerblue][B]Backup Skin Settings[/B][/COLOR]',BASEURL,59,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
+    addItem('[B]Choose Restore Location[/B]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
+    addItem('[B]Backup Skin Settings[/B]',BASEURL,59,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(SkinSettingsBackup):
-        addDir('[COLOR deepskyblue][B]Restore Skin Settings[/B][/COLOR]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
+        addDir('[B]Restore Skin Settings[/B]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
         addItem('[B][/B]',BASEURL,0,'',FANART,'')
-        addItem('[B][COLOR red]Delete Skin Settings Backup[/COLOR][/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+        addItem('[B][COLOR white]Delete Skin Settings Backup[/COLOR][/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
     else: pass
     if os.path.exists(fullbackuppath):
         try:
             for file in os.listdir(fullbackuppath):
                 path=os.path.join(fullbackuppath, file)
                 if file.endswith('.zip'):
-                    addItem('[B][COLOR orangered]Delete [/COLOR][COLOR white]'+file+'[/COLOR][/B]',path,53,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+                    addItem('[B][COLOR white]Delete '+file+'[/COLOR][/B]',path,53,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
         except: pass
-        addItem('[B][COLOR red]Delete all Backups[/COLOR][/B]',BASEURL,73,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+        addItem('[B][COLOR white]Delete all Backups[/COLOR][/B]',BASEURL,73,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
 
 def RepoMenu(): #36
     addItem('[COLOR yellow][B]Sources will appear on next start[/B][/COLOR]','http://get.mkiv.ca',42,ICON,FANART,'')
@@ -429,7 +430,6 @@ def AddonMenu():
         addItem('The Beast Wizard','http://thebeast1.com/repo/plugin.video.beast.zip',10,'https://seo-michael.co.uk/content/images/2016/05/beastfeat.jpg',FANART,'plugin.video.beast')
         addItem('Exodus','https://offshoregit.com/exodus/plugin.video.exodus/plugin.video.exodus-2.0.20.zip',10,'https://www.tvaddons.ag/kodi-addons/cache/images/f045187f652aaf04c824430ae1c4d3_icon.png',FANART,'plugin.video.exodus')
         addItem('Phoenix','https://offshoregit.com/xbmchub/xbmc-hub-repo/raw/master/plugin.video.phstreams/plugin.video.phstreams-3.1.15.zip',10,'https://www.tvaddons.ag/kodi-addons/cache/images/16ddd0b9ea1501f7cb5dcefffac205_icon.png',FANART,'plugin.video.phstreams')
-        addItem('Renegades TV','http://offshoregit.com/Renegades/repo/zips/script.renegadestv/script.renegadestv-2.0.6.zip',10,'https://www.tvaddons.ag/kodi-addons/cache/images/3df0631430c0e9921e691f489e2249_icon.png',FANART,'script.renegadestv')
         addItem('Sports Devil','https://offshoregit.com/unofficialsportsdevil/plugin.video.SportsDevil/plugin.video.SportsDevil-2016.10.10.zip',10,'https://www.tvaddons.ag/kodi-addons/cache/images/bd425777762040073f0077dc9838d8_icon.png',FANART,'plugin.video.SportsDevil')
         #addItem('[B]Hue Ambilight Controller[/B]','https://github.com/koying/script.kodi.hue.ambilight/archive/develop.zip',10,'mkiv4.png',FANART,'')
         #addItem('[B]Hue Ambilight Controller[/B]','https://github.com/koying/script.kodi.hue.ambilight/archive/develop.zip',10,'mkiv4.png',FANART,'')
@@ -508,7 +508,7 @@ def GetAceStream():
         dialog = xbmcgui.Dialog()
         if dialog.yesno(Title, 'The AceStream Engine is required to play some sports section content.', 'After its installed sign into the app and thats it.','Would you like to download and install now?', nolabel='SKIP',yeslabel='Yes'):
             if dialog.yesno(Title, 'Is your Android device x86 or ARM based', '','(If your not sure try ARM first)', nolabel='ARM',yeslabel='x86'):
-                INSTALLAPK('acestreamsx86','https://archive.org/download/aappkk/AcePlayer-3.0.6-2in1.apk','')
+                INSTALLAPK('acestreamsx86','https://archive.org/download/aappkk/AceStream-3.1.6.0-x86.apk','')
                     #mk4.INSTALLAPK('acestreams','http://dl.acestream.org/products/acestream-engine/android/latest','')
             else:
                 INSTALLAPK('acestreamsARM','https://archive.org/download/aappkk/AceStream-3.1.6.0-armv7.apk','')
@@ -659,11 +659,11 @@ def SetSetting(id, value):
     ADDON.setSetting(id, value)
 
 def TriggerMigration():
-    f = open(Addons26, mode='w')
+    f = open(Addons27, mode='w')
     f.write('Wiped')
     f.close()
     try:
-        os.remove(Addons26)
+        os.remove(Addons27)
         os.remove(Textures13)
     except: pass
     
@@ -674,19 +674,19 @@ def UpdateKryptonDB():
     except: 
         pass 
     try:
-        conn = sqlite3.connect(Addons26)
+        conn = sqlite3.connect(Addons27)
         cursor = conn.cursor()
 
         sql = """
         UPDATE version 
         SET idVersion = '20' 
-        WHERE idVersion = '26'
+        WHERE idVersion = '27'
         """
         cursor.execute(sql)
         conn.commit()
         time.sleep(1)
 
-        shutil.copy(Addons26,Addons20)
+        shutil.copy(Addons27,Addons20)
         try:
             os.remove(Textures13)
         except: pass
@@ -701,12 +701,12 @@ def RemoveTrigger():
             except: pass
         else: 
             pass 
-        conn = sqlite3.connect(Addons26)
+        conn = sqlite3.connect(Addons27)
         cursor = conn.cursor()
 
         sql = """
         UPDATE version 
-        SET idVersion = '26' 
+        SET idVersion = '27' 
         WHERE idVersion = '20'
         """
         cursor.execute(sql)
@@ -715,7 +715,7 @@ def RemoveTrigger():
     except: pass
 def EnableAll():
     try:
-        conn = sqlite3.connect(Addons26)
+        conn = sqlite3.connect(Addons27)
         cursor = conn.cursor()
 
         sql = """
@@ -1029,12 +1029,12 @@ def FIX_SPECIAL():
     myplatform = platform()            
     if myplatform == 'android':
         userpath="/storage/emulated/0/"
-    elif myplatform == 'osx':
-        userpath=xbmc.translatePath('special://home/').replace('/Library/Application Support/Kodi','')
+    elif myplatform != 'osx':
+        UserPath=ADDON.getSetting('UserPath')
     elif myplatform == 'linux':
-        userpath=xbmc.translatePath('special://home/').replace('/.kodi','')
+        UserPath=ADDON.getSetting('UserPath')
     elif myplatform == 'windows':
-        userpath=xbmc.translatePath('special://home/').replace('/AppData/Roaming/Kodi','')
+        UserPath=ADDON.getSetting('UserPath')
     else: pass
     urlUSERDATA=urllib.quote_plus(USERDATA)
     urlADDONS=urllib.quote_plus(ADDONS)
@@ -1076,20 +1076,6 @@ def FIX_SPECIAL():
                         f = open((os.path.join(root, file)), mode='w')
                         f.write(str(b))
                         f.close()
-    for root, dirs, files in os.walk(HOME):
-        for file in files: 
-            if file.endswith(".pyo"):
-                     dp.update(0,"Cleaning files: ",file, 'Please Wait')
-                     killfile=os.path.join(root, file)
-                     try: os.remove(killfile)
-                     except BaseException as e: pass
-    for root, dirs, files in os.walk(HOME):
-        for file in files: 
-            if file.endswith(".pyc"):
-                     dp.update(0,"Cleaning files: ",file, 'Please Wait')
-                     killfile=os.path.join(root, file)
-                     try: os.remove(killfile)
-                     except BaseException as e: pass
     if os.path.exists:
         try:
             if userpath in open(SkinSettingsXML).read():
@@ -1378,7 +1364,6 @@ def DeleteThumbnails():
     except: 
         dialog = xbmcgui.Dialog()
         dialog.ok(Title, "Sorry we were not able to remove Thumbnail Files", "")
-    Toast('Thumbnails Cleared!')
     xbmc.executebuiltin("Container.Refresh")
 
 def Delete_Logs():  
@@ -1785,8 +1770,7 @@ def unzip(_in, _out, dp):
 def MakePointerFile():
     if not os.path.exists(WorkPath):
         if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
-            Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
-            SetSetting('MK4WorkFolder',Workfolder)
+            Addon_Settings()
             pass
         else:
             return False, 0
@@ -1794,7 +1778,7 @@ def MakePointerFile():
         pass 
     xbmc.log('================  MK-IV Wizard  ================')
     xbmc.log('===========  Making A Pointer File  ============')
-    fullworkpath = xbmc.translatePath(os.path.join(WorkFolder,'KODI Work Folder/'))
+    fullworkpath = xbmc.translatePath(os.path.join(WorkFolder,'/KODI Work Folder/'))
     if not os.path.exists(fullworkpath):
         os.makedirs(fullworkpath)
     #if xbmcgui.Dialog().yesno(Title, 'A tutorial video is available for this section.', 'Would you like to see it?','', nolabel='SKIP',yeslabel='YES'):
@@ -1907,8 +1891,7 @@ def MakePointerFile():
 def MakeRssFile():
     if not os.path.exists(WorkPath):
         if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
-            Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
-            SetSetting('MK4WorkFolder',Workfolder)
+            Addon_Settings()
             pass
         else:
             return False, 0
@@ -1916,7 +1899,7 @@ def MakeRssFile():
         pass    
     xbmc.log('================  MK-IV Wizard  ================')
     xbmc.log('===========  Started Making RSS File ===========')  
-    fullworkpath = xbmc.translatePath(os.path.join(WorkFolder,'KODI Work Folder'))
+    fullworkpath = xbmc.translatePath(os.path.join(WorkFolder,'/KODI Work Folder/'))
     if not os.path.exists(fullworkpath):
         os.makedirs(fullworkpath)
     vqname = _get_keyboard(heading="Enter a Title for your rss feed" )
@@ -1951,16 +1934,14 @@ def MakeRssFile():
 def BuildAWizard():
     if not os.path.exists(WorkPath):
         if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
-            Workfolder=xbmcgui.Dialog().browse(0,'Choose your Work folder','files')
-            SetSetting('MK4WorkFolder',Workfolder)
-            pass
+			Addon_Settings()
         else:
             return False, 0    
     else:
         pass      
     xbmc.log('================  MK-IV Wizard  ================')
     xbmc.log('==========  Starting Build-A-Wizard  ===========')
-    fullworkpath = xbmc.translatePath(os.path.join(WorkFolder,'KODI Work Folder'))
+    fullworkpath = xbmc.translatePath(os.path.join(WorkFolder,'/KODI Work Folder/'))
     if not os.path.exists(fullworkpath):
         os.makedirs(fullworkpath)
     dialog = xbmcgui.Dialog()
@@ -2140,19 +2121,37 @@ def BuildAWizard():
     sys.exit()
 
 def MKIVWIZARD():
-    try:
-        link = OPEN_URL('https://mk-iv.github.io/Pointer/').replace('\n','').replace('\r','')
-        match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
-        for name,url,iconimage,fanart,description,version in match:
-            addDir(name,url,27,iconimage,fanart,description,version)
-    except:
-        try:
-            link = OPEN_URL('http://wizard.mkiv.ca').replace('\n','').replace('\r','')
-            match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
-            for name,url,iconimage,fanart,description,version in match:
-                addDir(name,url,27,iconimage,fanart,description,version)
-        except:
-            Toast('The MK-IV servers are down at the moment. Please try again later.')
+	if ADDON.getSetting('KodiVersion')=='Krypton':
+		try:
+			link = OPEN_URL('https://mk-iv.github.io/kRYPTON').replace('\n','').replace('\r','')
+			match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
+			for name,url,iconimage,fanart,description,version in match:
+				addDir(name,url,27,iconimage,fanart,description,version)
+		except:
+			try:
+			  	link = OPEN_URL('https://mk-iv.github.io/Pointer/').replace('\n','').replace('\r','')
+				match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
+				for name,url,iconimage,fanart,description,version in match:
+					addDir(name,url,27,iconimage,fanart,description,version)
+			except:
+				Toast('The MK-IV servers are down at the moment. Please try again later.')
+	elif ADDON.getSetting('KodiVersion')=='Jarvis':
+		try:
+			link = OPEN_URL('https://mk-iv.github.io/jARVIS').replace('\n','').replace('\r','')
+			match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
+			for name,url,iconimage,fanart,description,version in match:
+				addDir(name,url,27,iconimage,fanart,description,version)
+		except:
+			try:
+				link = OPEN_URL('https://mk-iv.github.io/Pointer/').replace('\n','').replace('\r','')
+				match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
+				for name,url,iconimage,fanart,description,version in match:
+					addDir(name,url,27,iconimage,fanart,description,version)
+			except:
+				Toast('The MK-IV servers are down at the moment. Please try again later.')
+	else:
+		xbmcgui.Dialog().ok(Title,'Sorry, MK-IV is currently only available for Jarvis and Krypton')
+		sys.exit(0)
 
 def DONATE():
     OpenWebpage('http://paypal.me/mkiv')
@@ -2617,7 +2616,9 @@ def WIZARD(name,url,version):
     downloader.download(url, lib, dp)
     addonfolder = xbmc.translatePath(os.path.join('special://','home'))
     if ADDON.getSetting('KodiVersion')=='Krypton':
-        dp.update(0,"Downloading [COLOR white]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Applying Patch...", '')
+        dp.update(0,"Downloading [COLOR white]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Extracting...")
+        pass
+    	'''dp.update(0,"Downloading [COLOR white]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Applying Patch...", '')
         path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
         reqzip=os.path.join(path,'requests.zip')
         try:
@@ -2635,7 +2636,7 @@ def WIZARD(name,url,version):
         except BaseException as e:
             pass
         dp.update(0,"Applying Patch...[COLOR lime]DONE[/COLOR]","Extracting...")
-        pass
+        pass'''
     else:
         dp.update(0,"Downloading [COLOR white]"+name+"[/COLOR]... [COLOR lime]DONE[/COLOR]","Extracting...")
         pass
@@ -2900,7 +2901,7 @@ def DeleteSkinBackup():
 
 def ReduceImageSize(): # Will add slider to choose > file size and int(quality)
     from PIL import Image
-    dp.create(Title,"Reducung Image Sizes...",'[COLOR deepsky][/COLOR]', '')
+    dp.create(Title,"Reducing Image Sizes...",'[COLOR deepsky][/COLOR]', '')
     for root, dirs, files in os.walk(ADDONS):  #Search all png then optimize and reduce pixels by 60% if file larger than 800kb (keeps ratio)
         for file in files:
             if file.endswith(".png"):
@@ -3186,118 +3187,103 @@ def DeleteMK4BackgroundsBackup():
     xbmc.executebuiltin("Container.Refresh")
 
 def NewSession():
-    if ADDON.getSetting('NewSession') == 'true':
-        try:
-            Toast('Welcome back to the '+Title)
-            myplatform = platform()            
-            if myplatform == 'android':
-                if BackupPath=="":
-                    SetSetting("backup","/storage/emulated/0/")
-                    RepoAction('Android Device', '/storage/emulated/0/')
-                    pass
-                else: pass
-                if WorkPath=="":  
-                    SetSetting("MK4WorkFolder","/storage/emulated/0/")
-                    pass
-                else: pass
-            elif myplatform == 'osx':
-                if BackupPath=="": 
-                    SetSetting('backup',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/Library/Application Support/Kodi',''))
-                    RepoAction('Desktop',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/Library/Application Support/Kodi',''))
-                    pass
-                else: pass
-                if WorkPath=="": 
-                    SetSetting('MK4WorkFolder',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/Library/Application Support/Kodi',''))
-                    pass
-                else: pass 
-            elif myplatform == 'linux':
-                if BackupPath=="": 
-                    SetSetting('backup',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/.kodi',''))
-                    RepoAction('Desktop',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/.kodi',''))
-                    pass
-                else: pass
-                if WorkPath=="": 
-                    SetSetting('MK4WorkFolder',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/.kodi',''))
-                    pass
-                else: pass
-            elif myplatform == 'windows':
-                if BackupPath=="": 
-                    SetSetting('backup',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/AppData/Roaming/Kodi',''))
-                    RepoAction('Desktop',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/AppData/Roaming/Kodi',''))
-                    pass
-                else: pass
-                if WorkPath=="": 
-                    SetSetting('MK4WorkFolder',xbmc.translatePath(os.path.join('special://home/','Desktop/')).replace('/AppData/Roaming/Kodi',''))
-                    pass
-                else: pass
-            else: pass
-        except: pass
-
-        '''if os.path.exists(repo1):
-            pass
-        else:
-            if InstallRepo=='true':
-                xbmc.log('================  MK-IV Wizard  ================')
-                xbmc.log('========  Installing MK-IV Repository  =========')
-                xbmc.log('================================================')
-                try:
-                    ADDONWIZ('Repo', 'https://github.com/MK-IV/repository.mkiv/archive/master.zip', 'none')
-                    pass
-                except:
-                    pass
-            else:
-                pass
-
-            if AutoUpdate=='true':
-                if not os.path.exists(Slave):
-                    xbmc.log('=====================  MK-IV Wizard  =====================')
-                    xbmc.log('========  Installing MK-IV Slave (Auto-Updater)  =========')
-                    xbmc.log('==========================================================')
-                    ADDONWIZ('Slave', 'https://github.com/MK-IV/script.mkiv/archive/2.0.zip', 'none')
-                    pass
-                else:
-                    pass'''
-                    
-        SetSetting('NewSession','false')
-        paths = ADDON.getSetting("backup")
-        time.sleep(1)
-        Toast('Backup folder set to: '+paths)
-        #try:
-        dp = xbmcgui.DialogProgress()
-        dp.create(Title,'Checking for updates...','', 'Please Wait')
-        link = OPEN_URL('https://raw.githubusercontent.com/MK-IV/plugin.program.mkiv/master/addon.xml').replace('\n','').replace('\r','')
-        match = re.compile('id="(.+?)".+?ame="(.+?)".+?ersion="(.+?)"').findall(link)  
-        for id, name, version in match:
-            xbmc.log('version='+version+' Addon='+ADDON.getAddonInfo("version")+'')
-            if version > ADDON.getAddonInfo('version'):
-                #try:
-                path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
-                dp = xbmcgui.DialogProgress()
-                dp.create(Title,'Downloading '+Title+' update...','', 'Please Wait')
-                lib=os.path.join(path, 'plugin.program.mkiv-master.zip')
-                try:
-                    os.remove(lib)
-                except:
-                    pass
-                downloader.download('https://github.com/MK-IV/plugin.program.mkiv/archive/master.zip', lib, dp)
-                dp.update(0,'Downloading '+Title+' update... [COLOR lime]Finished[/COLOR]', 'Installing...')
-                extract.all(lib,ADDONS,dp)
-                time.sleep(.5)
-                try:
-                    os.remove(lib)
-                except:
-                    pass
-                os.rename(Local,Localtmp)
-                os.rename(Master,Local)
-                shutil.rmtree(Localtmp)
-                time.sleep(1)
-                DeleteThumbnails()
-                xbmc.executebuiltin('Container.Refresh')
-                #xbmcgui.Dialog().ok(Title,Title+' Restart required...','','Press OK to close the add-on')
-                #sys.exit(0)
-                #except: pass
-            else: pass
-        #except: pass
+	if ADDON.getSetting('NewSession') == 'true':
+		try:
+			Toast('Welcome back to the '+Title)
+			myplatform = platform()            
+			if myplatform == 'android':
+				if BackupPath=="":
+					SetSetting('UserPath','/storage/emulated/0/')
+					SetSetting("backup","/storage/emulated/0/")
+					RepoAction('Android Device', '/storage/emulated/0/')
+					if WorkPath=="":  
+						SetSetting("MK4WorkFolder","/storage/emulated/0/")
+						pass
+					else: pass
+				else: pass
+			elif myplatform == 'osx':
+				SetSetting('UserPath',HOME)
+				time.sleep(.5)
+				UserPath=ADDON.getSetting('UserPath')
+				UserPath=UserPath.replace('/Library/Application Support/Kodi','')
+				if BackupPath=="": 
+					SetSetting('backup',UserPath+'Desktop/')
+					RepoAction('Desktop',UserPath+'Desktop/')
+					if WorkPath=="": 
+						SetSetting('MK4WorkFolder',UserPath+'Desktop/')
+						pass
+					else: pass
+				else: pass
+			elif myplatform == 'linux':
+				SetSetting('UserPath',HOME)
+				time.sleep(.5)
+				UserPath=ADDON.getSetting('UserPath')
+				UserPath=UserPath.replace('/.kodi','')
+				if BackupPath=="": 
+					SetSetting('backup',UserPath+'Desktop/')
+					RepoAction('Desktop',UserPath+'Desktop/')
+					if WorkPath=="": 
+						SetSetting('MK4WorkFolder',UserPath+'Desktop/')
+						pass
+					else: pass
+				else: pass
+			elif myplatform == 'windows':
+				SetSetting('UserPath',HOME)
+				time.sleep(.5)
+				UserPath=ADDON.getSetting('UserPath')
+				UserPath=UserPath.replace('\\AppData\\Roaming\\Kodi','')
+				SetSetting('UserPath',UserPath)
+				time.sleep(1) 
+				if BackupPath=="": 
+					SetSetting('backup',UserPath+'Desktop\\')
+					RepoAction('Desktop',UserPath+'Desktop\\')
+					if WorkPath=="": 
+						SetSetting('MK4WorkFolder',UserPath+'Desktop\\')
+						pass
+					else: pass
+				else: pass
+			else: pass
+		except: pass 
+		SetSetting('NewSession','false')
+		paths = ADDON.getSetting("backup")
+		time.sleep(1)
+		Toast('Backup folder set to: '+paths)
+		#try:
+		dp = xbmcgui.DialogProgress()
+		dp.create(Title,'Checking for updates...','', 'Please Wait')
+		link = OPEN_URL('https://raw.githubusercontent.com/MK-IV/plugin.program.mkiv/master/addon.xml').replace('\n','').replace('\r','')
+		match = re.compile('id="(.+?)".+?ame="(.+?)".+?ersion="(.+?)"').findall(link)  
+		for id, name, version in match:
+			xbmc.log('version='+version+' Addon='+ADDON.getAddonInfo("version")+'')
+			if version > ADDON.getAddonInfo('version'):
+				#try:
+				path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
+				dp = xbmcgui.DialogProgress()
+				dp.create(Title,'Downloading '+Title+' update...','', 'Please Wait')
+				lib=os.path.join(path, 'plugin.program.mkiv-master.zip')
+				try:
+					os.remove(lib)
+				except:
+					pass
+				downloader.download('https://github.com/MK-IV/plugin.program.mkiv/archive/master.zip', lib, dp)
+				dp.update(0,'Downloading '+Title+' update... [COLOR lime]Finished[/COLOR]', 'Installing...')
+				extract.all(lib,ADDONS,dp)
+				time.sleep(.5)
+				try:
+					os.remove(lib)
+				except:
+					pass
+				os.rename(Local,Localtmp)
+				os.rename(Master,Local)
+				shutil.rmtree(Localtmp)
+				time.sleep(1)
+				DeleteThumbnails()
+				xbmc.executebuiltin('Container.Refresh')
+				#xbmcgui.Dialog().ok(Title,Title+' Restart required...','','Press OK to close the add-on')
+				#sys.exit(0)
+				#except: pass
+			else: pass
+		#except: pass
         
 def Check4Update():
     try:
@@ -3354,6 +3340,43 @@ def Check4Update():
                 else: pass
     except: pass
 
+
+def RequiredUpdate():
+	try:
+		LockXbmc()
+		BuildName = 'MK-IV'
+		link = OPEN_URL('https://MK-IV.github.io/Check4Updates').replace('\n','').replace('\r','')
+		match = re.compile('name="(.+?)".+?rl="(.+?)".+?ersion="(.+?)"').findall(link)
+		for name,url,version in match:
+			if name == BuildName:
+				path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
+				dp = xbmcgui.DialogProgress()        
+				dp.create(Title,'Downloading '+name+'... ')
+				lib=os.path.join(path, name+'.zip')
+				try:
+					os.remove(lib)
+				except:
+					pass
+				downloader.download(url, lib, dp)
+				addonfolder = xbmc.translatePath(os.path.join('special://','home'))
+				time.sleep(.5)
+				dp.update(0,'Downloading [COLOR white]'+name+'[/COLOR] --- [COLOR lime]DONE[/COLOR]','Applying changes...')
+				try: 
+					extract.all(lib,addonfolder,dp)
+				except BaseException as e:
+					pass 
+				SetSetting('BuildVersion',version)
+				time.sleep(.5)
+				try:
+					os.remove(lib)
+				except:
+					pass
+				UnlockXbmc()
+				killxbmc()
+	except:
+		UnlockXbmc()
+		pass
+
 def MK4WizUpdate():
     #try:
         dp = xbmcgui.DialogProgress()
@@ -3409,7 +3432,7 @@ def UpdateSwitch():
         Toast('AutoUpdate [COLOR red]Disabled[/COLOR] for '+build)
         xbmc.executebuiltin('Container.Refresh')
     else:
-        Toast('[COLOR orangered]Feature is not available[/COLOR]')
+        Toast('[COLOR orangered]Feature is not available on your current set-up[/COLOR]')
         
 def ResetMK4Settings():
     SetSetting('backup','')

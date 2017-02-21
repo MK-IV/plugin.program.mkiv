@@ -1,9 +1,12 @@
-Coming next...
-    Fixes for the known issues
-    MK-IV Video makeover
-    Killer to stop built in player from playing when window is not top most
-    Whatever comes up for requests
-
+v2017.2.20
+    Removed MK-IV Video.
+    Removed Thumbnails Cleared notification.
+    Fixed Backup and Work path settings to direct to the current users desktop by default on windows and macs, instead of the home folder. (whoops)
+    Changed addon enabler to accomadate recent Kodi release update.
+    Added auto-updater trigger to automatically install MK-IV Krypton if MK-IV Jarvis is detected as installed while running Kodi 17.
+    Updated source code for Build-A-Wizard to include a Fresh Start option.
+    Fresh Start no longer wipes users favourites or sources.
+    
 
 v2016.12.18
     Added Repository builder to BuildAWizard Section
