@@ -281,10 +281,10 @@ def BuildAWizardMenu():
 
 def BuildARepoMenu():
     Addonsxml = xbmc.translatePath(os.path.join(fullworkpath, 'Repository/addons.xml'))
-    addItem('[B]Make a Repository[/B]',BASEURL,30,'http://asiaglobaltechnology.my/images/equella%20digital%20repository.png',FANART,'')
-    addItem('[B]Make a Repo Add-on[/B]',BASEURL,30,'http://more-sky.com/data/out/8/IMG_258740.jpg',FANART,'')
+    addItem('[B]Make a Repository[/B]',BASEURL,86,'http://asiaglobaltechnology.my/images/equella%20digital%20repository.png',FANART,'')
+    addItem('[B]Make a Repo Add-on[/B]',BASEURL,97,'http://more-sky.com/data/out/8/IMG_258740.jpg',FANART,'')
     if os.path.exists(Addonsxml):
-        addItem('[B]Update Repository[/B]',BASEURL,30,'http://www.komando.com/wp-content/uploads/2015/04/update2-970x546.jpg',FANART,'')
+        addItem('[B]Update Repository[/B]',BASEURL,98,'http://www.komando.com/wp-content/uploads/2015/04/update2-970x546.jpg',FANART,'')
     else: pass
     
 def ToolsMenu():
@@ -1769,7 +1769,7 @@ def unzip(_in, _out, dp):
     return True
 
 def MakePointerFile():
-    if not os.path.exists(WorkPath):
+    if not os.path.exists(WorkPath) or WorkPath == "":
         if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
             Addon_Settings()
             pass
@@ -1890,7 +1890,7 @@ def MakePointerFile():
     sys.exit()
 
 def MakeRssFile():
-    if not os.path.exists(WorkPath):
+    if not os.path.exists(WorkPath) or WorkPath == "":
         if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
             Addon_Settings()
             pass
@@ -1933,7 +1933,7 @@ def MakeRssFile():
         sys.exit()
 
 def BuildAWizard():
-    if not os.path.exists(WorkPath):
+    if not os.path.exists(WorkPath) or WorkPath == "":
         if xbmcgui.Dialog().yesno(Title,'You need to select a Work Folder in Settings first.','','Choose your work folder now?'):
 			Addon_Settings()
         else:
