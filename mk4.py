@@ -101,6 +101,7 @@ skin=xbmc.getSkinDir()
 userdatafolder=xbmc.translatePath(os.path.join(ADDON_DATA,AddonID))
 urlbase='None'
 mk4g='MarkFourG/'
+Installer=xbmc.translatePath('special://home/addons/plugin.program.mkiv-installer')
 password=ADDON.getSetting('password')
 InstallRepo=ADDON.getSetting('InstallRepo')
 ShowAdult=ADDON.getSetting('ShowAdult')
@@ -3623,7 +3624,12 @@ def RepoUpdater():
     b=hashlib.md5(str(a)).hexdigest()
     WriteFile(Addonsxmlmd5,str(b))
     xbmcgui.Dialog().ok(Title,'[COLOR white]Repository update complete[/COLOR]')
-                
+    
+def RemoveInstaller():
+    try:
+        shutil.rmtree(Installer)
+    except: pass
+
 def RepoAddon():
     dialog = xbmcgui.Dialog()
     dialog.ok('Step 1 of 7: Entering an ID for your repository','The id is your addons xbmc ID... i.e. repository.<your_id_here>','')

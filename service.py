@@ -16,6 +16,7 @@ dialog = xbmcgui.Dialog()
 Addons20 = xbmc.translatePath(os.path.join('special://home/userdata/Database/','Addons20.db'))
 ART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id + '/resources/art/'))
 phoenix = xbmc.translatePath(os.path.join('special://home/addons/','plugin.video.phstreams'))
+Installer=xbmc.translatePath('special://home/addons/plugin.program.mkiv-installer')
 AresTracker = xbmc.translatePath(os.path.join('special://home/userdata/addon_data/script.areswizard/','buildinstall'))
 RequestPatch=xbmc.translatePath(os.path.join('special://home/addons/script.module.requests/lib/requests/','packages'))
 skin=xbmc.getSkinDir()
@@ -67,16 +68,19 @@ else: pass
 if not os.path.exists(MK4Notifications):
     mk4.SetSetting('MK4Build', 'false')
     pass
-elif os.path.exists(MK4Notifications):
+else:
     mk4.SetSetting('MK4Build', 'true')
     pass
-else: pass
 
 if ADDON.getSetting('InstallRepo') == 'true':
     repo.InstallRepo
     pass
 else: pass
  
+if os.path.exists(Installer):
+    mk4.RemoveInstaller()
+    pass
+
 if os.path.exists(AresTracker):
     a=open(AresTracker).read()	
     b=a.replace('\n','').replace('\r','').replace('{"canupdate": ','canupdate=').replace(', "guisettingssize": ',' guisettingssize=').replace(', "wizardname": ',' wizardname=').replace(', "installedversion": ',' installedversion=').replace(', "buildurl": ',' buildurl=').replace(', "buildname": ',' buildname=').replace('}','')
