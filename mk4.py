@@ -2122,7 +2122,9 @@ def BuildAWizard():
     sys.exit()
 
 def MKIVWIZARD():
-	if ADDON.getSetting('KodiVersion')=='Krypton':
+	xbmc_version=xbmc.getInfoLabel("System.BuildVersion")
+	version=float(xbmc_version[:4])
+	if version >= 17.0 and version <= 17.9:
 		try:
 			link = OPEN_URL('https://mk-iv.github.io/kRYPTON').replace('\n','').replace('\r','')
 			match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
@@ -2136,7 +2138,7 @@ def MKIVWIZARD():
 					addDir(name,url,27,iconimage,fanart,description,version)
 			except:
 				Toast('The MK-IV servers are down at the moment. Please try again later.')
-	elif ADDON.getSetting('KodiVersion')=='Jarvis':
+	elif version >= 16.0 and version <= 16.9:
 		try:
 			link = OPEN_URL('https://mk-iv.github.io/jARVIS').replace('\n','').replace('\r','')
 			match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)".+?ersion="(.+?)"').findall(link)
