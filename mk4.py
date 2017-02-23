@@ -1553,10 +1553,10 @@ def INSTALL_FANRIFFIC(name,url,description):
     addonfolder = xbmc.translatePath(os.path.join('special://','home'))
     dp.update(0,'Downloading' + themename +'...',"Extracting Zip Please Wait","")
     unzip(lib,addonfolder,dp)
-    if Addon.getSetting('KodiVersion','Krypton'):
-        EnableAll()
-        pass
-    else: pass
+    #if ADDON.getSetting('KodiVersion','Krypton'):
+    #    EnableAll()
+    #    pass
+    #else: pass
     dialog = xbmcgui.Dialog()
     dialog.ok(Title, "The theme has now been installed. To save the changes you must now force close the Media Center.")
     killxbmc()
