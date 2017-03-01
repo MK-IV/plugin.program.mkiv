@@ -1421,7 +1421,8 @@ def ARCHIVE_CB(sourcefile, destfile, message_header, message1, message2, message
                    if FILE_DATE > FORCE:
                        zipobj.write(fn, fn[rootlen:])  
     zipobj.close()
-    dp.close()                              
+    dp.close()
+    time.sleep(1)                              
 
 def UNIVERSAL_BACKUP():
     Delete_Logs()
@@ -2676,13 +2677,13 @@ def WIZARD(name,url,version):
  #   xbmc.executebuiltin('RefreshRSS')
   #  time.sleep(.5)
     #DeletePackages()
-    if ADDON.getSetting('KodiVersion')=='Krypton':
-        try:
-            dp.update(0,"Extracting...[COLOR lime]DONE[/COLOR]", "Updating Krypton Database...")
+    #if ADDON.getSetting('KodiVersion')=='Krypton':
+    #    try:
+    #        dp.update(0,"Extracting...[COLOR lime]DONE[/COLOR]", "Updating Krypton Database...")
             #EnableAll() 
-            UpdateKryptonDB()
-        except: pass
-    else: pass
+    #        UpdateKryptonDB()
+    #    except: pass
+    #else: pass
     RestoreAddonData()
     dialog = xbmcgui.Dialog()
     dialog.ok("Your Setup Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
