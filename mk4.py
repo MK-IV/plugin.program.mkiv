@@ -83,8 +83,9 @@ SkinSettingsBackup=xbmc.translatePath(os.path.join('special://home/userdata/','S
 Backgrounds=xbmc.translatePath(os.path.join(USERDATA,'Background_pics'))
 BackgroundsBackup=xbmc.translatePath(os.path.join(USERDATA,'BackgroundsBackup'))
 BackgroundsBackupZip=xbmc.translatePath(os.path.join(USERDATA,'BackgroundsBackup.zip'))
-ScriptSkin=xbmc.translatePath(os.path.join('special://home/userdata/addon_data/','script.skinsettings'))
-ScriptSkinBackup=xbmc.translatePath(os.path.join('special://home/userdata/','ScriptSkinSettingsBackup.zip'))
+ScriptSkin=xbmc.translatePath(os.path.join('special://home/userdata/addon_data/','script.skinshortcuts'))
+ScriptSkinBackup=xbmc.translatePath(os.path.join('special://home/userdata/','ScriptSkinShortcutsBackup.zip'))
+addon_dataBackup=xbmc.translatePath(os.path.join('special://home/userdata/','addon_dataBackup.zip'))
 Requests=xbmc.translatePath(os.path.join('special://home/addons/','script.module.requests'))
 USB=xbmc.translatePath(os.path.join(BackupPath,'KODI Backups'))
 INSTALL=xbmc.translatePath(os.path.join(USERDATA,'install.xml'))
@@ -231,10 +232,16 @@ def BackupMenu():
 
     addItem('[B]Choose Restore Location[/B]',BASEURL,74,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'')
     addItem('[B]Backup Skin Settings[/B]',BASEURL,59,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
+    addItem('[B]Backup Add-on Settings[/B]',BASEURL,105,'http://iconbug.com/data/5c/512/3acbd906e7b75eaf09e70d1d26c665f9.png',FANART,'')
     if os.path.exists(SkinSettingsBackup):
         addDir('[B]Restore Skin Settings[/B]',BASEURL,60,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
         addItem('[B][/B]',BASEURL,0,'',FANART,'')
         addItem('[B][COLOR white]Delete Skin Settings Backup[/COLOR][/B]',BASEURL,61,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
+    else: pass
+    if os.path.exists(addon_dataBackup):
+        addDir('[B]Restore Add-on Settings[/B]',BASEURL,106,'https://www.restoretools.com/icon/icon_zip_256.png',FANART,'','')
+        addItem('[B][/B]',BASEURL,0,'',FANART,'')
+        addItem('[B][COLOR white]Delete Add-on Settings Backup[/COLOR][/B]',BASEURL,107,'https://premium.wpmudev.org/blog/wp-content/uploads/2012/08/delete-big.jpg',FANART,'')
     else: pass
     if os.path.exists(fullbackuppath):
         try:
@@ -1541,7 +1548,7 @@ def INSTALL_FANRIFFIC(name,url,description):
     if not os.path.exists(path):
         os.makedirs(path)
     dp = xbmcgui.DialogProgress()
-    dp.create(Title,'Downloading' + themename +'...','','')
+    dp.create(Title,'Downloading ' + themename +'...','','')
     lib=os.path.join(path, themename+'.zip')
 
     try:
@@ -1551,12 +1558,13 @@ def INSTALL_FANRIFFIC(name,url,description):
 
     downloader.download(url, lib, dp)
     addonfolder = xbmc.translatePath(os.path.join('special://','home'))
-    dp.update(0,'Downloading' + themename +'...',"Extracting Zip Please Wait","")
+    dp.update(0,'Downloading ' + themename +'...[COLOR lime]Done[/COLOR]',"Extracting Zip Please Wait","")
     unzip(lib,addonfolder,dp)
     #if ADDON.getSetting('KodiVersion','Krypton'):
     #    EnableAll()
     #    pass
     #else: pass
+    dp.close()
     dialog = xbmcgui.Dialog()
     dialog.ok(Title, "The theme has now been installed. To save the changes you must now force close the Media Center.")
     killxbmc()
@@ -2604,6 +2612,7 @@ def WIZARD(name,url,version):
         pass
     SetSetting('BuildName',name)
     SetSetting('BuildVersion',version)
+    BackupAddonData()
     #localfile = open(AUTOEXEC, mode='w')
     #time.sleep(.5)
     #localfile.write('import xbmc\nxbmc.executebuiltin("RunAddon(script.mkiv)")')
@@ -2674,6 +2683,7 @@ def WIZARD(name,url,version):
             UpdateKryptonDB()
         except: pass
     else: pass
+    RestoreAddonData()
     dialog = xbmcgui.Dialog()
     dialog.ok("Your Setup Is Almost Finished...", 'The application will now close.', '', 'On your next start please leave it sit for a minute to allow add-ons to update.')
     killxbmc()
@@ -2859,7 +2869,7 @@ def BackupSkinSettings():
         except: pass
     ZipIt(_SkinSettings,ADDON_DATA,skin) 
     if os.path.exists(ScriptSkin):
-        ZipIt(ScriptSkin, ADDON_DATA,'ScriptSkinSettingsBackup')
+        ZipIt(ScriptSkin, ADDON_DATA,'ScriptSkinBackup')
         pass
     else: pass
     shutil.copy(GUI,GuiBackup)
@@ -2898,6 +2908,30 @@ def DeleteSkinBackup():
     else: pass
     if os.path.exists(ScriptSkinBackup):
         os.remove(ScriptSkinBackup)
+        pass
+    else: pass
+    xbmc.executebuiltin("Container.Refresh")
+
+def BackupAddonData():
+    exclude_dirs =  [skin, 'script.skinshortcuts']
+    exclude_files = []
+    message_header = "Saving addon data"
+    message1 = "Archiving..."
+    message2 = ""
+    message3 = "Please Wait"
+    ARCHIVE_CB(ADDON_DATA,addon_dataBackup, message_header, message1, message2, message3, exclude_dirs, exclude_files)
+
+def RestoreAddonData():
+    try:
+        extract.all(addon_dataBackup,ADDON_DATA)
+    except Exception, e:
+        print str(e)  
+    dialog = xbmcgui.Dialog()
+    dialog.ok(Title,'Your addon settings have been restored','The MC will now close','')
+
+def DeleteAddonDataBackup():
+    if os.path.exists(addon_dataBackup):
+        os.remove(addon_dataBackup)
         pass
     else: pass
     xbmc.executebuiltin("Container.Refresh")
@@ -3303,10 +3337,14 @@ def Check4Update():
                         if xbmcgui.Dialog().yesno(Title,'Would you like to continue with the update anyway?'):
                             pass
                         else: sys.exit(0)
-                    else: 
+                    else:
+                    	BackupAddonData() 
                         params=plugintools.get_params()
                         FRESHSTART(params)
                 else: pass
+                if not os.path.exists(addon_dataBackup):
+                	BackupAddonData()
+            	else: pass
                 path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
                 dp = xbmcgui.DialogProgress()        
                 dp.create(Title,'Downloading [COLOR white]'+name+'[/COLOR] update... ')
@@ -3322,14 +3360,15 @@ def Check4Update():
                     dp.update(0,'Downloading [COLOR white]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...')
                     pass
                 else:
-                    dp.update(0,'Downloading [COLOR white]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...','Screen will go black for a moment')
-                    time.sleep(1)
+                    dp.update(0,'Downloading [COLOR white]'+name+'[/COLOR] update...[COLOR lime]DONE[/COLOR]','Applying update...','Screen will go black for a moment while extracting')
+                    time.sleep(5)
                     xbmc.executebuiltin('UnloadSkin()')
                     pass
                 try: 
                     extract.all(lib,addonfolder,dp)
                 except BaseException as e:
                     pass 
+                RestoreAddonData()
                 SetSetting('BuildVersion',version)
                 xbmc.executebuiltin('ReloadSkin()')
                 time.sleep(.5)

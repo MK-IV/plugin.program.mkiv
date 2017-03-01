@@ -368,6 +368,13 @@ elif mode==101: mk4.B64Encode()
 elif mode==102: mk4.B64Decode()
 elif mode==103: mk4.ToolsMenu()
 elif mode==104: mk4.B64View()
+elif mode==105: 
+    mk4.BackupAddonData()
+    xbmc.executebuiltin('Container.Refresh')
+elif mode==106: 
+    mk4.RestoreAddonData()
+    mk4.killxbmc()
+elif mode==107: mk4.DeleteAddonDataBackup()
 elif mode==111: mk4.ReduceImageSize()
     
     

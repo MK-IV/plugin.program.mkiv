@@ -62,7 +62,7 @@ def doLogin(cookiepath, username, password):
     if username and password:
 
         #the url you will request to.
-        login_url = 'http://fantasti.cc/signin.php'
+        login_url = 'https://ares-project.uk/login/'
 
         #the header used to pretend you are a browser
         header_string = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
