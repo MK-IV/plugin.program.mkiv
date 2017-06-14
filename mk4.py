@@ -1074,16 +1074,7 @@ def FIX_SPECIAL():
                          b=a.replace(USERDATA, 'special://home/userdata/').replace(ADDONS,'special://home/addons/').replace(MEDIA,'special://home/media/').replace(urlUSERDATA, 'special://home/userdata/').replace(urlADDONS,'special://home/addons/').replace(urlMEDIA,'special://home/media/')
                          f = open((os.path.join(root, file)), mode='w')
                          f.write(str(b))
-                         f.close()    
-    for root, dirs, files in os.walk(USERDATA):
-        for file in files: 
-            if file.endswith(".db"):
-                        dp.update(0,"Checking database file: ",file, 'Please Wait')
-                        a=open((os.path.join(root, file))).read()
-                        b=a.replace(USERDATA, 'special://home/userdata/').replace(ADDONS,'special://home/addons/').replace(MEDIA,'special://home/media/').replace(urlUSERDATA, 'special://home/userdata/').replace(urlADDONS,'special://home/addons/').replace(urlMEDIA,'special://home/media/')
-                        f = open((os.path.join(root, file)), mode='w')
-                        f.write(str(b))
-                        f.close()
+                         f.close()                     
     if os.path.exists:
         try:
             if userpath in open(SkinSettingsXML).read():
