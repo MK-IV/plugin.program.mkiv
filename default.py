@@ -16,6 +16,7 @@
 """
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin  
 import mk4
+import mk4video
 import urllib
 import re
 import os
@@ -360,6 +361,7 @@ elif mode==85:
             sys.exit(0)
     #else: sys.exit(0)
 elif mode==86: mk4.BuildARepo()
+elif mode==87: mk4video.MK4Video()
 elif mode==97: mk4.RepoAddon()
 elif mode==98: mk4.RepoUpdater()
 elif mode==99: mk4.BuildARepoMenu()
