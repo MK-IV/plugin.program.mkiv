@@ -152,7 +152,8 @@ def INDEX(): #1
         myplatform = platform()            
         if myplatform == 'android':
             addDir('[COLOR lime][B]Android Apps[/B][/COLOR]',BASEURL,40,'http://www.technocrazed.com/wp-content/uploads/2015/01/Using-Arabic-Urdu-Persian-And-Other-Languages-Fonts-In-Android-App-Development-1.jpg',FANART,'','')       
-        addDir('[B]Log Viewer[/B]',BASEURL,46,'http://www.iconshock.com/img_jpg/STROKE/communications/jpg/256/log_file_icon.jpg',FANART,'','')
+        addDir('[B][COLOR red]MK-IV Video[/COLOR][/B]','JVtHtoiKYAE',87,ICON,FANART,'','')
+	addDir('[B]Log Viewer[/B]',BASEURL,46,'http://www.iconshock.com/img_jpg/STROKE/communications/jpg/256/log_file_icon.jpg',FANART,'','')
         addDir('[B]Maintenance[/B]',BASEURL,26,'http://vignette3.wikia.nocookie.net/paw-patrol/images/8/89/Character_large-rocky.jpg/revision/latest?cb=20140112112749',FANART,'','')
         addDir('[B]Backup/Restore[/B]',BASEURL,31,'http://cdn1.itpro.co.uk/sites/itpro/files/styles/article_main_wide_image/public/2015/06/backup.jpg?itok=e3650P7m',FANART,'','')
         addDir('[B]Add Sources[/B]',BASEURL,36,'http://cdn.htpcbeginner.com/images/2015/09/03-Add-Video-Source-Browse-for-New-Share.jpg',FANART,'','')
