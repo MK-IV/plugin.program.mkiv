@@ -16,7 +16,7 @@
 """
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin,os,sys
 import shutil
-import urllib2,urllib
+import urllib
 import sqlite3
 import plugintools
 #import errno
@@ -34,6 +34,22 @@ import speedtest
 #import uploadlog
 from lib import smtplib
 import hashlib
+# Py2
+try:
+    from urlparse import urljoin
+    from urllib import quote_plus, unquote_plus
+    import urllib2
+    from HTMLParser import HTMLParser
+
+# Py3:
+except ImportError:
+    import urllib.request as urllib2
+    from urllib.parse import urljoin, quote_plus, unquote_plus
+
+from resources.libs import extract, downloader, notify, debridit, traktit, loginit, skinSwitch, uploadLog, yt, speedtest, wizard as wiz
+
+
+
 USER_AGENT='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 addon_id='plugin.program.mkiv'
 ADDON=xbmcaddon.Addon(id=addon_id)
